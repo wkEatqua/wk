@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Xml;
-using Org.BouncyCastle.Crypto.Generators;
 using Shared.Model;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 
 namespace Shared.Data
 {
@@ -31,6 +27,7 @@ namespace Shared.Data
     }
     public class ScenarioPageImageInfo
     {
+        public long UniqueId => data.UniqueId;
         public long PageId => data.PageId;
         public string ImagePath => data.ImagePath;
         public int ImageActiveOrder => data.ImageActiveOrder;
@@ -106,6 +103,7 @@ namespace Shared.Data
     }
     public class ScenarioPageTextInfo
     {
+        public long UniqueId => data.UniqueId;
         public long PageId => data.PageId;
         public int Order => data.Order;
         public string Text => data.Text;
@@ -126,6 +124,7 @@ namespace Shared.Data
 
     public class ScenarioSelectInfo
     {
+        public long UniqueId => data.UniqueId;
         public long GroupId => data.GroupId;
         public string SelectText => data.SelectText;
         public SelectType SelectType => data.SelectType;
@@ -236,13 +235,13 @@ namespace Shared.Data
         static IDictionary<long, ScenarioWorldInfo> WorldDict = new Dictionary<long, ScenarioWorldInfo>();
         static IDictionary<long, ScenarioChapterInfo> ChapterDict = new Dictionary<long, ScenarioChapterInfo>();
         static IDictionary<long, ScenarioPageInfo> PageDict = new Dictionary<long, ScenarioPageInfo>();
-        static IDictionary<long, List<ScenarioPageInfo>> PageGroupDict = new Dictionary<long, List<ScenarioPageInfo>>();
-        static IDictionary<long, List<ScenarioPageTextInfo>> PageTextDict = new Dictionary<long, List<ScenarioPageTextInfo>>();
+        static readonly IDictionary<long, List<ScenarioPageInfo>> PageGroupDict = new Dictionary<long, List<ScenarioPageInfo>>();
+        static readonly IDictionary<long, List<ScenarioPageTextInfo>> PageTextDict = new Dictionary<long, List<ScenarioPageTextInfo>>();
         static readonly IDictionary<long, List<ScenarioSelectInfo>> SelectGroupDict = new Dictionary<long, List<ScenarioSelectInfo>>();
         static IDictionary<long, ScenarioDiceInfo> DiceDict = new Dictionary<long, ScenarioDiceInfo>();
         static IDictionary<long, ScenarioChapterRewardInfo> RewardDict = new Dictionary<long, ScenarioChapterRewardInfo>();
         static IDictionary<long, ScenarioEndingInfo> EndingDict = new Dictionary<long, ScenarioEndingInfo>();
-        static IDictionary<long, List<ScenarioPageImageInfo>> ImageDict = new Dictionary<long, List<ScenarioPageImageInfo>>();
+        static readonly IDictionary<long, List<ScenarioPageImageInfo>> ImageDict = new Dictionary<long, List<ScenarioPageImageInfo>>();
         public override void ProcessDataLoad(string path)
         {
             WorldDict.Clear();

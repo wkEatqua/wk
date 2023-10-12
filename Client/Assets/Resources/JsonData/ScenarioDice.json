@@ -1,0 +1,25 @@
+{
+  "10001": {
+    "ChapterId": 10001,
+    "DiceProb1": 500,
+    "DiceProb2": 500,
+    "DiceProb3": 500,
+    "DiceProb4": 500,
+    "DiceProb5": 500,
+    "DiceProb6": 500,
+    "DiceProb7": 500,
+    "DiceProb8": 500,
+    "DiceProb9": 500,
+    "DiceProb10": 500,
+    "DiceProb11": 500,
+    "DiceProb12": 500,
+    "DiceProb13": 500,
+    "DiceProb14": 500,
+    "DiceProb15": 500,
+    "DiceProb16": 500,
+    "DiceProb17": 500,
+    "DiceProb18": 500,
+    "DiceProb19": 500,
+    "DiceProb20": 500
+  }
+}

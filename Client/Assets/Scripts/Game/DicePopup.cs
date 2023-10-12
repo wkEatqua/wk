@@ -9,8 +9,6 @@ namespace WK.Battle
 
     public class DicePopup : MonoBehaviour
     {
-        public BattleManager battleManager;
-
 
         public DiceRolling[] dices;
         public int diceCount;
@@ -19,7 +17,8 @@ namespace WK.Battle
         bool once = false;
         public void Initialize()
         {
-            battleManager.init();
+            BattleManager.instance.init();
+
             once = false;
             diceResult = new List<int>();
             foreach (var dice in dices)
@@ -33,21 +32,20 @@ namespace WK.Battle
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                for (int i = 0; i < diceCount; i++)
-                {
-                    dices[i].stopDice = true;
-                }
-            }
-
             if (diceResult.Count == diceCount && !once)
             {
-                battleManager.StartCoroutine(battleManager.BattleDiceRollFinish());
+                BattleManager.instance.StartCoroutine(BattleManager.instance.BattleDiceRollFinish());
                 once = true;
             }
         }
 
+        public void OnClickStopBtn()
+        {
+            for (int i = 0; i < diceCount; i++)
+            {
+                dices[i].stopDice = true;
+            }
+        }
 
         public void SetDice(int mydiceCount)
         {

@@ -1,5 +1,6 @@
 ﻿namespace Shared.Model
-{   
+{
+    
     public enum StarFlagType
     {
         Progress,
@@ -18,12 +19,14 @@
     {
         Character,
     }
+    [System.Serializable]
     public class ScenarioWorld
     {
         public long UniqueId { get; set; }
         public string Name { get; set; }
         public string LocalizeKey { get; set; }        
     }
+    [System.Serializable]
 
     public class ScenarioChapter
     {
@@ -41,12 +44,16 @@
 
         public long StarRewardId { get; set; }
     }
+    [System.Serializable]
+
     public class ScenarioPageImage
     {
+        public long UniqueId { get; set; }
         public long PageId { get; set; }
         public string ImagePath { get; set; }
         public int ImageActiveOrder { get; set; }
     }
+    [System.Serializable]
     public class ScenarioPage
     {
         public int ChapterId { get; set; }
@@ -54,15 +61,20 @@
         public string DevName { get; set; }
         public long SelectGroupId { get; set; }
     }
+    [System.Serializable]
 
     public class ScenarioPageText
     {
+        public long UniqueId { get; set; }
         public long PageId { get; set; }
         public int Order { get; set; }
         public string Text { get; set; }
     }
+    [System.Serializable]
+
     public class ScenarioSelect
     {
+        public long UniqueId { get; set; }
         public long GroupId { get; set; }
         public string SelectText { get; set; }
         public SelectType SelectType { get; set; }
@@ -70,6 +82,7 @@
         public int SelectEnergy { get; set; }
         public int SelectVerisimilitude { get; set; }
     }
+    [System.Serializable]
 
     public class ScenarioDice
     {
@@ -96,7 +109,9 @@
         public int? DiceProb18 { get; set; }
         public int? DiceProb19 { get; set; }
         public int? DiceProb20 { get; set; }
-    }    
+    }
+    [System.Serializable]
+
     public class ScenarioChapterReward
     {
         public long UniqueId { get; set; }
@@ -105,6 +120,7 @@
         public int RewardAmount { get; set; }
 
     }
+    [System.Serializable]
 
     public class ScenarioEnding
     {

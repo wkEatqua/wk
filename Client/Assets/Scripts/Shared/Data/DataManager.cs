@@ -10,7 +10,7 @@ namespace Shared.Data
 {
     public static class DataManager
     {
-        public static Dictionary<uint, Database> DataDict = new Dictionary<uint, Database>();
+        public static Dictionary<uint, Database> DataDict = new();
 
         public static void Load(string path)
         {

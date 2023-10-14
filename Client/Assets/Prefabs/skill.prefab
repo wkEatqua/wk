@@ -938,6 +938,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6994e3683a26cb4282b0f4d839a6ad7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMySkill: 0
+  alreadyHaveDice: 0
+  cost: 0
   skillName: {fileID: 1802075081650742563}
   skillDesc: {fileID: 9190892045682313695}
   ActiveProb: {fileID: 8366962637413970953}
@@ -950,6 +953,7 @@ MonoBehaviour:
   - {fileID: 240025384288670878}
   - {fileID: 6963017243917481089}
   - {fileID: 4238603765365719209}
+  tCOST: {fileID: 0}
 --- !u!61 &6591633577595768
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -982,7 +986,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -2.942688, y: -0.80255127}
+  m_Offset: {x: -0.8573303, y: 1.5409698}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -993,7 +997,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 319.34558, y: 142.78418}
+  m_Size: {x: 286.87482, y: 138.09714}
   m_EdgeRadius: 0
 --- !u!1 &2553733506780156269
 GameObject:

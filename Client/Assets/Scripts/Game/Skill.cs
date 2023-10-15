@@ -10,10 +10,6 @@ namespace WK.Battle
     {
         bool isWaitSelcet;
 
-        public bool isMySkill = false; //적스킬인가 내스킬인가
-        public bool alreadyHaveDice = false;
-        public int cost;
-
         [Header("[ UI ]")]
         public TextMeshProUGUI skillName; //스킬이름
         public TextMeshProUGUI skillDesc; //스킬설명
@@ -22,9 +18,6 @@ namespace WK.Battle
 
         public TextMeshProUGUI[] diceSection; // 1~5 / 6~11 / 12~12 
         public TextMeshProUGUI[] SkillDiceOption; //스킬 1~5 / 6~11 / 12~12 각 구간당 효과설명
-        public TextMeshProUGUI tCOST; //소비 개연성
-
-
 
 
 
@@ -90,50 +83,30 @@ namespace WK.Battle
         string[] DatadiceSection;
         string[] DataSkillDiceOption;
 
-
-        public void init()
+        public void SelectOn()
         {
-            alreadyHaveDice = false;
+            //isWaitSelcet.
         }
 
-        public void SkillDiceSetting(int DiceNum) //스킬강화
+
+        public void SkillDiceSetting(int DiceNum)
         {
-            string text = "<color=red>" + diceSection[DiceNum].text + "</color>";
-            diceSection[DiceNum].text = text;
-
-            // 스킬 발동 계산 
-
+            //if(DiceNum)
+            // 스킬 발동 계산
             Debug.Log("<<<<" + Name + "스킬강화!!>>>>> ");
         }
 
-        public void SkillUse() //스킬사용
+        public void SkillUse()
         {
-            if (BattleManager.instance.myCOSTvalue < cost) { Debug.Log("개연성부족"); return; }
-
             // 스킬사용 => 본인주사위 영향, 적 체력에 영향
             Debug.Log("<<<<" + Name + "스킬사용!!>>>>> ");
         }
 
-
-
-
-        private void OnCollisionEnter2D(Collision2D collision)
+        public void OnBtnClick()
         {
-            //Debug.Log("기본: " + collision.transform.parent.name+" / "+gameObject.name);
-            if (collision.gameObject.tag.Equals("DiceSlots"))
-            {
-                Debug.Log("충돌: " + collision.transform.parent.name + " / " + gameObject.name);
-                var DiceNum = collision.gameObject.transform.parent.GetComponent<DiceSlots>().slotDiceNum;
-
-                SkillDiceSetting(DiceNum);
-            }
-
+            //SkillDiceSetting()
         }
 
-        private void OnCollisionExit2D(Collision2D collision)
-        {
-           
 
-        }
     }
 }

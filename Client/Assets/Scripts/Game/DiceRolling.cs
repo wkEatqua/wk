@@ -35,7 +35,7 @@ namespace WK.Battle
         {
             diceBG = GetComponent<Image>();
             diceNum = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-            dicePopup = BattleManager.instance.dicePopup;
+            dicePopup = BattleManager.instance.DiceRollingPAN;
 
             stopDice = false;
             once = false;

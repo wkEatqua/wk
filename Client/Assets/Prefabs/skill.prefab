@@ -925,7 +925,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6989834032842875432}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4053798382929045039}
+        m_TargetAssemblyTypeName: WK.Battle.Skill, Assembly-CSharp
+        m_MethodName: OnBtnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &4053798382929045039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -938,6 +950,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6994e3683a26cb4282b0f4d839a6ad7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AlreadyHaveDiceSkill: 0
   skillName: {fileID: 1802075081650742563}
   skillDesc: {fileID: 9190892045682313695}
   ActiveProb: {fileID: 8366962637413970953}
@@ -982,7 +995,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -2.942688, y: -0.80255127}
+  m_Offset: {x: 1.3816681, y: -0.80255127}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -993,7 +1006,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 319.34558, y: 142.78418}
+  m_Size: {x: 284.08542, y: 142.78418}
   m_EdgeRadius: 0
 --- !u!1 &2553733506780156269
 GameObject:

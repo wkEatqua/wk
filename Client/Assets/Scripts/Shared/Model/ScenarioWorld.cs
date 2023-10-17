@@ -129,4 +129,18 @@
         public string ImagePath { get; set; }
         public string Name { get; set; }
     }
+
+    public class ScenarioIntro
+    {
+        public long ChapterId { get; set; }
+        public float BackGroundPosX { get; set; }
+        public float BackGroundPosY { get; set; }
+        public float BackGroundColorR { get; set; }
+        public float BackGroundColorG { get; set; }
+        public float BackGroundColorB { get; set; }
+        public float BackGroundColorA { get; set; }
+        public string CharacterClass { get; set; }
+        public string CharacterName { get; set; }   
+
+    }
 }

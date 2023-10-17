@@ -8,7 +8,7 @@ using Febucci.UI.Core;
 using Febucci.UI.Core.Parsing;
 using Shared.Model;
 
-public class StoryManager : MonoBehaviour
+public class UI_MainStory : MonoBehaviour
 {
     [Header("프리팹")]
     public SelectButton selectButton;
@@ -27,22 +27,17 @@ public class StoryManager : MonoBehaviour
     public TextMeshProUGUI hpText;
     public TextMeshProUGUI consoleText;
     public DiceWindow diceWindow;
-
-    [Header("테이블 데이터")]
-    [SerializeField] long worldId;
-    [SerializeField] long chapterId;
-
-    ScenarioChapterInfo chapterInfo;
-    ScenarioWorldInfo worldInfo;
-    List<ScenarioPageInfo> pages;
+   
     List<ScenarioPageTextInfo> pageTexts;
     List<ScenarioSelectInfo> selectInfoGroup;
     List<ScenarioPageImageInfo> pageImages;
 
-    readonly List<SelectButton> selectButtons = new();
-    public ScenarioChapterInfo ChapterInfo => chapterInfo;
-    public ScenarioWorldInfo WorldInfo => worldInfo;
+    MainStoryManager Manager => MainStoryManager.Instance;
 
+    readonly List<SelectButton> selectButtons = new();
+    ScenarioChapterInfo ChapterInfo => Manager.ChapterInfo;
+    ScenarioWorldInfo WorldInfo => Manager.WorldInfo;
+    List<ScenarioPageInfo> Pages => Manager.Pages;
     int page;
 
     int curSelectedVeris;
@@ -54,9 +49,9 @@ public class StoryManager : MonoBehaviour
     int Stamina { get { return stamina; }
         set 
         {
-            if (value > chapterInfo.DefaultEnergyMax)
+            if (value > ChapterInfo.DefaultEnergyMax)
             {
-                stamina = chapterInfo.DefaultEnergyMax;
+                stamina = ChapterInfo.DefaultEnergyMax;
             }
             else if(value < 0)
             {
@@ -78,31 +73,22 @@ public class StoryManager : MonoBehaviour
             return value > 100 ? 100 : value;
         }
     }
-    static StoryManager instance;
-    public static StoryManager Instance => instance;
-    private void Awake()
-    {
-        instance = this;       
-    }
+    
     private void Start()
-    {
-        ScenarioData.TryGetChapter(chapterId, out chapterInfo);
-        ScenarioData.TryGetWorld(worldId, out worldInfo);
-        ScenarioData.TryGetPageGroup(chapterId, out pages);
-        
+    {       
         page = 0;
-        worldTitle.text = worldInfo.Name + ", ";
+        worldTitle.text = WorldInfo.Name + ", ";
         chapterTitle.text = ChapterInfo.Name;
         typewriter.onMessage.AddListener(ShowImage);
         typewriter.onMessage.AddListener(EnergyDown);
-        stamina = chapterInfo.DefaultEnergyMax;
-        hp = chapterInfo.DefaultHealthMax;
+        stamina = ChapterInfo.DefaultEnergyMax;
+        hp = ChapterInfo.DefaultHealthMax;
         ShowPage();
     }
     private void Update()
     {
         verisimilitude.text = Verisimilitude.ToString() + "%";
-        progress.text = Mathf.RoundToInt((float)page / pages.Count * 100).ToString() + "%";
+        progress.text = Mathf.RoundToInt((float)page / Pages.Count * 100).ToString() + "%";
         staminaBar.fillAmount = Stamina / 100f;
         staminaText.text = Stamina.ToString();
     }
@@ -125,8 +111,8 @@ public class StoryManager : MonoBehaviour
     {
         consoleText.text = "";
         story.text = "";
-        ScenarioData.TryGetPageText(pages[page].UniqueId, out pageTexts);
-        ScenarioData.TryGetPageImages(pages[page].UniqueId, out pageImages);
+        ScenarioData.TryGetPageText(Pages[page].UniqueId, out pageTexts);
+        ScenarioData.TryGetPageImages(Pages[page].UniqueId, out pageImages);
 
         illustration.gameObject.SetActive(pageImages != null);
         
@@ -158,7 +144,7 @@ public class StoryManager : MonoBehaviour
     public void ShowImage(EventMarker eventMarker)
     {
         if (!(eventMarker.name == nameof(ShowImage))) return;
-        illustration.sprite = Resources.Load<Sprite>("image/" + eventMarker.parameters[0]);       
+        illustration.sprite = Resources.Load<Sprite>("image/Story/" + eventMarker.parameters[0]);       
     }
 
     public void EnergyDown(EventMarker eventMarker)
@@ -168,7 +154,7 @@ public class StoryManager : MonoBehaviour
     }
     public void ShowSelections()
     {
-        ScenarioData.TryGetSelectGroup(pages[page].SelectGroupId, out selectInfoGroup);
+        ScenarioData.TryGetSelectGroup(Pages[page].SelectGroupId, out selectInfoGroup);
      
         for (int i = 0; i < selectInfoGroup.Count; i++)
         {
@@ -193,7 +179,7 @@ public class StoryManager : MonoBehaviour
     }
     public void OnSelect(ScenarioSelectInfo info)
     {
-        if (page >= pages.Count - 1)
+        if (page >= Pages.Count - 1)
         {
             Debug("마지막 페이지입니다.");
             return;
@@ -207,7 +193,7 @@ public class StoryManager : MonoBehaviour
                 diceWindow.gameObject.SetActive(true);
                 if (!info.isDiced)
                 {
-                    diceWindow.Init(20, info);
+                    diceWindow.Init(20, info, this);
                     info.isDiced = true;
                 }
                 break;

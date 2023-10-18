@@ -1,14 +1,1 @@
-{
-  "1000001": {
-    "UniqueId": 1000001,
-    "ChapterId": 10001,
-    "DevName": "페이지 1",
-    "SelectGroupId": 1000010
-  },
-  "1000002": {
-    "UniqueId": 1000002,
-    "ChapterId": 10001,
-    "DevName": "페이지 2",
-    "SelectGroupId": 1000010
-  }
-}
+﻿[{"ChapterId":10001,"UniqueId":1000001,"DevName":"페이지 1","SelectGroupId":1000010},{"ChapterId":10001,"UniqueId":1000002,"DevName":"페이지 2","SelectGroupId":1000010}]

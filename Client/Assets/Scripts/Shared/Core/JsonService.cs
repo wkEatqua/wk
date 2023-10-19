@@ -1,10 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
+#if SERVER
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#endif
 
 namespace Shared.Core
 {
@@ -49,6 +52,7 @@ namespace Shared.Core
             TypeNameHandling = TypeNameHandling.None,
             NullValueHandling = NullValueHandling.Ignore,
             DefaultValueHandling = DefaultValueHandling.Ignore,
+            
             // Converters = { new Newtonsoft.Json.Converters.VectorConverter() }
         };
 

@@ -59,9 +59,9 @@ namespace Shared.Data
         public long OpenConditionId => data.OpenConditionId;
         public long StarRewardId => data.StarRewardId;
 
-        readonly Model.ScenarioChapter data;
+        readonly ScenarioChapter data;
 
-        public ScenarioChapterInfo(Model.ScenarioChapter data)
+        public ScenarioChapterInfo(ScenarioChapter data)
         {
             this.data = data;
         }
@@ -229,6 +229,25 @@ namespace Shared.Data
         }
     }
 
+    public class ScenarioIntroInfo
+    {
+        public long ChapterId => data.ChapterId;
+        public float BackGroundPosX => data.BackGroundPosX;
+        public float BackGroundPosY => data.BackGroundPosY;
+        public float BackGroundColorR => data.BackGroundColorR;
+        public float BackGroundColorG => data.BackGroundColorG;
+        public float BackGroundColorB => data.BackGroundColorB;
+        public float BackGroundColorA => data.BackGroundColorA;
+        public string CharacterClass => data.CharacterClass;
+        public string CharacterName => data.CharacterName;
+
+        readonly ScenarioIntro data;
+
+        public ScenarioIntroInfo(ScenarioIntro data)
+        {
+            this.data = data;
+        }
+    }
 
     public class ScenarioData : Database
     {
@@ -242,6 +261,7 @@ namespace Shared.Data
         static IDictionary<long, ScenarioChapterRewardInfo> RewardDict = new Dictionary<long, ScenarioChapterRewardInfo>();
         static IDictionary<long, ScenarioEndingInfo> EndingDict = new Dictionary<long, ScenarioEndingInfo>();
         static readonly IDictionary<long, List<ScenarioPageImageInfo>> ImageDict = new Dictionary<long, List<ScenarioPageImageInfo>>();
+        static IDictionary<long,ScenarioIntroInfo> IntroDict = new Dictionary<long, ScenarioIntroInfo>();
         public override void ProcessDataLoad(string path)
         {
             WorldDict.Clear();
@@ -355,6 +375,12 @@ namespace Shared.Data
                     ImageDict[group.PageId].Add(new ScenarioPageImageInfo(group));
                 }
             }
+            IntroDict.Clear();
+            {
+                var intro = new Data<ScenarioIntro>().GetData(path);
+
+                IntroDict = intro.ToDictionary(kv => kv.ChapterId, kv => new ScenarioIntroInfo(kv));               
+            }
         }
 
         public static bool TryGetWorld(long uniqueId, out ScenarioWorldInfo info)
@@ -401,6 +427,10 @@ namespace Shared.Data
         public static bool TryGetPageImages(long groupId, out List<ScenarioPageImageInfo> info)
         {
             return ImageDict.TryGetValue(groupId, out info);
+        }
+        public static bool TryGetIntro(long chapterId,out  ScenarioIntroInfo info)
+        {
+            return IntroDict.TryGetValue(chapterId,out info);
         }
     }
 }

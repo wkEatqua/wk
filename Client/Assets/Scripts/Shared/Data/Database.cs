@@ -1,10 +1,13 @@
 ﻿using Ganss.Excel;
-using System.Collections.Generic;
-using UnityEngine;
 using Newtonsoft.Json;
+using Shared.Core;
+using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using System.Linq;
+
+#if UNITY_EDITOR
+using UnityEngine;
+#endif
 
 namespace Shared.Data
 {
@@ -19,24 +22,20 @@ namespace Shared.Data
 
         public IEnumerable<T> GetData(string rootPath)
         {
+            var json = string.Empty;
 #if UNITY_EDITOR
-
-            return new ExcelMapper($"{Application.dataPath}/{FolderName}/{typeof(T).Name}.xlsx").Fetch<T>();
-
-
-#else
             TextAsset jsonFile = Resources.Load<TextAsset>("JsonData/" + typeof(T).Name);
-            string json = "";
             if (jsonFile != null)
             {
                 json = jsonFile.text;
             }
-            
-            var x = JsonConvert.DeserializeObject<Dictionary<string,T>>(json).Values;
-            
-            return x.ToList();
+#else
+            using (StreamReader r = new StreamReader($"JsonData/{typeof(T).Name}.json"))
+            {
+                json = r.ReadToEnd();
+            }
 #endif
+            return JsonService.DeserializePlainObject<List<T>>(json).ToList();
         }
     }
-
 }

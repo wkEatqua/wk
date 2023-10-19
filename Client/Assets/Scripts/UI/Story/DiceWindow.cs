@@ -17,14 +17,15 @@ public class DiceWindow : MonoBehaviour
     public Button finishButton;
     ScenarioSelectInfo info;
 
+    UI_MainStory canvas;
     
-    public void Init(int slotNum, ScenarioSelectInfo info)
+    public void Init(int slotNum, ScenarioSelectInfo info,UI_MainStory canvas)
     {
         this.info = info;
         resultText.text = "";
         rerollButton.onClick.RemoveAllListeners();
         finishButton.onClick.RemoveAllListeners();
-        
+        this.canvas = canvas;
        
         rerollButton.onClick.AddListener(() => StartCoroutine(StartSlot()));
 
@@ -81,7 +82,7 @@ public class DiceWindow : MonoBehaviour
         {
             resultText.text = "성공";
             resultText.color = Color.green;
-            finishButton.onClick.AddListener(() => StoryManager.Instance.ToNextPage(info));
+            finishButton.onClick.AddListener(() => canvas.ToNextPage(info));
         }
         else
         {
@@ -92,6 +93,6 @@ public class DiceWindow : MonoBehaviour
 
         rerollButton.enabled = true;
         rerollButton.onClick.RemoveAllListeners();
-        rerollButton.onClick.AddListener(() => { StoryManager.Instance.Debug("더이상 굴릴 수 없습니다"); });
+        rerollButton.onClick.AddListener(() => { canvas.Debug("더이상 굴릴 수 없습니다"); });
     }
 }

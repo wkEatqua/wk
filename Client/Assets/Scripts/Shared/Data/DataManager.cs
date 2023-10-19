@@ -1,10 +1,12 @@
-﻿using NPOI.SS.Formula.Functions;
-using Shared.Service;
+﻿using Shared.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Linq;
+#if UNITY_EDITOR
 using UnityEngine;
+#endif
 
 namespace Shared.Data
 {
@@ -39,7 +41,9 @@ namespace Shared.Data
 
             if (DataDict.ContainsKey(key))
             {
+#if UNITY_EDITOR
                 Debug.LogError($"!! Warning. {database.GetType().Name} data duplicated. ");
+#endif
             }
 
             DataDict.Add(key, database);

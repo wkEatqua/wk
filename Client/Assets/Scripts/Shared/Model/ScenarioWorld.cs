@@ -1,6 +1,14 @@
 ﻿namespace Shared.Model
 {
-    
+    /// <summary>
+    /// 추출 가능한 데이터 클래스
+    /// </summary>
+    public class JsonModel
+    {
+
+    }
+
+
     public enum StarFlagType
     {
         Progress,
@@ -20,20 +28,20 @@
         Character,
     }
     [System.Serializable]
-    public class ScenarioWorld
+    public class ScenarioWorld : JsonModel
     {
         public long UniqueId { get; set; }
         public string Name { get; set; }
-        public string LocalizeKey { get; set; }        
+        public string LocalizeKey { get; set; }
     }
     [System.Serializable]
 
-    public class ScenarioChapter
+    public class ScenarioChapter : JsonModel
     {
         public long WorldId { get; set; }
-        public string Name { get; set; }    
+        public string Name { get; set; }
         public long UniqueId { get; set; }
-        
+
         public long HeroId { get; set; }
         public int DefaultHealthMax { get; set; }
         public int DefaultEnergyMax { get; set; }
@@ -46,7 +54,7 @@
     }
     [System.Serializable]
 
-    public class ScenarioPageImage
+    public class ScenarioPageImage : JsonModel
     {
         public long UniqueId { get; set; }
         public long PageId { get; set; }
@@ -54,7 +62,7 @@
         public int ImageActiveOrder { get; set; }
     }
     [System.Serializable]
-    public class ScenarioPage
+    public class ScenarioPage : JsonModel
     {
         public int ChapterId { get; set; }
         public long UniqueId { get; set; }
@@ -63,7 +71,7 @@
     }
     [System.Serializable]
 
-    public class ScenarioPageText
+    public class ScenarioPageText : JsonModel
     {
         public long UniqueId { get; set; }
         public long PageId { get; set; }
@@ -72,7 +80,7 @@
     }
     [System.Serializable]
 
-    public class ScenarioSelect
+    public class ScenarioSelect : JsonModel
     {
         public long UniqueId { get; set; }
         public long GroupId { get; set; }
@@ -84,7 +92,7 @@
     }
     [System.Serializable]
 
-    public class ScenarioDice
+    public class ScenarioDice : JsonModel
     {
         public long ChapterId { get; set; }
         public int DiceProbSum { get; set; }
@@ -112,7 +120,7 @@
     }
     [System.Serializable]
 
-    public class ScenarioChapterReward
+    public class ScenarioChapterReward : JsonModel
     {
         public long UniqueId { get; set; }
         public ParcelType RewardType { get; set; }
@@ -122,7 +130,7 @@
     }
     [System.Serializable]
 
-    public class ScenarioEnding
+    public class ScenarioEnding : JsonModel
     {
         public long UniqueId { get; set; }
         public long ChapterId { get; set; }
@@ -130,7 +138,7 @@
         public string Name { get; set; }
     }
 
-    public class ScenarioIntro
+    public class ScenarioIntro : JsonModel
     {
         public long ChapterId { get; set; }
         public float BackGroundPosX { get; set; }
@@ -140,7 +148,7 @@
         public float BackGroundColorB { get; set; }
         public float BackGroundColorA { get; set; }
         public string CharacterClass { get; set; }
-        public string CharacterName { get; set; }   
+        public string CharacterName { get; set; }
 
     }
 }

@@ -15,12 +15,14 @@ namespace WK.Battle
         public Slider uiHPbar; //체력바
         public Slider uiStamina; //피로도
 
-        public DiceSlots[] uiDiceSlots; //주사위슬롯
+        public TextMeshProUGUI uiHPvalue;
+
+        public DiceInventory[] uiDiceSlots; //주사위슬롯
         public TextMeshProUGUI uiATK;   //공격력
         public TextMeshProUGUI uiCRI;   //치명타율
 
 
-        public DiceSlots[] uiEnemyDiceSlots; //주사위슬롯
+        public DiceInventory[] uiEnemyDiceSlots; //주사위슬롯
         public Skill[] uiSkills;
 
 
@@ -42,17 +44,30 @@ namespace WK.Battle
         public Skill[] skills; // - 스킬 (스킬슬롯주소/스킬아이디/기본선택확률/확률감소수치) > 스킬테이블따로
         public int[] diceValues;
 
-
+        public float HPvalue;
+        public float MAXHPvalue;
 
 
         public void init()
         {
+            HPvalue = 100;
+            MAXHPvalue = 100;
             // uiEnemyDiceSlots; //주사위슬롯 초기화
         }
 
         public void initTurn()
         {
             //턴 돌아올때 초기화 해줄 것
+        }
+
+        public void setHP(float hit)
+        {
+            //value update
+            HPvalue = HPvalue - hit;
+
+            //ui update
+            uiHPbar.value = HPvalue/ MAXHPvalue;
+            uiHPvalue.text = HPvalue + "/100";
         }
     }
 }

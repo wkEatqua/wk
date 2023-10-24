@@ -9,7 +9,7 @@ using static UnityEditorInternal.ReorderableList;
 namespace WK.Battle
 {
 
-    public class DiceSlots : MonoBehaviour
+    public class DiceInventory : MonoBehaviour
     {
         public EachDice Dice;
         //data

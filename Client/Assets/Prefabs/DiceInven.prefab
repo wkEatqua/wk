@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 1340038265341292467}
   - component: {fileID: 4305813630930638446}
   m_Layer: 5
-  m_Name: DiceSlot
+  m_Name: DiceInven
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

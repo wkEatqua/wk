@@ -46,7 +46,7 @@ namespace WK.Battle
         public TextMeshProUGUI uiLUK; //행운
 
 
-        public DiceSlots[] uiDiceSlots; //주사위슬롯
+        public DiceInventory[] uiDiceSlots; //주사위슬롯
        
 
 

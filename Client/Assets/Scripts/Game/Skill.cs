@@ -78,6 +78,13 @@ namespace WK.Battle
         string[] DataSkillDiceOption;
 
 
+        public void OnEnable()
+        {
+            SelectImg.enabled = false;
+
+
+        }
+
         //스킬강화(주사위넣기)
         public void SkillDiceSetting(int DiceNum,GameObject eachDice)
         {
@@ -86,8 +93,6 @@ namespace WK.Battle
                 Debug.Log("이미강화된 스킬입니다");
                 return;
             }
-
-
 
             int[] dicerange = BattleManager.instance.diceRange;
             
@@ -110,6 +115,8 @@ namespace WK.Battle
 
             // 스킬 발동 계산
             Debug.Log("<<<<" + gameObject.name+ "스킬강화!!>>>>> ");
+
+            SelectImg.enabled = true;
         }
 
         
@@ -118,6 +125,15 @@ namespace WK.Battle
         {
             // 스킬사용 => 본인주사위 영향, 적 체력에 영향
             Debug.Log("<<<<" + gameObject.name + " 공격 스킬사용!!>>>>> ");
+
+            BattleManager.instance.Enemy.setHP(10); //임시 데미지
+
+            BattleManager.instance.PlayEffectATTACK();
+
+
+
+            BattleManager.instance.SetDEMGauge(5);
+            BattleManager.instance.SetRelationGauge(2);
         }
 
 
@@ -130,8 +146,9 @@ namespace WK.Battle
         //스킬사용
         public void OnBtnClick()
         {
+
             //1. 개연성 수치 있는지?
-            if(BattleManager.instance.Player.COSTGuage< skillCost) { Debug.Log("개연성이 부족합니다"); return; }
+            if (BattleManager.instance.Player.COSTGuage< skillCost) { Debug.Log("개연성이 부족합니다"); return; }
 
             //2. 버프? 공격?
             if(SkillOption == SkillOption.Buff) //2-1. 버프라면 어떤 스킬 강화
@@ -145,6 +162,8 @@ namespace WK.Battle
 
 
             // 적 스탯에 영향
+            
+
             //END.  DEM게이지
         }
 

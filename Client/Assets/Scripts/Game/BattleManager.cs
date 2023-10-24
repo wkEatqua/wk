@@ -4,6 +4,8 @@ using TMPro;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using DG.Tweening;
+using Unity.Collections.LowLevel.Unsafe;
 
 namespace WK.Battle
 {
@@ -24,8 +26,8 @@ namespace WK.Battle
         public Sprite diceImg;
 
 
-        public PlayerBattleInfo Player;
-        public EnemyBattleInfo Enemy;
+        [SerializeField] public PlayerBattleInfo Player;
+        [SerializeField] public EnemyBattleInfo Enemy;
 
         [Space(20)]
         [Header("====팝업====")]
@@ -35,12 +37,27 @@ namespace WK.Battle
         [SerializeField] bool isMyTurn = true;  // true : 플레이어 턴  false: 적 턴
         public GameObject interactionEnable; //상호작용 가능상태 true 불가능 false
 
-      
+        [Space(20)]
+        [Header("====스킬이펙트====")]
+        [SerializeField] public GameObject Effect_HURT;
+        [SerializeField] public GameObject Effect_ATTACK;
 
         GameState gameState = GameState.READY;
 
-        
 
+
+        int RelationShipValue=5;
+        public TextMeshProUGUI uiRelationShowText; //개연성 텍스트
+        int DEMValue=0;
+        public TextMeshProUGUI uiDEMShowText; // dem 게이지 텍스트
+        public Image uiDEMShowGauge; // dem 게이지 이미지
+
+        int MAXDEMGuage = 100; //dem 게이지 full
+        int MAXRLSGuage = 10; //relationship 게이지 full
+        int MAXRLSorigin = 5; //relationship 
+
+
+        
 
         public void init()
         {
@@ -58,9 +75,14 @@ namespace WK.Battle
             StartCoroutine(GameBegin());
         }
 
-      
+        public void Update()
+        {
+            
+        }
 
-        public void initPlayerDataLoad() //플레이어, 적 플레이어 데이터 로드
+ 
+
+            public void initPlayerDataLoad() //플레이어, 적 플레이어 데이터 로드
         {
             Player.HavingDice = 4; //임시 주사위갯수 --지울것
             //스테이지정보
@@ -166,6 +188,26 @@ namespace WK.Battle
 
         #region # 스킬발동
 
+        // 개연성 게이지 변경
+        public void SetRelationGauge(int point)
+        {
+            if (MAXRLSGuage < MAXRLSorigin) return;
+            RelationShipValue -= point;
+            uiRelationShowText.text = "개연성\n"+ RelationShipValue + "/" + MAXRLSorigin;
+        }
+
+        // DEM 게이지 변경
+        public void SetDEMGauge(int point)
+        {
+            DEMValue += point;
+
+            uiDEMShowGauge.fillAmount = DEMValue / MAXDEMGuage; 
+            //uiDEMShowText.text = "DEM\n"+Mathf.Floor(MAXDEMGuage / DEMValue) * 100 +"%"; // 채워진 퍼센트
+            uiDEMShowText.text = "DEM\n"+ (DEMValue/ MAXDEMGuage)*100 +"%"; // 채워진 퍼센트
+
+            Debug.Log("DEMValue = "+DEMValue);
+        }
+
         #endregion
 
 
@@ -179,5 +221,23 @@ namespace WK.Battle
         }
         #endregion
 
+
+
+
+        // UI 상호작용 ================== (임시)
+
+        public void PlayEffectHURT()
+        {
+            Effect_HURT.SetActive(false);
+            Effect_HURT.SetActive(true);
+        }
+
+        public void PlayEffectATTACK()
+        {
+            Effect_ATTACK.SetActive(false);
+            Effect_ATTACK.SetActive(true);
+        }
+
+        //=================================
     }
 }

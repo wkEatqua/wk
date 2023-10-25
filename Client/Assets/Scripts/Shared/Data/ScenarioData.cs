@@ -251,17 +251,18 @@ namespace Shared.Data
 
     public class ScenarioData : Database
     {
-        static IDictionary<long, ScenarioWorldInfo> WorldDict = new Dictionary<long, ScenarioWorldInfo>();
-        static IDictionary<long, ScenarioChapterInfo> ChapterDict = new Dictionary<long, ScenarioChapterInfo>();
-        static IDictionary<long, ScenarioPageInfo> PageDict = new Dictionary<long, ScenarioPageInfo>();
-        static readonly IDictionary<long, List<ScenarioPageInfo>> PageGroupDict = new Dictionary<long, List<ScenarioPageInfo>>();
-        static readonly IDictionary<long, List<ScenarioPageTextInfo>> PageTextDict = new Dictionary<long, List<ScenarioPageTextInfo>>();
-        static readonly IDictionary<long, List<ScenarioSelectInfo>> SelectGroupDict = new Dictionary<long, List<ScenarioSelectInfo>>();
-        static IDictionary<long, ScenarioDiceInfo> DiceDict = new Dictionary<long, ScenarioDiceInfo>();
-        static IDictionary<long, ScenarioChapterRewardInfo> RewardDict = new Dictionary<long, ScenarioChapterRewardInfo>();
-        static IDictionary<long, ScenarioEndingInfo> EndingDict = new Dictionary<long, ScenarioEndingInfo>();
-        static readonly IDictionary<long, List<ScenarioPageImageInfo>> ImageDict = new Dictionary<long, List<ScenarioPageImageInfo>>();
-        static IDictionary<long,ScenarioIntroInfo> IntroDict = new Dictionary<long, ScenarioIntroInfo>();
+        public static IDictionary<long, ScenarioWorldInfo> WorldDict = new Dictionary<long, ScenarioWorldInfo>();
+        public static IDictionary<long, ScenarioChapterInfo> ChapterDict = new Dictionary<long, ScenarioChapterInfo>();
+        public static IDictionary<long,List<ScenarioChapterInfo>> ChapterGroupDict = new Dictionary<long, List<ScenarioChapterInfo>>();
+        public static IDictionary<long, ScenarioPageInfo> PageDict = new Dictionary<long, ScenarioPageInfo>();
+        public static readonly IDictionary<long, List<ScenarioPageInfo>> PageGroupDict = new Dictionary<long, List<ScenarioPageInfo>>();
+        public static readonly IDictionary<long, List<ScenarioPageTextInfo>> PageTextDict = new Dictionary<long, List<ScenarioPageTextInfo>>();
+        public static readonly IDictionary<long, List<ScenarioSelectInfo>> SelectGroupDict = new Dictionary<long, List<ScenarioSelectInfo>>();
+        public static IDictionary<long, ScenarioDiceInfo> DiceDict = new Dictionary<long, ScenarioDiceInfo>();
+        public static IDictionary<long, ScenarioChapterRewardInfo> RewardDict = new Dictionary<long, ScenarioChapterRewardInfo>();
+        public static IDictionary<long, ScenarioEndingInfo> EndingDict = new Dictionary<long, ScenarioEndingInfo>();
+        public static readonly IDictionary<long, List<ScenarioPageImageInfo>> ImageDict = new Dictionary<long, List<ScenarioPageImageInfo>>();
+        public static IDictionary<long,ScenarioIntroInfo> IntroDict = new Dictionary<long, ScenarioIntroInfo>();
         public override void ProcessDataLoad(string path)
         {
             WorldDict.Clear();
@@ -278,6 +279,22 @@ namespace Shared.Data
                 ChapterDict = chapters.ToDictionary(kv => kv.UniqueId, kv => new ScenarioChapterInfo(kv));
             }
 
+            ChapterGroupDict.Clear();
+            {
+                var group = new Data<ScenarioChapter>().GetData(path);
+
+                foreach(var x in group)
+                {
+                    if (!ChapterGroupDict.ContainsKey(x.WorldId))
+                    {
+                        ChapterGroupDict.Add(x.WorldId, new());
+                    }
+
+                    ChapterGroupDict[x.WorldId] ??= new();
+
+                    ChapterGroupDict[x.WorldId].Add(new ScenarioChapterInfo(x));
+                }
+            }
             PageDict.Clear();
             {
                 var pages = new Data<ScenarioPage>().GetData(path);
@@ -387,10 +404,14 @@ namespace Shared.Data
         {
             return WorldDict.TryGetValue(uniqueId, out info);
         }
-
+        
         public static bool TryGetChapter(long uniqueId, out ScenarioChapterInfo info)
         {
             return ChapterDict.TryGetValue(uniqueId, out info);
+        }
+        public static bool TryGetChapterGroup(long worldId, out List<ScenarioChapterInfo> list)
+        {
+            return ChapterGroupDict.TryGetValue(worldId, out list);
         }
         public static bool TryGetPage(long uniqueId, out ScenarioPageInfo info)
         {

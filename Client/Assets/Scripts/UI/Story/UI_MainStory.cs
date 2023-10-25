@@ -92,21 +92,7 @@ public class UI_MainStory : MonoBehaviour
         staminaBar.fillAmount = Stamina / 100f;
         staminaText.text = Stamina.ToString();
     }
-    public void SetStoryText(int fontSize, int lineSpacing)
-    {
-        if (!PlayerPrefs.HasKey("FONTSIZE"))
-        {
-            PlayerPrefs.SetInt("FONTSIZE", fontSize);
-        }
-
-        if (!PlayerPrefs.HasKey("HANG"))
-        {
-            PlayerPrefs.SetInt("HANG", lineSpacing);
-        }
-
-        story.fontSize = PlayerPrefs.GetInt("FONTSIZE");
-        story.lineSpacing = PlayerPrefs.GetInt("HANG");
-    }
+    
     void ShowPage()
     {
         consoleText.text = "";

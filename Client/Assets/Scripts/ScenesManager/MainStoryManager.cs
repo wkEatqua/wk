@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class MainStoryManager : Singleton<MainStoryManager> 
 {
-    [Header("테이블 데이터")]
-    [SerializeField] long worldId;
-    [SerializeField] long chapterId;
+    
+    [HideInInspector] public long worldId;
+    [HideInInspector] public long chapterId;
 
     ScenarioChapterInfo chapterInfo;
     ScenarioWorldInfo worldInfo;
@@ -21,7 +21,9 @@ public class MainStoryManager : Singleton<MainStoryManager>
     protected override void Awake()
     {
         base.Awake();
-
+        chapterId = LibraryLobbyManager.Instance.chapterId;
+        worldId = LibraryLobbyManager.Instance.worldId;
+        
         ScenarioData.TryGetChapter(chapterId, out chapterInfo);
         ScenarioData.TryGetWorld(worldId, out worldInfo);
         ScenarioData.TryGetPageGroup(chapterId, out pages);

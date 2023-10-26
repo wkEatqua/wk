@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LibraryLobbyManager : Singleton<LibraryLobbyManager>
+public class LibraryLobbyManager : MonoBehaviour
 {
     public WorldSelection[] worldSelections;
     [HideInInspector] public bool IsMoving = false;
@@ -14,13 +14,27 @@ public class LibraryLobbyManager : Singleton<LibraryLobbyManager>
     [SerializeField] Transform chapterParent;
     [SerializeField] GameObject popUp;
     [SerializeField] Button chapterButtonPrefab;
-
+    [SerializeField] GameObject speechBubble;
+    [SerializeField] TextMeshProUGUI bubbleText;
     [HideInInspector] public long worldId;
     [HideInInspector] public long chapterId;
-    protected override void Awake()
+
+    [TextArea] [SerializeField] string[] libraryScripts;
+
+    static LibraryLobbyManager instance;
+    public static LibraryLobbyManager Instance
     {
-        base.Awake();
+        get
+        {
+            return instance;
+        }
+    }
+    private void Awake()
+    {
+        isShowing = false;
+        instance = this;
         IsMoving = false;
+
         for (int i = 0; i < worldSelections.Length; i++)
         {
             Button button = worldSelections[i].GetComponent<Button>();
@@ -29,7 +43,7 @@ public class LibraryLobbyManager : Singleton<LibraryLobbyManager>
 
             button.onClick.AddListener(() =>
             {
-                if (Instance.IsMoving) return;
+                if (IsMoving) return;
                 for (int j = 0; j < worldSelections.Length; j++)
                 {
                     if (j == temp) continue;
@@ -41,7 +55,16 @@ public class LibraryLobbyManager : Singleton<LibraryLobbyManager>
             });
         }
 
-        worldSelections[2].Select();
+        worldSelections[2].Select();       
+
+        if(GameManager.Instance.scriptIndex >= 0)
+        {
+            ShowSpeechBubble();
+        }
+        else
+        {
+            GameManager.Instance.scriptIndex = 0;
+        }
     }
     public void OnClickBackBtn()
     {
@@ -51,8 +74,9 @@ public class LibraryLobbyManager : Singleton<LibraryLobbyManager>
     public void OnClickMainStory()
     {
         SceneChangeManager.instance.SceneMove("MainStory");
-        MainStoryManager.Instance.chapterId = chapterId;
-        MainStoryManager.Instance.worldId = worldId;
+        MainStoryManager.chapterId = chapterId;
+        MainStoryManager.worldId = worldId;
+        
     }
 
     public void OpenChaterList(long worldIndex)
@@ -73,5 +97,26 @@ public class LibraryLobbyManager : Singleton<LibraryLobbyManager>
             });
         }
     }
+    bool isShowing;
+    public void ShowSpeechBubble()
+    {
+        if (isShowing) return;
+        isShowing = true;
+        int index = Random.Range(0, libraryScripts.Length);
+        while (index == GameManager.Instance.scriptIndex)
+        {
+            index = Random.Range(0, libraryScripts.Length);
+        }
+        GameManager.Instance.scriptIndex = index;
+        speechBubble.SetActive(true);
+        bubbleText.text = libraryScripts[index];
 
+        Invoke(nameof(TurnOffSpeechBubble), 4);
+    }
+
+    void TurnOffSpeechBubble()
+    {
+        speechBubble.SetActive(false);
+        isShowing = false;
+    }
 }

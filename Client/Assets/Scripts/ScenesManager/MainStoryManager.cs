@@ -4,29 +4,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainStoryManager : Singleton<MainStoryManager> 
+public class MainStoryManager
 {
-    
-    [HideInInspector] public long worldId;
-    [HideInInspector] public long chapterId;
 
-    ScenarioChapterInfo chapterInfo;
-    ScenarioWorldInfo worldInfo;
-    List<ScenarioPageInfo> pages;
+    public static long worldId = -1;
+    public static long chapterId = -1;
 
-    public ScenarioChapterInfo ChapterInfo => chapterInfo;
-    public ScenarioWorldInfo WorldInfo => worldInfo;
-    public List<ScenarioPageInfo> Pages => pages;
+    static ScenarioChapterInfo chapterInfo;
+    static ScenarioWorldInfo worldInfo;
+    static List<ScenarioPageInfo> pages;
 
-    protected override void Awake()
-    {
-        base.Awake();
-        chapterId = LibraryLobbyManager.Instance.chapterId;
-        worldId = LibraryLobbyManager.Instance.worldId;
-        
-        ScenarioData.TryGetChapter(chapterId, out chapterInfo);
-        ScenarioData.TryGetWorld(worldId, out worldInfo);
-        ScenarioData.TryGetPageGroup(chapterId, out pages);
-
+    public static ScenarioChapterInfo ChapterInfo { get
+        {
+            if(chapterInfo == null || chapterInfo.UniqueId != chapterId)
+            {
+                ScenarioData.TryGetChapter(chapterId, out chapterInfo);
+            }
+            return chapterInfo;
+        }
     }
+    public static ScenarioWorldInfo WorldInfo
+    {
+        get
+        {
+            if(worldInfo == null || worldInfo.UniqueId != worldId)
+            {
+                ScenarioData.TryGetWorld(worldId, out worldInfo);
+            }
+            return worldInfo;
+        }
+    }
+    public static List<ScenarioPageInfo> Pages
+    {
+        get
+        {
+            if(pages == null || pages[0].ChapterId != chapterId)
+            {
+                ScenarioData.TryGetPageGroup(chapterId, out pages);
+            }
+            return pages;
+        }
+    }
+      
 }

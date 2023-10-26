@@ -93,6 +93,6 @@ public class DiceWindow : MonoBehaviour
 
         rerollButton.enabled = true;
         rerollButton.onClick.RemoveAllListeners();
-        rerollButton.onClick.AddListener(() => { canvas.Debug("더이상 굴릴 수 없습니다"); });
+        rerollButton.onClick.AddListener(() => { canvas.DebugText("더이상 굴릴 수 없습니다"); });
     }
 }

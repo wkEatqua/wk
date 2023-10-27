@@ -31,6 +31,8 @@ public class UI_MainStory : MonoBehaviour
     public DiceWindow diceWindow;
     public GameObject gameOverWindow;
     public Transform storyParent;
+    public Button nextPageButton;
+    public TextMeshProUGUI selectText;
 
     List<ScenarioPageTextInfo> pageTexts;
     List<ScenarioSelectInfo> selectInfoGroup;
@@ -104,9 +106,11 @@ public class UI_MainStory : MonoBehaviour
 
     List<UI_StoryShow> storyList = new List<UI_StoryShow>();
     List<Image> storyImageList = new List<Image>();
-    void ShowPage()
+    public void ShowPage()
     {
         consoleText.text = "";
+        selectText.text = "";
+        nextPageButton.enabled = false;
         ScenarioData.TryGetPageText(Pages[page].UniqueId, out pageTexts);
         ScenarioData.TryGetPageImages(Pages[page].UniqueId, out pageImages);
 
@@ -158,10 +162,7 @@ public class UI_MainStory : MonoBehaviour
             storyList[i].typeWriter.onTextShowed.AddListener(() => storyList[temp + 1].typeWriter.StartShowingText());
         }
         storyList.Last().typeWriter.onTextShowed.AddListener(ShowSelections);
-        foreach (var x in selectButtons)
-        {
-            Destroy(x.gameObject);
-        }
+        
         selectButtons.Clear();
     }
 
@@ -240,12 +241,20 @@ public class UI_MainStory : MonoBehaviour
 
     public void ToNextPage(ScenarioSelectInfo info)
     {
+        selectText.text = info.ResultText;
         page++;
         curSelectedVeris += info.SelectVerisimilitude;
         curMaxVeris += tempMaxVeris;
 
         Stamina += info.SelectEnergy;
-        ShowPage();
+        foreach (var x in selectButtons)
+        {
+            Destroy(x.gameObject);
+        }
+        if (selectText.text == "")
+        {
+            ShowPage();
+        }
     }
 
     public void GameOver()

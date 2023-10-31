@@ -1,6 +1,9 @@
-name: Build Test
+name: Build
 on:
   push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
   merge_group:
 

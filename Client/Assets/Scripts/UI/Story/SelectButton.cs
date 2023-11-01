@@ -16,17 +16,25 @@ public class SelectButton : MonoBehaviour
     public ScenarioSelectInfo info;
 
     bool isDisabled;
-
+    [HideInInspector] public bool isDiced;
     private void Awake()
     {
         button = GetComponent<Button>();
-        button.onClick.AddListener(() => { OnClick.Invoke(info); });
-        button.onClick.AddListener(OnClick2.Invoke);       
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(() => { OnClick.Invoke(this); });       
     }
 
+    private void OnEnable()
+    {
+        isDiced = false;
+    }
     public void DisablePointer()
     {
         isDisabled = true;
+    }
+    public void EnablePointer()
+    {
+        isDisabled = false;
     }
     public void OnPointerEnter()
     {
@@ -41,6 +49,5 @@ public class SelectButton : MonoBehaviour
         tmp.fontStyle = FontStyles.Normal;
     }
 
-    [HideInInspector] public UnityEvent<ScenarioSelectInfo> OnClick = new();
-    [HideInInspector] public UnityEvent OnClick2 = new();
+    [HideInInspector] public UnityEvent<SelectButton> OnClick = new();   
 }

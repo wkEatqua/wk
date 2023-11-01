@@ -134,9 +134,9 @@ namespace Shared.Data
         public int SelectVerisimilitude => data.SelectVerisimilitude;
 
         public string ResultText => data.ResultText;
-        public bool isDiced;
+        
         readonly ScenarioSelect data;
-        public ScenarioSelectInfo(ScenarioSelect data) { this.data = data; isDiced = false; }
+        public ScenarioSelectInfo(ScenarioSelect data) { this.data = data;}
 
         public override string ToString()
         {

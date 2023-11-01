@@ -33,6 +33,7 @@ public class UI_MainStory : MonoBehaviour
     public GameObject gameOverWindow;
     public Transform storyParent;
     public Button nextPageButton;
+    public GameObject ending;
     
     List<ScenarioPageTextInfo> pageTexts;
     List<ScenarioSelectInfo> selectInfoGroup;
@@ -93,6 +94,7 @@ public class UI_MainStory : MonoBehaviour
         chapterTitle.text = ChapterInfo.Name;       
         stamina = ChapterInfo.DefaultEnergyMax;
         hp = ChapterInfo.DefaultHealthMax;
+        ending.SetActive(false);
         ShowPage();
     }
     private void Update()
@@ -109,6 +111,7 @@ public class UI_MainStory : MonoBehaviour
     {
         consoleText.text = "";
         nextPageButton.enabled = false;
+        
         ScenarioData.TryGetPageText(Pages[page].UniqueId, out pageTexts);
         ScenarioData.TryGetPageImages(Pages[page].UniqueId, out pageImages);
         skipStrategy = new SkipTypeWriter(this);
@@ -121,32 +124,35 @@ public class UI_MainStory : MonoBehaviour
         }
         selectButtons.Clear();
 
-        for (int i = 0; i < pageTexts.Count; i++)
+        if (pageTexts != null)
         {
-            var st = storyPool.Get("Story Show");
-            st.transform.SetParent(storyParent);           
-            ScenarioPageImageInfo imageInfo = null;
-            if (pageImages != null)
+            for (int i = 0; i < pageTexts.Count; i++)
             {
-                foreach (var x in pageImages)
+                var st = storyPool.Get("Story Show");
+                st.transform.SetParent(storyParent);
+                ScenarioPageImageInfo imageInfo = null;
+                if (pageImages != null)
                 {
-                    if (x.ImageActiveOrder == i)
+                    foreach (var x in pageImages)
                     {
-                        imageInfo = x;
-                        break;
+                        if (x.ImageActiveOrder == i)
+                        {
+                            imageInfo = x;
+                            break;
+                        }
                     }
                 }
+                st.Init(this, pageTexts[i], imageInfo);
+                storyList.Add(st);
+                Image img = imagePool.Get("Image");
+                img.gameObject.SetActive(false);
+                img.transform.SetParent(storyParent);
+                storyImageList.Add(img);
+                st.typeWriter.onTextShowed.AddListener(() =>
+                {
+                    img.gameObject.SetActive(true);
+                });
             }
-            st.Init(this, pageTexts[i], imageInfo);
-            storyList.Add(st);
-            Image img = imagePool.Get("Image");
-            img.gameObject.SetActive(false);
-            img.transform.SetParent(storyParent);
-            storyImageList.Add(img);
-            st.typeWriter.onTextShowed.AddListener(() =>
-            {
-                img.gameObject.SetActive(true);
-            });
         }
 
         storyList[0].typeWriter.StartShowingText();
@@ -198,10 +204,10 @@ public class UI_MainStory : MonoBehaviour
                     obj.tmp2.text += $" 주사위 {selectInfoGroup[i].SelectValue} 필요";
                     break;
             }
-
+            
             obj.info = selectInfoGroup[i];
             obj.OnClick.AddListener(OnSelect);
-            obj.OnClick2.AddListener(() => OnSelect2(obj));           
+            obj.OnClick.AddListener(DisableSelections);           
             selectButtons.Add(obj);
             tempMaxVeris = Mathf.Max(tempMaxVeris, selectInfoGroup[i].SelectVerisimilitude);
         }
@@ -222,7 +228,7 @@ public class UI_MainStory : MonoBehaviour
         storyList.Clear();
         storyImageList.Clear();
     }
-    void OnSelect2(SelectButton button)
+    void DisableSelections(SelectButton button)
     {
         foreach(var x in selectButtons)
         {
@@ -236,26 +242,29 @@ public class UI_MainStory : MonoBehaviour
         button.tmp.color = Color.white;
         
     }
-    public void OnSelect(ScenarioSelectInfo info)
+    public void EnableSelections()
     {
-        if (page >= Pages.Count - 1)
+        foreach (var x in selectButtons)
         {
-            DebugText("마지막 페이지입니다.");
-            return;
+            x.tmp.fontStyle = FontStyles.Normal;
+            x.tmp.color = Color.white;
+            x.EnablePointer();
+            x.GetComponent<Button>().enabled = true;
+            x.GetComponent<Image>().raycastTarget = true;
         }
-
-        switch (info.SelectType)
+    }
+    public void OnSelect(SelectButton select)
+    {
+        switch (select.info.SelectType)
         {
             case SelectType.None:
-                ToNextPage(info);
+                ToNextPage(select.info);
                 break;
             case SelectType.Dice:
+                if (select.isDiced) return;
                 diceWindow.gameObject.SetActive(true);
-                if (!info.isDiced)
-                {
-                    diceWindow.Init(20, info, this);
-                    info.isDiced = true;
-                }
+                diceWindow.Init(20, select, this);
+                select.isDiced = true;
                 break;
         }
     }
@@ -276,6 +285,11 @@ public class UI_MainStory : MonoBehaviour
         
         if (str == "")
         {
+            if (page >= Pages.Count - 1)
+            {
+                ShowEnding();
+                return;
+            }
             ShowPage();
         }
         else
@@ -290,7 +304,10 @@ public class UI_MainStory : MonoBehaviour
             obj.typeWriter.StartShowingText();
         }
     }
-
+    public void ShowEnding()
+    {
+        ending.SetActive(true);
+    }
     public void GameOver()
     {
         gameOverWindow.SetActive(true);
@@ -338,6 +355,11 @@ public class UI_MainStory : MonoBehaviour
         }
         public void Skip()
         {
+            if (main.page >= main.Pages.Count - 1)
+            {
+                main.ShowEnding();
+                return;
+            }
             main.ShowPage();
         }
     }

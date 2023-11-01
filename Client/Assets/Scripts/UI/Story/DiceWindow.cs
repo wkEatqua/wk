@@ -18,16 +18,20 @@ public class DiceWindow : MonoBehaviour
     ScenarioSelectInfo info;
 
     UI_MainStory canvas;
+    SelectButton button;
     
-    public void Init(int slotNum, ScenarioSelectInfo info,UI_MainStory canvas)
-    {
-        this.info = info;
+    public void Init(int slotNum, SelectButton button,UI_MainStory canvas)
+    {       
+        slots?.ForEach(x => Destroy(x));
+        slots?.Clear();
+        this.info = button.info;
         resultText.text = "";
         rerollButton.onClick.RemoveAllListeners();
         finishButton.onClick.RemoveAllListeners();
         this.canvas = canvas;
-       
+        this.button = button;
         rerollButton.onClick.AddListener(() => StartCoroutine(StartSlot()));
+        slotParent.transform.localPosition = Vector3.zero;
 
         for (int i = 0; i < slotNum; i++)
         {
@@ -50,7 +54,7 @@ public class DiceWindow : MonoBehaviour
         int rand = Random.Range(0, slots.Count);
         Debug.Log(rand);
         int count = slots.Count * 2 + rand - 1;
-
+        if (rand == 0) rand = slots.Count;
 
         for (int i = 0, x = 0; i < count; i++, x++)
         {
@@ -88,11 +92,20 @@ public class DiceWindow : MonoBehaviour
         {
             resultText.text = "실패";
             resultText.color = Color.red;
+            finishButton.onClick.AddListener(() => canvas.EnableSelections());
+            finishButton.onClick.AddListener(() =>
+            {
+                button.tmp.fontStyle = FontStyles.Normal;
+                button.tmp.color = Color.gray;
+                button.DisablePointer();
+                button.GetComponent<Button>().enabled = false;
+                button.GetComponent<Image>().raycastTarget = false;
+            });
         }
         finishButton.onClick.AddListener(() => { gameObject.SetActive(false); });
 
         rerollButton.enabled = true;
         rerollButton.onClick.RemoveAllListeners();
-        rerollButton.onClick.AddListener(() => { canvas.Debug("더이상 굴릴 수 없습니다"); });
+        rerollButton.onClick.AddListener(() => { canvas.DebugText("더이상 굴릴 수 없습니다"); });
     }
 }

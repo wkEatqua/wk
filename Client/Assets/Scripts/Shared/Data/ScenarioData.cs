@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security;
 using System.Text;
 using Shared.Model;
 
@@ -132,9 +133,10 @@ namespace Shared.Data
         public int SelectEnergy => data.SelectEnergy;
         public int SelectVerisimilitude => data.SelectVerisimilitude;
 
-        public bool isDiced;
+        public string ResultText => data.ResultText;
+        
         readonly ScenarioSelect data;
-        public ScenarioSelectInfo(ScenarioSelect data) { this.data = data; isDiced = false; }
+        public ScenarioSelectInfo(ScenarioSelect data) { this.data = data;}
 
         public override string ToString()
         {

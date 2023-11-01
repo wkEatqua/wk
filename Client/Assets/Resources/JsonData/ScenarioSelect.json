@@ -1,1 +1,26 @@
-﻿[{"GroupId":1000010,"SelectText":"해결하기: 충분히 준비 되었어 싸워보자고!","SelectType":3,"SelectEnergy":10,"SelectVerisimilitude":3},{"GroupId":1000010,"SelectText":"비상사태: 모시깽 모시깽 아주 위험","SelectType":3,"SelectEnergy":5,"SelectVerisimilitude":4},{"GroupId":1000010,"SelectText":"패스하기: 모르겠어 그냥 넘어가자","SelectValue":10,"SelectVerisimilitude":5}]
+﻿[
+  {
+    "GroupId": 1000010,
+    "SelectText": "해결하기: 충분히 준비 되었어 싸워보자고!",
+    "SelectType": 3,
+    "SelectEnergy": 10,
+    "SelectVerisimilitude": 3,
+    "ResultText": "적을 쓰러뜨리고 해결했습니다."
+  },
+  {
+    "GroupId": 1000010,
+    "SelectText": "비상사태: 모시깽 모시깽 아주 위험",
+    "SelectType": 3,
+    "SelectEnergy": 5,
+    "SelectVerisimilitude": 4,
+    "ResultText": "당신은 위험에 빠졌습니다."
+  },
+  {
+    "GroupId": 1000010,
+    "SelectText": "패스하기: 모르겠어 그냥 넘어가자",
+    "SelectValue": 10,
+    "SelectVerisimilitude": 5,
+    "ResultText": "당신은 무사히 넘어갔습니다."
+  }
+
+]

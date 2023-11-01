@@ -7,19 +7,22 @@ using UnityEngine.UI;
 using Febucci.UI.Core;
 using Febucci.UI.Core.Parsing;
 using Shared.Model;
+using Febucci.UI;
+using System.Linq;
 
 public class UI_MainStory : MonoBehaviour
 {
     [Header("프리팹")]
     public SelectButton selectButton;
+    public UI_StoryShow storyTextPrefab;
+    public Image storySDImage;
+    public GameObject resultTextPrefab;
 
     [Header("UI")]
-    public TextMeshProUGUI story;
     public GameObject selectArea;
     public TextMeshProUGUI worldTitle;
     public TextMeshProUGUI chapterTitle;
     public Image illustration;
-    public TypewriterCore typewriter;
     public TextMeshProUGUI progress;
     public TextMeshProUGUI verisimilitude;
     public Image staminaBar;
@@ -27,17 +30,20 @@ public class UI_MainStory : MonoBehaviour
     public TextMeshProUGUI hpText;
     public TextMeshProUGUI consoleText;
     public DiceWindow diceWindow;
-   
+    public GameObject gameOverWindow;
+    public Transform storyParent;
+    public Button nextPageButton;
+    public GameObject ending;
+    
     List<ScenarioPageTextInfo> pageTexts;
     List<ScenarioSelectInfo> selectInfoGroup;
     List<ScenarioPageImageInfo> pageImages;
 
-    MainStoryManager Manager => MainStoryManager.Instance;
 
     readonly List<SelectButton> selectButtons = new();
-    ScenarioChapterInfo ChapterInfo => Manager.ChapterInfo;
-    ScenarioWorldInfo WorldInfo => Manager.WorldInfo;
-    List<ScenarioPageInfo> Pages => Manager.Pages;
+    ScenarioChapterInfo ChapterInfo => MainStoryManager.ChapterInfo;
+    ScenarioWorldInfo WorldInfo => MainStoryManager.WorldInfo;
+    List<ScenarioPageInfo> Pages => MainStoryManager.Pages;
     int page;
 
     int curSelectedVeris;
@@ -46,14 +52,16 @@ public class UI_MainStory : MonoBehaviour
 
     int stamina;
 
-    int Stamina { get { return stamina; }
-        set 
+    int Stamina
+    {
+        get { return stamina; }
+        set
         {
             if (value > ChapterInfo.DefaultEnergyMax)
             {
                 stamina = ChapterInfo.DefaultEnergyMax;
             }
-            else if(value < 0)
+            else if (value < 0)
             {
                 stamina = 0;
             }
@@ -67,22 +75,26 @@ public class UI_MainStory : MonoBehaviour
     int Verisimilitude
     {
         get
-        { 
+        {
             if (curMaxVeris <= 0) return 0;
             int value = Mathf.RoundToInt((float)curSelectedVeris / curMaxVeris * 100f);
             return value > 100 ? 100 : value;
         }
     }
-    
+
+
+    ObjectPool<UI_StoryShow> storyPool;
+    ObjectPool<Image> imagePool;
     private void Start()
-    {       
+    {
+        storyPool = new ObjectPool<UI_StoryShow>(new UI_StoryShow[] { storyTextPrefab });
+        imagePool = new ObjectPool<Image>(new Image[] { storySDImage });
         page = 0;
         worldTitle.text = WorldInfo.Name + ", ";
-        chapterTitle.text = ChapterInfo.Name;
-        typewriter.onMessage.AddListener(ShowImage);
-        typewriter.onMessage.AddListener(EnergyDown);
+        chapterTitle.text = ChapterInfo.Name;       
         stamina = ChapterInfo.DefaultEnergyMax;
         hp = ChapterInfo.DefaultHealthMax;
+        ending.SetActive(false);
         ShowPage();
     }
     private void Update()
@@ -92,56 +104,92 @@ public class UI_MainStory : MonoBehaviour
         staminaBar.fillAmount = Stamina / 100f;
         staminaText.text = Stamina.ToString();
     }
-    
-    void ShowPage()
+
+    public readonly List<UI_StoryShow> storyList = new();
+    public readonly List<Image> storyImageList = new();
+    public void ShowPage()
     {
         consoleText.text = "";
-        story.text = "";
+        nextPageButton.enabled = false;
+        
         ScenarioData.TryGetPageText(Pages[page].UniqueId, out pageTexts);
         ScenarioData.TryGetPageImages(Pages[page].UniqueId, out pageImages);
-
+        skipStrategy = new SkipTypeWriter(this);
         illustration.gameObject.SetActive(pageImages != null);
-        
-        for (int i = 0; i < pageTexts.Count; i++)
-        {
-            if (pageImages != null)
-            {
-                foreach (var x in pageImages)
-                {
-                    if (x.ImageActiveOrder == i)
-                    {
-                        story.text += $"<?ShowImage={x.ImagePath}>";
-                        break;
-                    }
-                }
-            }
-            story.text += "<?EnergyDown>";
-            story.text += pageTexts[i].Text.Replace("\\n", "\n");
-            story.text += "\n";
-        }
 
+        ClearStoryBoard();
         foreach (var x in selectButtons)
         {
             Destroy(x.gameObject);
         }
         selectButtons.Clear();
+
+        if (pageTexts != null)
+        {
+            for (int i = 0; i < pageTexts.Count; i++)
+            {
+                var st = storyPool.Get("Story Show");
+                st.transform.SetParent(storyParent);
+                ScenarioPageImageInfo imageInfo = null;
+                if (pageImages != null)
+                {
+                    foreach (var x in pageImages)
+                    {
+                        if (x.ImageActiveOrder == i)
+                        {
+                            imageInfo = x;
+                            break;
+                        }
+                    }
+                }
+                st.Init(this, pageTexts[i], imageInfo);
+                storyList.Add(st);
+                Image img = imagePool.Get("Image");
+                img.gameObject.SetActive(false);
+                img.transform.SetParent(storyParent);
+                storyImageList.Add(img);
+                st.typeWriter.onTextShowed.AddListener(() =>
+                {
+                    img.gameObject.SetActive(true);
+                });
+            }
+        }
+
+        storyList[0].typeWriter.StartShowingText();
+
+        for (int i = 0; i < storyList.Count - 1; i++)
+        {
+            int temp = i;
+            storyList[i].typeWriter.onTextShowed.AddListener(() => storyList[temp + 1].typeWriter.StartShowingText());
+        }
+        storyList.Last().typeWriter.onTextShowed.AddListener(ShowSelections);       
     }
 
     public void ShowImage(EventMarker eventMarker)
     {
         if (!(eventMarker.name == nameof(ShowImage))) return;
-        illustration.sprite = Resources.Load<Sprite>("image/Story/" + eventMarker.parameters[0]);       
+        illustration.sprite = Resources.Load<Sprite>("image/Story/" + eventMarker.parameters[0]);
     }
 
     public void EnergyDown(EventMarker eventMarker)
     {
         if (!(eventMarker.name == nameof(EnergyDown))) return;
         Stamina--;
+
+        if (Stamina == 0)
+        {
+            GameOver();
+        }
     }
     public void ShowSelections()
     {
+        if (stamina <= 0)
+        {
+            return;
+        }       
+
         ScenarioData.TryGetSelectGroup(Pages[page].SelectGroupId, out selectInfoGroup);
-     
+
         for (int i = 0; i < selectInfoGroup.Count; i++)
         {
             SelectButton obj = Instantiate(selectButton, selectArea.transform);
@@ -156,47 +204,163 @@ public class UI_MainStory : MonoBehaviour
                     obj.tmp2.text += $" 주사위 {selectInfoGroup[i].SelectValue} 필요";
                     break;
             }
-
+            
             obj.info = selectInfoGroup[i];
             obj.OnClick.AddListener(OnSelect);
+            obj.OnClick.AddListener(DisableSelections);           
             selectButtons.Add(obj);
             tempMaxVeris = Mathf.Max(tempMaxVeris, selectInfoGroup[i].SelectVerisimilitude);
         }
     }
-    public void OnSelect(ScenarioSelectInfo info)
+
+    void ClearStoryBoard()
     {
-        if (page >= Pages.Count - 1)
+        foreach (var x in storyList)
         {
-            Debug("마지막 페이지입니다.");
-            return;
+            x.typeWriter.ShowText("");
+            
+            storyPool.Return(x);
         }
-        switch (info.SelectType)
+        foreach (var x in storyImageList)
+        {
+            imagePool.Return(x);
+        }
+        storyList.Clear();
+        storyImageList.Clear();
+    }
+    void DisableSelections(SelectButton button)
+    {
+        foreach(var x in selectButtons)
+        {
+            x.tmp.fontStyle = FontStyles.Normal;
+            x.tmp.color = Color.gray;
+            x.DisablePointer();
+            x.GetComponent<Button>().enabled = false;
+            x.GetComponent<Image>().raycastTarget = false;
+        }
+        button.tmp.fontStyle = FontStyles.Underline;
+        button.tmp.color = Color.white;
+        
+    }
+    public void EnableSelections()
+    {
+        foreach (var x in selectButtons)
+        {
+            x.tmp.fontStyle = FontStyles.Normal;
+            x.tmp.color = Color.white;
+            x.EnablePointer();
+            x.GetComponent<Button>().enabled = true;
+            x.GetComponent<Image>().raycastTarget = true;
+        }
+    }
+    public void OnSelect(SelectButton select)
+    {
+        switch (select.info.SelectType)
         {
             case SelectType.None:
-                ToNextPage(info);
+                ToNextPage(select.info);
                 break;
             case SelectType.Dice:
+                if (select.isDiced) return;
                 diceWindow.gameObject.SetActive(true);
-                if (!info.isDiced)
-                {
-                    diceWindow.Init(20, info, this);
-                    info.isDiced = true;
-                }
+                diceWindow.Init(20, select, this);
+                select.isDiced = true;
                 break;
         }
     }
-    public void Debug(string log)
+    public void DebugText(string log)
     {
         consoleText.text = log;
     }
-   
+
     public void ToNextPage(ScenarioSelectInfo info)
-    {       
+    {
+        string str = "";
+        str += info.ResultText;
         page++;
         curSelectedVeris += info.SelectVerisimilitude;
         curMaxVeris += tempMaxVeris;
 
         Stamina += info.SelectEnergy;
-        ShowPage();
+        
+        if (str == "")
+        {
+            if (page >= Pages.Count - 1)
+            {
+                ShowEnding();
+                return;
+            }
+            ShowPage();
+        }
+        else
+        {
+            var obj = storyPool.Get("Story Show");           
+            obj.transform.SetParent(storyParent);
+            obj.typeWriter.ShowText(str);
+            obj.typeWriter.onMessage.RemoveAllListeners();
+            skipStrategy = new SkipShowStoryText(this);
+            ClearStoryBoard();
+            storyList.Add(obj);
+            obj.typeWriter.StartShowingText();
+        }
+    }
+    public void ShowEnding()
+    {
+        ending.SetActive(true);
+    }
+    public void GameOver()
+    {
+        gameOverWindow.SetActive(true);
+    }
+
+    public void LoadScene(string sceneName)
+    {
+        SceneChangeManager.instance.SceneMove(sceneName);
+    }
+    ISkipStrategy skipStrategy;
+
+    public void Skip()
+    {
+        skipStrategy.Skip();       
+    }
+
+    interface ISkipStrategy
+    {
+        void Skip();
+    }
+
+    class SkipTypeWriter : ISkipStrategy
+    {
+        readonly List<UI_StoryShow> storyList;
+        public void Skip()
+        {
+            foreach (var x in storyList)
+            {
+                x.typeWriter.SkipTypewriter();
+            }
+        }
+
+        public SkipTypeWriter(UI_MainStory main)
+        {
+            this.storyList = main.storyList;
+        }
+    }
+
+    class SkipShowStoryText : ISkipStrategy
+    {
+        readonly UI_MainStory main;
+        public SkipShowStoryText(UI_MainStory main)
+        {
+            this.main = main;
+        }
+        public void Skip()
+        {
+            if (main.page >= main.Pages.Count - 1)
+            {
+                main.ShowEnding();
+                return;
+            }
+            main.ShowPage();
+        }
     }
 }

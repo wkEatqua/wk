@@ -79,7 +79,7 @@ public class LibraryLobbyManager : MonoBehaviour
         
     }
 
-    public void OpenChaterList(long worldIndex)
+    public void OpenChapterList(long worldIndex)
     {
         chapterList.SetActive(true);
 

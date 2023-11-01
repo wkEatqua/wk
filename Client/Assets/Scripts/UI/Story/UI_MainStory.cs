@@ -16,6 +16,7 @@ public class UI_MainStory : MonoBehaviour
     public SelectButton selectButton;
     public UI_StoryShow storyTextPrefab;
     public Image storySDImage;
+    public GameObject resultTextPrefab;
 
     [Header("UI")]
     public GameObject selectArea;
@@ -32,8 +33,7 @@ public class UI_MainStory : MonoBehaviour
     public GameObject gameOverWindow;
     public Transform storyParent;
     public Button nextPageButton;
-    public TextMeshProUGUI selectText;
-
+    
     List<ScenarioPageTextInfo> pageTexts;
     List<ScenarioSelectInfo> selectInfoGroup;
     List<ScenarioPageImageInfo> pageImages;
@@ -90,8 +90,7 @@ public class UI_MainStory : MonoBehaviour
         imagePool = new ObjectPool<Image>(new Image[] { storySDImage });
         page = 0;
         worldTitle.text = WorldInfo.Name + ", ";
-        chapterTitle.text = ChapterInfo.Name;
-
+        chapterTitle.text = ChapterInfo.Name;       
         stamina = ChapterInfo.DefaultEnergyMax;
         hp = ChapterInfo.DefaultHealthMax;
         ShowPage();
@@ -104,32 +103,28 @@ public class UI_MainStory : MonoBehaviour
         staminaText.text = Stamina.ToString();
     }
 
-    List<UI_StoryShow> storyList = new List<UI_StoryShow>();
-    List<Image> storyImageList = new List<Image>();
+    public readonly List<UI_StoryShow> storyList = new();
+    public readonly List<Image> storyImageList = new();
     public void ShowPage()
     {
         consoleText.text = "";
-        selectText.text = "";
         nextPageButton.enabled = false;
         ScenarioData.TryGetPageText(Pages[page].UniqueId, out pageTexts);
         ScenarioData.TryGetPageImages(Pages[page].UniqueId, out pageImages);
-
+        skipStrategy = new SkipTypeWriter(this);
         illustration.gameObject.SetActive(pageImages != null);
 
-        foreach (var x in storyList)
+        ClearStoryBoard();
+        foreach (var x in selectButtons)
         {
-            storyPool.Return(x);
+            Destroy(x.gameObject);
         }
-        foreach(var x in storyImageList)
-        {
-            imagePool.Return(x);
-        }
-        storyList.Clear();
-        storyImageList.Clear();
+        selectButtons.Clear();
+
         for (int i = 0; i < pageTexts.Count; i++)
         {
             var st = storyPool.Get("Story Show");
-            st.transform.SetParent(storyParent);
+            st.transform.SetParent(storyParent);           
             ScenarioPageImageInfo imageInfo = null;
             if (pageImages != null)
             {
@@ -161,9 +156,7 @@ public class UI_MainStory : MonoBehaviour
             int temp = i;
             storyList[i].typeWriter.onTextShowed.AddListener(() => storyList[temp + 1].typeWriter.StartShowingText());
         }
-        storyList.Last().typeWriter.onTextShowed.AddListener(ShowSelections);
-        
-        selectButtons.Clear();
+        storyList.Last().typeWriter.onTextShowed.AddListener(ShowSelections);       
     }
 
     public void ShowImage(EventMarker eventMarker)
@@ -186,9 +179,9 @@ public class UI_MainStory : MonoBehaviour
     {
         if (stamina <= 0)
         {
-
             return;
-        }
+        }       
+
         ScenarioData.TryGetSelectGroup(Pages[page].SelectGroupId, out selectInfoGroup);
 
         for (int i = 0; i < selectInfoGroup.Count; i++)
@@ -208,9 +201,40 @@ public class UI_MainStory : MonoBehaviour
 
             obj.info = selectInfoGroup[i];
             obj.OnClick.AddListener(OnSelect);
+            obj.OnClick2.AddListener(() => OnSelect2(obj));           
             selectButtons.Add(obj);
             tempMaxVeris = Mathf.Max(tempMaxVeris, selectInfoGroup[i].SelectVerisimilitude);
         }
+    }
+
+    void ClearStoryBoard()
+    {
+        foreach (var x in storyList)
+        {
+            x.typeWriter.ShowText("");
+            
+            storyPool.Return(x);
+        }
+        foreach (var x in storyImageList)
+        {
+            imagePool.Return(x);
+        }
+        storyList.Clear();
+        storyImageList.Clear();
+    }
+    void OnSelect2(SelectButton button)
+    {
+        foreach(var x in selectButtons)
+        {
+            x.tmp.fontStyle = FontStyles.Normal;
+            x.tmp.color = Color.gray;
+            x.DisablePointer();
+            x.GetComponent<Button>().enabled = false;
+            x.GetComponent<Image>().raycastTarget = false;
+        }
+        button.tmp.fontStyle = FontStyles.Underline;
+        button.tmp.color = Color.white;
+        
     }
     public void OnSelect(ScenarioSelectInfo info)
     {
@@ -219,6 +243,7 @@ public class UI_MainStory : MonoBehaviour
             DebugText("마지막 페이지입니다.");
             return;
         }
+
         switch (info.SelectType)
         {
             case SelectType.None:
@@ -241,19 +266,28 @@ public class UI_MainStory : MonoBehaviour
 
     public void ToNextPage(ScenarioSelectInfo info)
     {
-        selectText.text = info.ResultText;
+        string str = "";
+        str += info.ResultText;
         page++;
         curSelectedVeris += info.SelectVerisimilitude;
         curMaxVeris += tempMaxVeris;
 
         Stamina += info.SelectEnergy;
-        foreach (var x in selectButtons)
-        {
-            Destroy(x.gameObject);
-        }
-        if (selectText.text == "")
+        
+        if (str == "")
         {
             ShowPage();
+        }
+        else
+        {
+            var obj = storyPool.Get("Story Show");           
+            obj.transform.SetParent(storyParent);
+            obj.typeWriter.ShowText(str);
+            obj.typeWriter.onMessage.RemoveAllListeners();
+            skipStrategy = new SkipShowStoryText(this);
+            ClearStoryBoard();
+            storyList.Add(obj);
+            obj.typeWriter.StartShowingText();
         }
     }
 
@@ -266,12 +300,45 @@ public class UI_MainStory : MonoBehaviour
     {
         SceneChangeManager.instance.SceneMove(sceneName);
     }
+    ISkipStrategy skipStrategy;
 
     public void Skip()
     {
-        foreach (var x in storyList)
+        skipStrategy.Skip();       
+    }
+
+    interface ISkipStrategy
+    {
+        void Skip();
+    }
+
+    class SkipTypeWriter : ISkipStrategy
+    {
+        readonly List<UI_StoryShow> storyList;
+        public void Skip()
         {
-            x.typeWriter.SkipTypewriter();
+            foreach (var x in storyList)
+            {
+                x.typeWriter.SkipTypewriter();
+            }
+        }
+
+        public SkipTypeWriter(UI_MainStory main)
+        {
+            this.storyList = main.storyList;
+        }
+    }
+
+    class SkipShowStoryText : ISkipStrategy
+    {
+        readonly UI_MainStory main;
+        public SkipShowStoryText(UI_MainStory main)
+        {
+            this.main = main;
+        }
+        public void Skip()
+        {
+            main.ShowPage();
         }
     }
 }

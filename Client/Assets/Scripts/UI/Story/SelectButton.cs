@@ -14,20 +14,33 @@ public class SelectButton : MonoBehaviour
     Button button;
 
     public ScenarioSelectInfo info;
+
+    bool isDisabled;
+
     private void Awake()
     {
         button = GetComponent<Button>();
         button.onClick.AddListener(() => { OnClick.Invoke(info); });
+        button.onClick.AddListener(OnClick2.Invoke);       
+    }
+
+    public void DisablePointer()
+    {
+        isDisabled = true;
     }
     public void OnPointerEnter()
     {
+        if(isDisabled) return;
         tmp.fontStyle = FontStyles.Underline;
     }
 
     public void OnPointerExit()
     {
+        if (isDisabled) return;
+
         tmp.fontStyle = FontStyles.Normal;
     }
 
     [HideInInspector] public UnityEvent<ScenarioSelectInfo> OnClick = new();
+    [HideInInspector] public UnityEvent OnClick2 = new();
 }

@@ -28,4 +28,34 @@ namespace WK.Battle
     {
         Dice0, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, Dice7, Dice8, Dice9, Dice10, Dice11, Dice12, Dice13, Dice14, Dice15, Dice16, Dice17, Dice18, Dice19, Dice20
     }
+
+
+
+    /// <summary>
+    /// ¹«±â - ¹«±âÁ¾·ù
+    /// </summary>
+    public enum WeaponType
+    {
+        PUNCH,      //1. ÁÖ¸Ô
+        SWORD,      //2. °Ë
+        MAGIC,      //3. ÁöÆÎÀÌ
+        GUN,        //4. ÃÑ
+        BATTA       //5. ¸ùµÕÀÌ
+    }
+
+
+
+    /// <summary>
+    /// ¹æ¾î±¸ - ¹æ¾î±¸Á¾·ù
+    /// </summary>
+    public enum DefenceType
+    {
+        NONE,           //0. ÁÖ¸Ô
+        METAL,          //1. ÆÇ±Ý
+        LIGHTARMOR,     //2. °æ°©
+        LEATHER,        //3. °¡Á×
+        CLOTHE,         //4. Ãµ
+        HARDARMOR       //5 - ¹æÅº
+    }
+
 }

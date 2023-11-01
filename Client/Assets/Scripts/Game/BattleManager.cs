@@ -4,96 +4,70 @@ using TMPro;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using DG.Tweening;
+using Unity.Collections.LowLevel.Unsafe;
 
 namespace WK.Battle
 {
-    public enum GameState
-    {
-        READY,
-        START,
-        GAME,
-        END,
-        RESULT
-    }
-
-    [SerializeField]
-    public struct Player
-    {
-        public bool isPlayer;
-
-        public Image myCharacterIMG;
-        public TextMeshProUGUI myCharacterName; //캐릭터이름
-        public int diceCount;
-        //public List<Skill> Skills = new List<Skill>();
-        public Skill[] Skills;
-
-        //public List<int> DiceSlot = new List<int>();
-        public int[] DiceSlot;
-    }
-
-
-    
 
     public class BattleManager : MonoBehaviour
     {
+        public enum GameState
+        {
+            READY,
+            START,
+            GAME,
+            END,
+            RESULT
+        }
+
         [Header("====스테이지기본정보====")]
-        //public string StageCode; //스테이지 코드
         public int[] diceRange = { 5, 11, 12 }; // 효과1단계 5 효과2단계 11 효과3단계 12
         public Sprite diceImg;
 
-        [Space(10)]
-        [Header("====플레이어UI====")]
-        public Image myCharacterIMG;
-        public TextMeshProUGUI myCharacterName; //캐릭터이름
-        public Slider myHPSlider; //체력바
-        public Slider myFatigueSlider; //피로도
 
-        public DiceSlots[] myDiceSlot; //주사위슬롯
-        public TextMeshProUGUI myDEM;   //DEM 게이지
-        public TextMeshProUGUI myCOST; //개연성
-        public Skill[] mySkills;
-        
-        [Space(10)]
-        [Header("====상대적UI====")]
-        public Image enemyCharacterIMG;
-        public TextMeshProUGUI enemyCharacterName; //캐릭터이름
-        public Slider enemyHPSlider; //체력바
-        public Slider enemyFatigueSlider; //피로도
-
-        public DiceSlots[] enemyDiceSlot; //주사위슬롯
-        //public TextMeshProUGUI myDEM;   //DEM 게이지
-        //public TextMeshProUGUI myCOST; //개연성
-        public Skill[] enemySkills;
+        [SerializeField] public PlayerBattleInfo Player;
+        [SerializeField] public EnemyBattleInfo Enemy;
 
         [Space(20)]
         [Header("====팝업====")]
-        public DicePopup dicePopup;
-
-
-        public Player player = new Player();
-        public Player enemy = new Player();
+        public DicePopup DiceRollingPAN; //주사위굴리는판
+         
 
         [SerializeField] bool isMyTurn = true;  // true : 플레이어 턴  false: 적 턴
-        int[] currentSlot;
-        public GameObject interactionEnable; //상호작용 가능상태 true 불가능 false (default: false)
+        public GameObject interactionEnable; //상호작용 가능상태 true 불가능 false
 
-      
+        [Space(20)]
+        [Header("====스킬이펙트====")]
+        [SerializeField] public GameObject Effect_HURT;
+        [SerializeField] public GameObject Effect_ATTACK;
 
         GameState gameState = GameState.READY;
 
-        
 
+
+        int RelationShipValue=5;
+        public TextMeshProUGUI uiRelationShowText; //개연성 텍스트
+        int DEMValue=0;
+        public TextMeshProUGUI uiDEMShowText; // dem 게이지 텍스트
+        public Image uiDEMShowGauge; // dem 게이지 이미지
+
+        int MAXDEMGuage = 100; //dem 게이지 full
+        int MAXRLSGuage = 10; //relationship 게이지 full
+        int MAXRLSorigin = 5; //relationship 
+
+
+        
 
         public void init()
         {
             interactionEnable.SetActive(false);
-            foreach (var ds in myDiceSlot)
-                ds.slotDiceText.text = ""; //기본빈칸
+
+            Player.init();
+            Enemy.init();
         }
-        public void initTurn()
-        {
-            //턴 돌아올때 초기화 해줄 것
-        }
+
+
 
         private void Start()
         {
@@ -101,11 +75,16 @@ namespace WK.Battle
             StartCoroutine(GameBegin());
         }
 
-      
-
-        public void initPlayerDataLoad() //플레이어, 적 플레이어 데이터 로드
+        public void Update()
         {
-            player.diceCount = 4; //임시 주사위갯수 --지울것
+            
+        }
+
+ 
+
+            public void initPlayerDataLoad() //플레이어, 적 플레이어 데이터 로드
+        {
+            Player.HavingDice = 4; //임시 주사위갯수 --지울것
             //스테이지정보
             //적정보
             //소유캐릭터,스킬 정보...등등 로드
@@ -142,7 +121,7 @@ namespace WK.Battle
         #region # 주사위 굴리기 
         public void OnBtnClickDiceLoll()
         {
-            if (dicePopup.gameObject.activeSelf) return; //이미활성화되어있다면 return
+            if (DiceRollingPAN.gameObject.activeSelf) return; //이미활성화되어있다면 return
 
             interactionEnable.SetActive(false);
             StartCoroutine(BattleDiceRollingStart()); //주사위굴리기
@@ -151,38 +130,52 @@ namespace WK.Battle
 
         public IEnumerator BattleDiceRollingStart()
         {
-            Player currentPlayer = new Player();
 
-            if (isMyTurn)   currentPlayer = player;
-            else            currentPlayer = enemy;
-
-           //yield return new WaitForSeconds(1.5f);
-           dicePopup.gameObject.SetActive(true);
-           dicePopup.SetDice(currentPlayer.diceCount);
+            //yield return new WaitForSeconds(1.5f);
+            DiceRollingPAN.gameObject.SetActive(true);
+            if (isMyTurn)
+            { 
+                DiceRollingPAN.SetDice(Player.HavingDice); 
+            }
+            else 
+            { 
+                DiceRollingPAN.SetDice(Enemy.BaseDiceCount); 
+            }
+            
 
             yield return null;
         }
 
 
         public IEnumerator BattleDiceRollFinish()
-        {
-            player.DiceSlot = new int[4];
+        {                           
+            Player.diceValues = new int[4];
 
-            for (int i=0;i<dicePopup.diceResult.Count;i++)
+         
+            for (int i=0;i<DiceRollingPAN.diceResult.Count;i++)
             {
-                if (isMyTurn) { player.DiceSlot[i] = dicePopup.diceResult[i]; }
-                else enemy.DiceSlot[i] = dicePopup.diceResult[i];
+                if (isMyTurn) { Player.diceValues[i] = DiceRollingPAN.diceResult[i]; }
+                else Enemy.diceValues[i] = DiceRollingPAN.diceResult[i];
             }
             yield return new WaitForSeconds(2.0f);
 
-            dicePopup.gameObject.SetActive(false);
-
-            for (int i = 0; i < player.DiceSlot.Length; i++)
+            DiceRollingPAN.gameObject.SetActive(false);
+            interactionEnable.SetActive(true);
+            for (int i = 0; i < Player.diceValues.Length; i++)
             {
-                if (isMyTurn) { myDiceSlot[i].SaveToDiceSlot(player.DiceSlot[i]); }
-                else enemyDiceSlot[i].SaveToDiceSlot(enemy.DiceSlot[i]);
+                if (isMyTurn)
+                {
+                    Player.uiDiceSlots[i].Dice.SaveToDiceSlot(Player.diceValues[i]);
+                    Player.uiDiceSlots[i].Dice.gameObject.SetActive(true);
+                }
+                else {
+                    Enemy.uiDiceSlots[i].Dice.SaveToDiceSlot(Enemy.diceValues[i]);
+                    Enemy.uiDiceSlots[i].Dice.gameObject.SetActive(true);
+                }
 
                 yield return new WaitForSeconds(1.0f);
+
+                
             }
             interactionEnable.SetActive(false);
 
@@ -194,6 +187,26 @@ namespace WK.Battle
 
 
         #region # 스킬발동
+
+        // 개연성 게이지 변경
+        public void SetRelationGauge(int point)
+        {
+            if (MAXRLSGuage < MAXRLSorigin) return;
+            RelationShipValue -= point;
+            uiRelationShowText.text = "개연성\n"+ RelationShipValue + "/" + MAXRLSorigin;
+        }
+
+        // DEM 게이지 변경
+        public void SetDEMGauge(int point)
+        {
+            DEMValue += point;
+
+            uiDEMShowGauge.fillAmount = DEMValue / MAXDEMGuage; 
+            //uiDEMShowText.text = "DEM\n"+Mathf.Floor(MAXDEMGuage / DEMValue) * 100 +"%"; // 채워진 퍼센트
+            uiDEMShowText.text = "DEM\n"+ (DEMValue/ MAXDEMGuage)*100 +"%"; // 채워진 퍼센트
+
+            Debug.Log("DEMValue = "+DEMValue);
+        }
 
         #endregion
 
@@ -208,5 +221,23 @@ namespace WK.Battle
         }
         #endregion
 
+
+
+
+        // UI 상호작용 ================== (임시)
+
+        public void PlayEffectHURT()
+        {
+            Effect_HURT.SetActive(false);
+            Effect_HURT.SetActive(true);
+        }
+
+        public void PlayEffectATTACK()
+        {
+            Effect_ATTACK.SetActive(false);
+            Effect_ATTACK.SetActive(true);
+        }
+
+        //=================================
     }
 }

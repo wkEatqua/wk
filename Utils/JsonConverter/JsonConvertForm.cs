@@ -42,7 +42,7 @@ namespace JsonConverter
                     ResultTextBox.Text = $"Start parsing {fileName}.";
 
                     var type = TypeList.FirstOrDefault(v => v.Name == fileName);
-
+                    
                     var data = new ExcelMapper(filePath).Fetch(type);
                     var result = JsonService.SerializePlainObject(data);
 

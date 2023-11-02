@@ -9,6 +9,7 @@ using Febucci.UI.Core.Parsing;
 using Shared.Model;
 using Febucci.UI;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class UI_MainStory : MonoBehaviour
 {
@@ -44,44 +45,39 @@ public class UI_MainStory : MonoBehaviour
     ScenarioChapterInfo ChapterInfo => MainStoryManager.ChapterInfo;
     ScenarioWorldInfo WorldInfo => MainStoryManager.WorldInfo;
     List<ScenarioPageInfo> Pages => MainStoryManager.Pages;
-    int page;
-
-    int curSelectedVeris;
-    int curMaxVeris;
+       
     int tempMaxVeris;
-
-    int stamina;
-
+    
     int Stamina
     {
-        get { return stamina; }
+        get { return data.Stamina; }
         set
         {
             if (value > ChapterInfo.DefaultEnergyMax)
             {
-                stamina = ChapterInfo.DefaultEnergyMax;
+                data.Stamina = ChapterInfo.DefaultEnergyMax;
             }
             else if (value < 0)
             {
-                stamina = 0;
+                data.Stamina = 0;
             }
             else
             {
-                stamina = value;
+                data.Stamina = value;
             }
         }
     }
-    int hp;
+    
     int Verisimilitude
     {
         get
         {
-            if (curMaxVeris <= 0) return 0;
-            int value = Mathf.RoundToInt((float)curSelectedVeris / curMaxVeris * 100f);
+            if (data.CurMaxVeris <= 0) return 0;
+            int value = Mathf.RoundToInt((float)data.CurSelectedVeris / data.CurMaxVeris * 100f);
             return value > 100 ? 100 : value;
         }
     }
-
+    StorySaveData data;
 
     ObjectPool<UI_StoryShow> storyPool;
     ObjectPool<Image> imagePool;
@@ -89,18 +85,32 @@ public class UI_MainStory : MonoBehaviour
     {
         storyPool = new ObjectPool<UI_StoryShow>(new UI_StoryShow[] { storyTextPrefab });
         imagePool = new ObjectPool<Image>(new Image[] { storySDImage });
-        page = 0;
+
+        GameManager.Save.GameDatas.Datas.ForEach(x =>
+        {
+            if (x is StorySaveData)
+            {
+                data = x as StorySaveData;
+                
+                return;
+            }
+        });
+        if (!data.isLoaded)
+        {
+            data.Stamina = ChapterInfo.DefaultEnergyMax;
+            data.Hp = ChapterInfo.DefaultHealthMax;
+        }
+        
         worldTitle.text = WorldInfo.Name + ", ";
         chapterTitle.text = ChapterInfo.Name;       
-        stamina = ChapterInfo.DefaultEnergyMax;
-        hp = ChapterInfo.DefaultHealthMax;
+        
         ending.SetActive(false);
         ShowPage();
     }
     private void Update()
     {
         verisimilitude.text = Verisimilitude.ToString() + "%";
-        progress.text = Mathf.RoundToInt((float)page / Pages.Count * 100).ToString() + "%";
+        progress.text = Mathf.RoundToInt((float)data.Page / Pages.Count * 100).ToString() + "%";
         staminaBar.fillAmount = Stamina / 100f;
         staminaText.text = Stamina.ToString();
     }
@@ -112,8 +122,8 @@ public class UI_MainStory : MonoBehaviour
         consoleText.text = "";
         nextPageButton.enabled = false;
         
-        ScenarioData.TryGetPageText(Pages[page].UniqueId, out pageTexts);
-        ScenarioData.TryGetPageImages(Pages[page].UniqueId, out pageImages);
+        ScenarioData.TryGetPageText(Pages[data.Page].UniqueId, out pageTexts);
+        ScenarioData.TryGetPageImages(Pages[data.Page].UniqueId, out pageImages);
         skipStrategy = new SkipTypeWriter(this);
         illustration.gameObject.SetActive(pageImages != null);
 
@@ -183,12 +193,12 @@ public class UI_MainStory : MonoBehaviour
     }
     public void ShowSelections()
     {
-        if (stamina <= 0)
+        if (Stamina <= 0)
         {
             return;
         }       
 
-        ScenarioData.TryGetSelectGroup(Pages[page].SelectGroupId, out selectInfoGroup);
+        ScenarioData.TryGetSelectGroup(Pages[data.Page].SelectGroupId, out selectInfoGroup);
 
         for (int i = 0; i < selectInfoGroup.Count; i++)
         {
@@ -277,15 +287,15 @@ public class UI_MainStory : MonoBehaviour
     {
         string str = "";
         str += info.ResultText;
-        page++;
-        curSelectedVeris += info.SelectVerisimilitude;
-        curMaxVeris += tempMaxVeris;
+        data.Page++;
+        data.CurSelectedVeris += info.SelectVerisimilitude;
+        data.CurMaxVeris += tempMaxVeris;
 
         Stamina += info.SelectEnergy;
         
         if (str == "")
         {
-            if (page >= Pages.Count - 1)
+            if (data.Page >= Pages.Count - 1)
             {
                 ShowEnding();
                 return;
@@ -298,11 +308,14 @@ public class UI_MainStory : MonoBehaviour
             obj.transform.SetParent(storyParent);
             obj.typeWriter.ShowText(str);
             obj.typeWriter.onMessage.RemoveAllListeners();
-            skipStrategy = new SkipShowStoryText(this);
+            skipStrategy = new SkipResultText(obj);
+            obj.typeWriter.onTextShowed.RemoveAllListeners();
+            obj.typeWriter.onTextShowed.AddListener(() => skipStrategy = new SkipShowStoryText(this));
             ClearStoryBoard();
             storyList.Add(obj);
             obj.typeWriter.StartShowingText();
         }
+        GameManager.Save.SaveAllDatas(SaveManager.SaveType.Story);
     }
     public void ShowEnding()
     {
@@ -355,12 +368,24 @@ public class UI_MainStory : MonoBehaviour
         }
         public void Skip()
         {
-            if (main.page >= main.Pages.Count - 1)
+            if(main.data.Page >= main.Pages.Count)
             {
                 main.ShowEnding();
                 return;
             }
             main.ShowPage();
+        }
+    }
+    class SkipResultText : ISkipStrategy
+    {
+        readonly UI_StoryShow storyShow;
+        public SkipResultText(UI_StoryShow storyShow)
+        {
+            this.storyShow = storyShow;
+        }
+        public void Skip()
+        {
+            storyShow.typeWriter.SkipTypewriter();
         }
     }
 }

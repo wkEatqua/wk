@@ -152,4 +152,12 @@
         public string CharacterName { get; set; }
 
     }
+
+    [System.Serializable]
+    public class CharacterScript : JsonModel
+    {
+        public long GroupId { get; set; }
+        public string ScriptText { get; set; }
+        public long UniqueId { get; set; }
+    }
 }

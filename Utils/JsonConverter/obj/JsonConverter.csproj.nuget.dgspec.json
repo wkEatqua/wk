@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "F:\\wk\\Utils\\JsonConverter\\JsonConverter.csproj": {}
+    "C:\\Users\\kg881\\OneDrive\\Documents\\GitHub\\wk\\Utils\\JsonConverter\\JsonConverter.csproj": {}
   },
   "projects": {
-    "F:\\wk\\Client\\Assets\\Scripts\\Shared\\Shared.csproj": {
+    "C:\\Users\\kg881\\OneDrive\\Documents\\GitHub\\wk\\Client\\Assets\\Scripts\\Shared\\Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\wk\\Client\\Assets\\Scripts\\Shared\\Shared.csproj",
+        "projectUniqueName": "C:\\Users\\kg881\\OneDrive\\Documents\\GitHub\\wk\\Client\\Assets\\Scripts\\Shared\\Shared.csproj",
         "projectName": "Shared",
-        "projectPath": "F:\\wk\\Client\\Assets\\Scripts\\Shared\\Shared.csproj",
-        "packagesPath": "C:\\Users\\EATQUA\\.nuget\\packages\\",
-        "outputPath": "F:\\wk\\Client\\Assets\\Scripts\\Shared\\obj\\",
+        "projectPath": "C:\\Users\\kg881\\OneDrive\\Documents\\GitHub\\wk\\Client\\Assets\\Scripts\\Shared\\Shared.csproj",
+        "packagesPath": "C:\\Users\\kg881\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\kg881\\OneDrive\\Documents\\GitHub\\wk\\Utils\\JsonConverter\\obj\\Shared\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\EATQUA\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\kg881\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -69,25 +65,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "F:\\wk\\Utils\\JsonConverter\\JsonConverter.csproj": {
+    "C:\\Users\\kg881\\OneDrive\\Documents\\GitHub\\wk\\Utils\\JsonConverter\\JsonConverter.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\wk\\Utils\\JsonConverter\\JsonConverter.csproj",
+        "projectUniqueName": "C:\\Users\\kg881\\OneDrive\\Documents\\GitHub\\wk\\Utils\\JsonConverter\\JsonConverter.csproj",
         "projectName": "JsonConverter",
-        "projectPath": "F:\\wk\\Utils\\JsonConverter\\JsonConverter.csproj",
-        "packagesPath": "C:\\Users\\EATQUA\\.nuget\\packages\\",
-        "outputPath": "F:\\wk\\Utils\\JsonConverter\\obj\\",
+        "projectPath": "C:\\Users\\kg881\\OneDrive\\Documents\\GitHub\\wk\\Utils\\JsonConverter\\JsonConverter.csproj",
+        "packagesPath": "C:\\Users\\kg881\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\kg881\\OneDrive\\Documents\\GitHub\\wk\\Utils\\JsonConverter\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\EATQUA\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\kg881\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -101,8 +93,8 @@
           "net6.0-windows7.0": {
             "targetAlias": "net6.0-windows",
             "projectReferences": {
-              "F:\\wk\\Client\\Assets\\Scripts\\Shared\\Shared.csproj": {
-                "projectPath": "F:\\wk\\Client\\Assets\\Scripts\\Shared\\Shared.csproj"
+              "C:\\Users\\kg881\\OneDrive\\Documents\\GitHub\\wk\\Client\\Assets\\Scripts\\Shared\\Shared.csproj": {
+                "projectPath": "C:\\Users\\kg881\\OneDrive\\Documents\\GitHub\\wk\\Client\\Assets\\Scripts\\Shared\\Shared.csproj"
               }
             }
           }
@@ -135,7 +127,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
         }
       }
     }

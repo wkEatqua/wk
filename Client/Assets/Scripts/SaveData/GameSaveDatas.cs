@@ -7,14 +7,21 @@ using UnityEngine;
 
 public abstract class SaveData
 {
-    public abstract void Save(int index);
-    public abstract void Load(int index);
+    protected GameSaveDatas gameData;
+    public bool isLoaded = false;
+    public SaveData(GameSaveDatas gameData)
+    {
+        this.gameData = gameData;
+        isLoaded = false;
+    }
+    public abstract void Save();
+    public abstract void Load();
 }
 public class GameSaveDatas
 {
     List<SaveData> datas;
 
-    List<SaveData> Datas
+    public List<SaveData> Datas
     {
         get
         {
@@ -25,32 +32,33 @@ public class GameSaveDatas
 
                 foreach (var type in types)
                 {
-                    datas.Add(Activator.CreateInstance(type) as SaveData);
+                    datas.Add(Activator.CreateInstance(type,this) as SaveData);
                 }
             }
 
             return datas;
         }
-    }  
-
-    public enum DataType
-    {
-        
     }
 
-    public void SaveAll(int index)
+    readonly SaveManager manager;
+    public SaveManager Manager => manager;
+    public GameSaveDatas(SaveManager manager)
     {
+        this.manager = manager;
+    }
+    public void SaveAll()
+    {        
         foreach (var data in Datas)
         {
-            data.Save(index);
+            data.Save();
         }
     }
 
-    public void LoadAll(int index)
+    public void LoadAll()
     {
         foreach (var data in Datas)
         {
-            data.Load(index);
+            data.Load();
         }
     }
 }

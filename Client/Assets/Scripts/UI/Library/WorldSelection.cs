@@ -31,7 +31,7 @@ public class WorldSelection : MonoBehaviour
         {
             if (selected)
             {
-                LibraryLobbyManager.Instance.OpenChaterList(worldId);
+                LibraryLobbyManager.Instance.OpenChapterList(worldId);
             }
         });
         rotation = transform.localEulerAngles.z;

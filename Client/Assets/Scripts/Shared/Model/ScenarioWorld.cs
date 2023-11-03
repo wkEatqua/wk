@@ -89,6 +89,7 @@
         public int SelectValue { get; set; }
         public int SelectEnergy { get; set; }
         public int SelectVerisimilitude { get; set; }
+        public string ResultText { get; set; }
     }
     [System.Serializable]
 

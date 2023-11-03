@@ -22,8 +22,6 @@ public class UI_Intro : MonoBehaviour
 
     ScenarioIntroInfo info;
 
-    MainStoryManager Manager => MainStoryManager.Instance;
-
     public Image bg;
     void Start()
     {
@@ -39,13 +37,13 @@ public class UI_Intro : MonoBehaviour
             }
         });
         
-        ScenarioData.TryGetIntro(Manager.ChapterInfo.UniqueId, out info);
+        ScenarioData.TryGetIntro(MainStoryManager.ChapterInfo.UniqueId, out info);
 
         bg.rectTransform.anchoredPosition = new Vector2(info.BackGroundPosX, info.BackGroundPosY);
         bg.color = new Color(info.BackGroundColorR,info.BackGroundColorG,info.BackGroundColorB,info.BackGroundColorA);
 
-        stageTitle.text = Manager.ChapterInfo.Name;
-        worldTitle.text = Manager.WorldInfo.Name;
+        stageTitle.text = MainStoryManager.ChapterInfo.Name;
+        worldTitle.text = MainStoryManager.WorldInfo.Name;
         classText.text = info.CharacterClass;
         nameText.text = info.CharacterName;
 

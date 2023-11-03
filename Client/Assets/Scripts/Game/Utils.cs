@@ -58,4 +58,9 @@ namespace WK.Battle
         HARDARMOR       //5 - πÊ≈∫
     }
 
+    public enum NameText
+    {
+        NAME0, NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8, NAME9, NAME10
+    }
+
 }

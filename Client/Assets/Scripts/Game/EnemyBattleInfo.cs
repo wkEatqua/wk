@@ -47,6 +47,10 @@ namespace WK.Battle
         public float HPvalue;
         public float MAXHPvalue;
 
+        public void DataLoad()
+        {
+
+        }
 
         public void init()
         {

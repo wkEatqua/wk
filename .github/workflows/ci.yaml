@@ -48,7 +48,6 @@ jobs:
       fail-fast: false
       matrix:
         targetPlatform:
-          - Android
           - StandaloneWindows
           - StandaloneWindows64
           

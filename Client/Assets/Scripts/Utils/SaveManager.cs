@@ -12,9 +12,9 @@ public class SaveManager
     private readonly string devJsonFilePath = "Assets/Resources/JsonData/Save/";
     private readonly string distJsonFilePath = "wk/";
 
-    SaveData data = new();
+    List<SaveData> dataList = new();
 
-    public SaveData Data => data;
+    public List<SaveData> DataList => dataList;
 
     readonly GameSaveDatas gameDatas;
 
@@ -32,51 +32,59 @@ public class SaveManager
     }
     public void SaveAllDatas(SaveType type)
     {
-        switch (type)
-        {
-            case SaveType.Story:
-                data = new StoryData();
-                break;
-            case SaveType.Minigame:
-                data = new MiniGameData();
-                break;
-        }
+        dataList.Clear();
         saveType = type;
         PlayerPrefs.SetString("SaveType", saveType.ToString());
         gameDatas.SaveAll();
 
-        
-        Save(data);
+        switch (type)
+        {
+            case SaveType.Story:
+                dataList.ForEach(x =>
+                {
+                    if (x is StoryData)
+                    {
+                        Save(x as StoryData);
+                    }
+                });
+                break;
+            case SaveType.Minigame:
+                dataList.ForEach(x =>
+                {
+                    if (x is MiniGameData)
+                    {
+                        Save(x as MiniGameData);
+                    }
+                });
+                break;
+        }
     }
 
     public void LoadAllDatas()
     {
-        string str = PlayerPrefs.GetString("SaveType");
-       
-        if (Enum.IsDefined(typeof(SaveType), str)) 
+        string str = PlayerPrefs.GetString("SaveType", "Null");
+        
+        if (Enum.IsDefined(typeof(SaveType), str))
         {
             saveType = (SaveType)Enum.Parse(typeof(SaveType), str);
-            
+
             switch (saveType)
             {
                 case SaveType.Story:
-                    data = Load<StoryData>();
-                    if (data != null) data.IsLoaded = true;
-                    else data = new StoryData();
-
+                    dataList = Load<StoryData>();
                     break;
                 case SaveType.Minigame:
-                    data = Load<MiniGameData>();
-                    if (data != null) data.IsLoaded = true;
-                    else data = new MiniGameData();
+                    dataList = Load<MiniGameData>();
                     break;
             }
+
+            dataList ??= new();
         }
         else
         {
-            data = new SaveData();
+            dataList.Clear();
         }
-
+        
         gameDatas.LoadAll();
     }
     void Save<T>(T data) where T : SaveData
@@ -84,25 +92,25 @@ public class SaveManager
         // Convert the GameData object to JSON string
         string json = data.ToJson();
 #if UNITY_EDITOR
-        File.WriteAllText(Path.Combine(devJsonFilePath, $"{typeof(T).Name}.json"), json);
+        File.WriteAllText(Path.Combine(devJsonFilePath, $"{typeof(T).Name}/{data.SaveId}.json"), json);
 #else
         // Save the JSON string to a file
         File.WriteAllText(Path.Combine(Application.persistentDataPath, distJsonFilePath, $"{typeof(T).Name}.json"), json);     
 #endif
     }
 
-    T Load<T>() where T : SaveData
+    List<SaveData> Load<T>() where T : SaveData
     {
-        string json = "";
 
 #if UNITY_EDITOR
-        TextAsset jsonFile = Resources.Load<TextAsset>(Path.Combine("JsonData/Save/","SaveData"));
-        
-        if (jsonFile != null)
+        TextAsset[] jsonFiles = Resources.LoadAll<TextAsset>(Path.Combine("JsonData/Save/", typeof(T).Name));
+
+        if (jsonFiles == null)
         {
-            json = jsonFile.text;
+            return null;
         }
 
+        List<SaveData> jsons = jsonFiles.Select(x => JsonUtility.FromJson<T>(x.text) as SaveData).ToList();
 #else
         string path = Path.Combine(Application.persistentDataPath, distJsonFilePath, "SaveData");
 
@@ -117,13 +125,13 @@ public class SaveManager
         }
 #endif
 
-        return JsonUtility.FromJson<T>(json);
+        return jsons;
     }
 
     [System.Serializable]
     public class SaveData
     {
-        public bool IsLoaded { get; set; }
+        public long SaveId;
         public string ToJson()
         {
             return JsonUtility.ToJson(this);

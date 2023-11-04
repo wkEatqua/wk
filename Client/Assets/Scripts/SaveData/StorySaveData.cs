@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,30 +19,49 @@ public class StorySaveData : SaveData
 
     public override void Load()
     {
-        if (gameData.Manager.Data is SaveManager.StoryData storyData)
+        ChapterId = MainStoryManager.chapterId;
+        SaveManager.SaveData data = gameData.Manager.DataList.Find(x => x.SaveId == ChapterId);
+        
+        if (data != null && data is SaveManager.StoryData storyData)
         {
             ChapterId = storyData.ChapterId;
             WorldId = storyData.WorldId;
+            storyData.SaveId = ChapterId;
             Stamina = storyData.Stamina;
             Page = storyData.Page;
             CurSelectedVeris = storyData.CurSelectedVeris;
             CurMaxVeris = storyData.CurMaxVeris;
             Hp = storyData.Hp;
+            isLoaded = true;
         }
 
     }
 
     public override void Save()
     {
-        if (gameData.Manager.Data is SaveManager.StoryData storyData)
-        {           
-            storyData.ChapterId = ChapterId;
-            storyData.WorldId = WorldId;
-            storyData.Stamina = Stamina;
-            storyData.Page = Page;
-            storyData.CurSelectedVeris = CurSelectedVeris;
-            storyData.CurMaxVeris = CurMaxVeris;
-            storyData.Hp = Hp;
+        ChapterId = MainStoryManager.chapterId;
+        WorldId = MainStoryManager.worldId;
+
+        SaveManager.SaveData data = gameData.Manager.DataList.Find(x => x.SaveId == ChapterId);
+
+        SaveManager.StoryData storyData = new();
+
+        if(data != null && data is SaveManager.StoryData)
+        {
+            storyData = data as SaveManager.StoryData;
         }
+        else
+        {
+            gameData.Manager.DataList.Add(storyData);
+        }
+
+        storyData.SaveId = ChapterId;
+        storyData.ChapterId = ChapterId;
+        storyData.WorldId = WorldId;
+        storyData.Stamina = Stamina;
+        storyData.Page = Page;
+        storyData.CurSelectedVeris = CurSelectedVeris;
+        storyData.CurMaxVeris = CurMaxVeris;
+        storyData.Hp = Hp;
     }
 }

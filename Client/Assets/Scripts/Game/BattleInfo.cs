@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -27,6 +28,36 @@ namespace WK.Battle
         public int[] StaminaDown; // 피로도총량[4] 
         public int[] StaminaDownRate; //4개 피로도감소수치
 
+    }
+
+
+    [Serializable]
+    public class Enemy
+    {
+        //DATA  
+        private string GroupID; //그룹 아이디
+        private string ID; //아이디
+        private string WorldID; //월드 아이디
+        private string ChapterID; //챕터 아이디
+        private string Name; //이름 텍스트
+        private string HeroIcon; //경로 아이콘
+        private DefenceType defenceType; //방어구타입
+        private string MainIllust; //경로 일러스트
+        private string TransFormValue; //변신수치 변신요구치
+        private string DiceSkin; //주사위스킨
+        public int BaseDiceCount; //소지 주사위 갯수
+        public int MaxDiceCountFix; //최대 주사위 소지
+        private int[] DiceRate; //주사위 눈 나올 확률 (1~12)
+    }
+
+    [Serializable]
+    public class Player
+    {
+        //DATA
+        public string HeroName; //이름
+        public int MaxHPvalue; // 피통
+        public int CurHPvalue; // 현재체력
+        public int Stamina; //피로도
     }
 
     public class BattleInfo : MonoBehaviour

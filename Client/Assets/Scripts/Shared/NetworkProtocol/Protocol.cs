@@ -8,8 +8,8 @@ namespace Shared.NetworkProtocol
         Error,
 
         Account_Auth = 10000,
+        Account_Create,
         Account_Sync,
-
 
         Attendance_Reward = 20000,
 

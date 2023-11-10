@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Shared.Model;
 
 namespace Shared.NetworkProtocol
 {
@@ -10,8 +6,8 @@ namespace Shared.NetworkProtocol
     public class AccountAuthRequest : RequestPacket
     {
         public override Protocol Protocol => Protocol.Account_Auth;
-        // SDK를 통해 계정을 생성했다면 true
-        public bool NeedCreate { get; set; }
+        public string NickName { get; set; }
+        public string Password { get; set; }
     }
 
     public class AccountAuthResponse : ResponsePacket
@@ -29,5 +25,19 @@ namespace Shared.NetworkProtocol
     public class AccountSyncResponse : ResponsePacket
     {
         public override Protocol Protocol => Protocol.Account_Sync;
+        public AccountSnapshot AccountSnapshot { get; set; }
+    }
+
+    public class AccountCreateRequest : RequestPacket
+    {
+        public override Protocol Protocol => Protocol.Account_Create;
+        public string NickName { get; set; }
+        public string Password { get; set; }
+    }
+
+    public class AccountCreateResponse : ResponsePacket
+    {
+        public override Protocol Protocol => Protocol.Account_Create;
+        public AccountDB AccountDB { get; set; }
     }
 }

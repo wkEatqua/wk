@@ -1,16 +1,19 @@
+using Newtonsoft.Json.Linq;
 using Proyecto26;
 using Shared.NetworkProtocol;
+using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace Shared.Core
 {
     public static class WWWService
     {
-        private readonly static string basePath = "https://localhost:7236/";
+        private readonly static string basePath = "https://localhost:5001/";
         private static RequestHelper currentRequest;
 
-        public static void Post(Protocol protocol, RequestPacket request, bool enableDebug = false)
+        public static ResponsePacket Post(Protocol protocol, RequestPacket request, bool enableDebug = false)
         {
             if (!ValidRequest(protocol, request, out var errorMessage))
             {
@@ -28,15 +31,20 @@ namespace Shared.Core
                 EnableDebug = enableDebug
             };
 
+            ResponsePacket responsePacket = null;
 
             RestClient.Post(currentRequest)
             .Then(res => {
 
                 RestClient.ClearDefaultParams();
                 
-                Debug.Log("Success");
+                Debug.Log($"Success: {res.Text}");
+
+                responsePacket = TextToResponsePacket(protocol, res.Text);
             })
             .Catch(err => Debug.LogError(err.Message));
+
+            return responsePacket;
         }
 
         private static bool ValidRequest(Protocol protocol, RequestPacket request, out string errorMessage)
@@ -49,7 +57,7 @@ namespace Shared.Core
                 return false;
             }
 
-            if (request is not AccountAuthRequest)
+            if (request is not AccountCreateRequest)
             {
                 if (request.SessionKey.AccountId == 0)
                 {
@@ -82,7 +90,50 @@ namespace Shared.Core
         {
             var split = protocol.ToString().Split('_');
 
-            return (split[0], split[1]);
+            return (split[0].ToLower(), split[1].ToLower());
+        }
+
+        private static ResponsePacket TextToResponsePacket(Protocol protocol, string text)
+        {
+            var parse = JObject.Parse(text);
+
+            var cleanText = CleanInput(parse["packet"].ToString());
+            
+            var responseType = ParseResponsePacket(protocol);
+
+            return (ResponsePacket)JsonService.DeserializePlainObject(responseType, cleanText);
+        }
+
+        private static Type ParseResponsePacket(Protocol protocol)
+        {
+            switch (protocol)
+            {
+                case Protocol.Account_Auth:
+                    break;
+                case Protocol.Account_Create:
+                    return typeof(AccountCreateResponse);
+                case Protocol.Account_Sync:
+                    break;
+                case Protocol.Attendance_Reward:
+                    break;
+                case Protocol.Scenario_Clear:
+                    break;
+                default: throw new Exception($"Check ParseResponsePacket, Add Protocol {protocol}");
+            }
+
+            return null;
+        }
+
+        static string CleanInput(string strIn)
+        {
+            try
+            {
+                return strIn.Replace(@"\", string.Empty);
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return String.Empty;
+            }
         }
     }
 }

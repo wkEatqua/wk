@@ -27,7 +27,8 @@ namespace Shared.Data
     public class Hero
     {
         public int ID;
-        public NameText Name;
+        //public NameText Name;
+        public string Name;
         public string HeroIcon;
         public WeaponType WeaponType;
         public string MainIllust;
@@ -53,6 +54,7 @@ namespace Shared.Data
         public int WorldID;
         public int ChapterID;
         //public Enum GameText;
+        public string GameText;
         public string HeroIcon;
         public int DefenceType;
         public string MainIllust;

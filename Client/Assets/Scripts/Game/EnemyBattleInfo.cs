@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+//using UnityEngine.UI;
 
 namespace WK.Battle
 {
 
-    public class EnemyBattleInfo : MonoBehaviour
+    public class EnemyBattleInfo : BattleInfo
     {
+        //Data
+        public Enemy enemy;
+
         //UI
         public Image uiIcon;
         public TextMeshProUGUI uiName; //캐릭터이름
@@ -26,20 +30,7 @@ namespace WK.Battle
         public Skill[] uiSkills;
 
 
-        //DATA  
-        private string GroupID; //그룹 아이디
-        private string ID; //아이디
-        private string WorldID; //월드 아이디
-        private string ChapterID; //챕터 아이디
-        private string Name; //이름 텍스트
-        private string HeroIcon; //경로 아이콘
-        private DefenceType defenceType; //방어구타입
-        private string MainIllust; //경로 일러스트
-        private string TransFormValue; //변신수치 변신요구치
-        private string DiceSkin; //주사위스킨
-        public  int BaseDiceCount; //소지 주사위 갯수
-        public int MaxDiceCountFix; //최대 주사위 소지
-        private int[] DiceRate; //주사위 눈 나올 확률 (1~12)
+        
 
         public Skill[] skills; // - 스킬 (스킬슬롯주소/스킬아이디/기본선택확률/확률감소수치) > 스킬테이블따로
         public int[] diceValues;
@@ -72,6 +63,23 @@ namespace WK.Battle
             //ui update
             uiHPbar.value = HPvalue/ MAXHPvalue;
             uiHPvalue.text = HPvalue + "/100";
+        }
+
+
+        public IEnumerator AttackLoutine()
+        {
+            //주사위굴리기
+
+            //주사위 인벤에 넣기
+
+            //주사위로 스킬강화(버프랑 나눔)
+
+            //스킬사용
+
+            
+
+
+            yield return null;
         }
     }
 }

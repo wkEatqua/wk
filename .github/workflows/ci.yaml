@@ -58,8 +58,9 @@ jobs:
         with:
           path: Library
           key: Library-${{ matrix.targetPlatform }}
-          
-      - uses: game-ci/unity-builder@v3
+
+      - name: 유니티 빌드
+        uses: game-ci/unity-builder@v3
         env:
           UNITY_EMAIL: rollrat.cse@gmail.com
           UNITY_PASSWORD: Aqwer1234
@@ -68,8 +69,27 @@ jobs:
           projectPath: Client
           unityVersion: 2022.3.8f1
           allowDirtyBuild: true
-          
-      - uses: actions/upload-artifact@v3
+
+      - name: 빌드 결과물 artifact로 업로드
+        uses: actions/upload-artifact@v3
         with:
           name: Build
           path: build
+
+      - name: AWS 설정
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: AKIAX6FZX7BIKZELWZIV
+          aws-secret-access-key: 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
+          aws-region: ap-northeast-2
+
+      - name: 빌드 결과물 압축 및 s3로 업로드 및 디스코드로 url 공유
+        run: |
+          zip -qq -r ./$GITHUB_SHA.zip ./build
+          aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://wk-cd-artifacts/$GITHUB_SHA.zip
+      
+      - name: CI 결과 디스코드로 전송
+        uses: baked-libs/discord-webhook@main
+        with:
+          id: 1172513028135194704
+          token: HhVwM1l2wNFkGfF2ibe-jZBn0ertml5QPK6Kz4eZ208AEPwtF1tTrGthG0yYTR-YVyRu

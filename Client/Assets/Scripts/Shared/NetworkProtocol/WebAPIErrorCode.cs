@@ -11,5 +11,18 @@
         InvalidToken,
         DBError,
 
+        SessionInvalidInput,
+        SessionNotFound,
+        SessionParseFail,
+        SessionNotAuth,
+        SessionDuplicateLogin,
+        SessionTimeOver,
+
+        AccountNickNameEmpty,
+        AccountNotFound,
+        AccountPasswordNotCorrect,
+
+
+
     }
 }

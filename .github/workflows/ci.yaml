@@ -90,6 +90,7 @@ jobs:
       
       - name: CI 결과 디스코드로 전송
         uses: baked-libs/discord-webhook@main
+        if: always()
         with:
           id: 1172513028135194704
           token: HhVwM1l2wNFkGfF2ibe-jZBn0ertml5QPK6Kz4eZ208AEPwtF1tTrGthG0yYTR-YVyRu

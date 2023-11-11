@@ -53,6 +53,8 @@ jobs:
           
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
           
       - uses: actions/cache@v3
         with:
@@ -89,8 +91,9 @@ jobs:
           aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://wk-cd-artifacts/$GITHUB_SHA.zip
       
       - name: CI 결과 디스코드로 전송
-        uses: baked-libs/discord-webhook@main
         if: always()
+        env:
+          DISCORD_WEBHOOK: https://discord.com/api/webhooks/1172513028135194704/HhVwM1l2wNFkGfF2ibe-jZBn0ertml5QPK6Kz4eZ208AEPwtF1tTrGthG0yYTR-YVyRu
+        uses: Ilshidur/action-discord@master
         with:
-          id: 1172513028135194704
-          token: HhVwM1l2wNFkGfF2ibe-jZBn0ertml5QPK6Kz4eZ208AEPwtF1tTrGthG0yYTR-YVyRu
+          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'

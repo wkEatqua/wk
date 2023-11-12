@@ -88,7 +88,7 @@ jobs:
       - name: 빌드 결과물 압축 및 s3로 업로드 및 디스코드로 url 공유
         run: |
           zip -qq -r ./$GITHUB_SHA.zip ./build
-          aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://wk-cd-artifacts/$GITHUB_SHA.zip
+          aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://wk-cd-artifacts/$GITHUB_SHA.zip --acl=public-read
       
       - name: CI 결과 디스코드로 전송
         if: always()
@@ -96,4 +96,4 @@ jobs:
           DISCORD_WEBHOOK: https://discord.com/api/webhooks/1172513028135194704/HhVwM1l2wNFkGfF2ibe-jZBn0ertml5QPK6Kz4eZ208AEPwtF1tTrGthG0yYTR-YVyRu
         uses: Ilshidur/action-discord@master
         with:
-          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
+          args: 'Artifacts download links is https://wk-cd-artifacts.s3.ap-northeast-2.amazonaws.com/$GITHUB_SHA'

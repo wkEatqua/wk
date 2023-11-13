@@ -1,4 +1,4 @@
-name: Build
+name: Build and Deploy
 on:
   push:
     branches: [ main ]
@@ -85,15 +85,26 @@ jobs:
           aws-secret-access-key: hA8JQQfXzznpXD8hQUGf4dMyco+qSHLzi3jcBGpN
           aws-region: ap-northeast-2
 
-      - name: 빌드 결과물 압축 및 s3로 업로드 및 디스코드로 url 공유
+      - name: 파일이름 결정
+        id: filename
+        run: echo "::set-output name=filename::$(date +'nightly-%Y-%m-%dT%H.%M.%S-${{ matrix.targetPlatform }}.zip')"
+        
+      - name: 빌드 결과물 압축 및 s3로 업로드
+        if: success()
         run: |
-          zip -qq -r ./$GITHUB_SHA.zip ./build
-          aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://wk-cd-artifacts/$GITHUB_SHA.zip --acl=public-read
+          zip -qq -r ./build.zip ./build
+          aws s3 cp --region ap-northeast-2 ./build.zip s3://wk-cd-artifacts/${{ steps.filename.outputs.filename }} --acl=public-read
       
-      - name: CI 결과 디스코드로 전송
-        if: always()
-        env:
-          DISCORD_WEBHOOK: https://discord.com/api/webhooks/1172513028135194704/HhVwM1l2wNFkGfF2ibe-jZBn0ertml5QPK6Kz4eZ208AEPwtF1tTrGthG0yYTR-YVyRu
-        uses: Ilshidur/action-discord@master
+      - name: CI 결과 및 빌드 아티팩트를 디스코드로 전송
+        if: success()
+        uses: sarisia/actions-status-discord@v1
         with:
-          args: 'Artifacts download links is https://wk-cd-artifacts.s3.ap-northeast-2.amazonaws.com/$GITHUB_SHA'
+          webhook: https://discord.com/api/webhooks/1172513028135194704/HhVwM1l2wNFkGfF2ibe-jZBn0ertml5QPK6Kz4eZ208AEPwtF1tTrGthG0yYTR-YVyRu
+          description: |
+            [Download ${{ steps.filename.outputs.filename }}](https://wk-cd-artifacts.s3.ap-northeast-2.amazonaws.com/${{ steps.filename.outputs.filename }})
+            
+      - name: CI 실패 결과 디스코드로 전송
+        if: failure()
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: https://discord.com/api/webhooks/1172513028135194704/HhVwM1l2wNFkGfF2ibe-jZBn0ertml5QPK6Kz4eZ208AEPwtF1tTrGthG0yYTR-YVyRu

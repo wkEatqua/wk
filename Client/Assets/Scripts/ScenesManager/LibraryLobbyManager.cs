@@ -73,10 +73,9 @@ public class LibraryLobbyManager : MonoBehaviour
 
     public void OnClickMainStory()
     {
-        SceneChangeManager.instance.SceneMove("MainStory");
         MainStoryManager.chapterId = chapterId;
         MainStoryManager.worldId = worldId;
-        
+        SceneChangeManager.instance.SceneMove("MainStory");
     }
 
     public void OpenChapterList(long worldIndex)

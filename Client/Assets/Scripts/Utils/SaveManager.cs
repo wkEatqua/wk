@@ -92,7 +92,7 @@ public class SaveManager
         // Convert the GameData object to JSON string
         string json = data.ToJson();
 #if UNITY_EDITOR
-        File.WriteAllText(Path.Combine(devJsonFilePath, $"{typeof(T).Name}/{data.SaveId}.json"), json);
+        File.WriteAllText(Path.Combine(devJsonFilePath, $"{typeof(T).Name}/SaveData.json"), json);
 #else
         // Save the JSON string to a file
         File.WriteAllText(Path.Combine(Application.persistentDataPath, distJsonFilePath, $"{typeof(T).Name}.json"), json);     

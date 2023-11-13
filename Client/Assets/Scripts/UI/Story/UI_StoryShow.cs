@@ -8,6 +8,7 @@ using TMPro;
 using UnityEngine;
 using Febucci.UI.Core;
 using Febucci.UI.Core.Parsing;
+using Unity.VisualScripting;
 
 public class UI_StoryShow : MonoBehaviour
 {
@@ -20,13 +21,18 @@ public class UI_StoryShow : MonoBehaviour
     {
         typeWriter = GetComponent<TypewriterByCharacter>();
         tmp = GetComponent<TextMeshProUGUI>();
+       
+    }
+
+    private void OnEnable()
+    {
         typeWriter.onMessage.AddListener(ShowImage);
         typeWriter.onMessage.AddListener(EnergyDown);
     }
-
     private void OnDisable()
     {
         typeWriter.onTextShowed.RemoveAllListeners();
+        typeWriter.onMessage.RemoveAllListeners();
     }
     public void Init(UI_MainStory main, ScenarioPageTextInfo textInfo, ScenarioPageImageInfo imageInfo)
     {       
@@ -45,9 +51,11 @@ public class UI_StoryShow : MonoBehaviour
     {
         main.ShowImage(eventMarker);
     }
-
+    
     public void EnergyDown(EventMarker eventMarker)
     {
         main.EnergyDown(eventMarker);
     }
+
+    
 }

@@ -35,11 +35,11 @@ public class UI_MainStory : MonoBehaviour
     public Transform storyParent;
     public Button nextPageButton;
     public GameObject ending;
-    
-    List<ScenarioPageTextInfo> pageTexts;
-    List<ScenarioSelectInfo> selectInfoGroup;
-    List<ScenarioPageImageInfo> pageImages;
 
+    List<ScenarioPageTextInfo> pageTexts = new();
+    List<ScenarioSelectInfo> selectInfoGroup = new();
+    List<ScenarioPageImageInfo> pageImages = new();
+    List<ScenarioTextContentInfo> resultTexts = new();
 
     readonly List<SelectButton> selectButtons = new();
     ScenarioChapterInfo ChapterInfo => MainStoryManager.ChapterInfo;
@@ -47,6 +47,8 @@ public class UI_MainStory : MonoBehaviour
     List<ScenarioPageInfo> Pages => MainStoryManager.Pages;
        
     int tempMaxVeris;
+
+    int selectCount = 0;
     
     int Stamina
     {
@@ -121,18 +123,26 @@ public class UI_MainStory : MonoBehaviour
     {
         consoleText.text = "";
         nextPageButton.enabled = false;
-        
-        ScenarioData.TryGetPageText(Pages[data.Page].UniqueId, out pageTexts);
-        ScenarioData.TryGetPageImages(Pages[data.Page].UniqueId, out pageImages);
-        skipStrategy = new SkipTypeWriter(this);
-        illustration.gameObject.SetActive(pageImages != null);
-
-        ClearStoryBoard();
+        selectCount = 0;
         foreach (var x in selectButtons)
         {
             Destroy(x.gameObject);
         }
         selectButtons.Clear();
+        ScenarioData.TryGetTextContent(Pages[data.Page].ResultContentGroupId, out resultTexts);
+        ShowTexts(Pages[data.Page].TextContentId);       
+        storyList.Last().typeWriter.onTextShowed.AddListener(ShowSelections);       
+    }
+
+    void ShowTexts(long textContentId)
+    {
+        ScenarioData.TryGetTextContent(textContentId, out ScenarioTextContentInfo info);
+        ScenarioData.TryGetPageText(info.TextGroupId, out pageTexts);
+        ScenarioData.TryGetPageImages(info.ImageGroupId, out pageImages);
+        skipStrategy = new SkipTypeWriter(this);
+        illustration.gameObject.SetActive(pageImages != null);
+
+        ClearStoryBoard();
 
         if (pageTexts != null)
         {
@@ -140,6 +150,7 @@ public class UI_MainStory : MonoBehaviour
             {
                 var st = storyPool.Get("Story Show");
                 st.transform.SetParent(storyParent);
+
                 ScenarioPageImageInfo imageInfo = null;
                 if (pageImages != null)
                 {
@@ -171,8 +182,7 @@ public class UI_MainStory : MonoBehaviour
         {
             int temp = i;
             storyList[i].typeWriter.onTextShowed.AddListener(() => storyList[temp + 1].typeWriter.StartShowingText());
-        }
-        storyList.Last().typeWriter.onTextShowed.AddListener(ShowSelections);       
+        }       
     }
 
     public void ShowImage(EventMarker eventMarker)
@@ -268,7 +278,7 @@ public class UI_MainStory : MonoBehaviour
         switch (select.info.SelectType)
         {
             case SelectType.None:
-                ToNextPage(select.info);
+                ToResult(select.info);
                 break;
             case SelectType.Dice:
                 if (select.isDiced) return;
@@ -283,18 +293,19 @@ public class UI_MainStory : MonoBehaviour
         consoleText.text = log;
     }
 
-    public void ToNextPage(ScenarioSelectInfo info)
+    public void ToResult(ScenarioSelectInfo info)
     {
-        string str = "";
-        str += info.ResultText;
-        data.Page++;
+        long textId = info.ResultTextContentId;
+        
         data.CurSelectedVeris += info.SelectVerisimilitude;
         data.CurMaxVeris += tempMaxVeris;
 
         Stamina += info.SelectEnergy;
-        
-        if (str == "")
+        selectCount++;
+        if (textId <= 0)
         {
+            data.Page++;
+
             if (data.Page >= Pages.Count - 1)
             {
                 ShowEnding();
@@ -304,16 +315,19 @@ public class UI_MainStory : MonoBehaviour
         }
         else
         {
-            var obj = storyPool.Get("Story Show");           
-            obj.transform.SetParent(storyParent);
-            obj.typeWriter.ShowText(str);
-            obj.typeWriter.onMessage.RemoveAllListeners();
-            skipStrategy = new SkipResultText(obj);
-            obj.typeWriter.onTextShowed.RemoveAllListeners();
-            obj.typeWriter.onTextShowed.AddListener(() => skipStrategy = new SkipShowStoryText(this));
-            ClearStoryBoard();
-            storyList.Add(obj);
-            obj.typeWriter.StartShowingText();
+            ShowTexts(textId);
+            storyList.Last().typeWriter.onTextShowed.AddListener(() => 
+            {
+                if (selectCount >= resultTexts.Count)
+                {
+                    data.Page++;
+                    skipStrategy = new SkipShowStoryText(this);
+                }
+                else
+                {
+                    skipStrategy = new ToAfterSelectText(this); 
+                }
+            });
         }
         GameManager.Save.SaveAllDatas(SaveManager.SaveType.Story);
     }
@@ -376,16 +390,16 @@ public class UI_MainStory : MonoBehaviour
             main.ShowPage();
         }
     }
-    class SkipResultText : ISkipStrategy
+    class ToAfterSelectText : ISkipStrategy
     {
-        readonly UI_StoryShow storyShow;
-        public SkipResultText(UI_StoryShow storyShow)
+        readonly UI_MainStory main;
+        public ToAfterSelectText(UI_MainStory main)
         {
-            this.storyShow = storyShow;
+            this.main = main;
         }
         public void Skip()
         {
-            storyShow.typeWriter.SkipTypewriter();
+            main.ShowTexts(main.resultTexts[main.selectCount].UniqueId);
         }
     }
 }

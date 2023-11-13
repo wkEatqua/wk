@@ -29,7 +29,7 @@ namespace Shared.Data
     public class ScenarioPageImageInfo
     {
         public long UniqueId => data.UniqueId;
-        public long PageId => data.PageId;
+        public long GroupId => data.GroupId;
         public string ImagePath => data.ImagePath;
         public int ImageActiveOrder => data.ImageActiveOrder;
 
@@ -39,7 +39,7 @@ namespace Shared.Data
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"GroupId : {PageId}");
+            sb.AppendLine($"GroupId : {GroupId}");
             sb.AppendLine($"ImagePath : {ImagePath}");
             sb.AppendLine($"ImageActiveOrder : {ImageActiveOrder}");
             return sb.ToString();
@@ -88,6 +88,9 @@ namespace Shared.Data
         public string DevName => data.DevName;
         public long SelectGroupId => data.SelectGroupId;
 
+        public long TextContentId => data.TextContentId;        
+        public long ResultContentGroupId => data.ResultContentGroupId;
+
         readonly ScenarioPage data;
 
         public ScenarioPageInfo(ScenarioPage data) { this.data = data; }
@@ -105,7 +108,7 @@ namespace Shared.Data
     public class ScenarioPageTextInfo
     {
         public long UniqueId => data.UniqueId;
-        public long PageId => data.PageId;
+        public long GroupId => data.GroupId;
         public int Order => data.Order;
         public string Text => data.Text;
 
@@ -116,13 +119,26 @@ namespace Shared.Data
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"PageId : {PageId}");
+            sb.AppendLine($"PageId : {GroupId}");
             sb.AppendLine($"Order : {Order}");
             sb.AppendLine($"Text : {Text}");
             return sb.ToString();
         }
     }
+    public class ScenarioTextContentInfo
+    {
+        public long GroupId => data.GroupId;
+        public long UniqueId => data.UniqueId;
+        public long TextGroupId => data.TextGroupId;
+        public long ImageGroupId => data.ImageGroupId;
 
+        readonly ScenarioTextContent data;
+
+        public ScenarioTextContentInfo(ScenarioTextContent data)
+        {
+            this.data = data;
+        }
+    }
     public class ScenarioSelectInfo
     {
         public long UniqueId => data.UniqueId;
@@ -133,7 +149,7 @@ namespace Shared.Data
         public int SelectEnergy => data.SelectEnergy;
         public int SelectVerisimilitude => data.SelectVerisimilitude;
 
-        public string ResultText => data.ResultText;
+        public long ResultTextContentId => data.ResultTextContentId;
         
         readonly ScenarioSelect data;
         public ScenarioSelectInfo(ScenarioSelect data) { this.data = data;}
@@ -265,6 +281,8 @@ namespace Shared.Data
         public static IDictionary<long, ScenarioEndingInfo> EndingDict = new Dictionary<long, ScenarioEndingInfo>();
         public static readonly IDictionary<long, List<ScenarioPageImageInfo>> ImageDict = new Dictionary<long, List<ScenarioPageImageInfo>>();
         public static IDictionary<long,ScenarioIntroInfo> IntroDict = new Dictionary<long, ScenarioIntroInfo>();
+        public static IDictionary<long,ScenarioTextContentInfo> ContentDict = new Dictionary<long, ScenarioTextContentInfo>();
+        public static IDictionary<long, List<ScenarioTextContentInfo>> ContentGroupDict = new Dictionary<long, List<ScenarioTextContentInfo>>();
         public override void ProcessDataLoad(string path)
         {
             WorldDict.Clear();
@@ -328,16 +346,16 @@ namespace Shared.Data
 
                 foreach (var x in texts)
                 {
-                    if (!PageTextDict.ContainsKey(x.PageId))
+                    if (!PageTextDict.ContainsKey(x.GroupId))
                     {
-                        PageTextDict.Add(x.PageId, new List<ScenarioPageTextInfo>());
+                        PageTextDict.Add(x.GroupId, new List<ScenarioPageTextInfo>());
                     }
 
-                    if (PageTextDict[x.PageId] == null)
+                    if (PageTextDict[x.GroupId] == null)
                     {
-                        PageTextDict[x.PageId] = new List<ScenarioPageTextInfo>();
+                        PageTextDict[x.GroupId] = new List<ScenarioPageTextInfo>();
                     }
-                    PageTextDict[x.PageId].Add(new ScenarioPageTextInfo(x));
+                    PageTextDict[x.GroupId].Add(new ScenarioPageTextInfo(x));
                 }
             }
 
@@ -384,14 +402,14 @@ namespace Shared.Data
 
                 foreach (var group in groups)
                 {
-                    if (!ImageDict.ContainsKey(group.PageId))
+                    if (!ImageDict.ContainsKey(group.GroupId))
                     {
-                        ImageDict.Add(group.PageId, new());
+                        ImageDict.Add(group.GroupId, new());
                     }
 
-                    ImageDict[group.PageId] ??= new();
+                    ImageDict[group.GroupId] ??= new();
 
-                    ImageDict[group.PageId].Add(new ScenarioPageImageInfo(group));
+                    ImageDict[group.GroupId].Add(new ScenarioPageImageInfo(group));
                 }
             }
             IntroDict.Clear();
@@ -400,8 +418,33 @@ namespace Shared.Data
 
                 IntroDict = intro.ToDictionary(kv => kv.ChapterId, kv => new ScenarioIntroInfo(kv));               
             }
-        }
+            ContentDict.Clear();
+            ContentGroupDict.Clear();
+            {
+                var content = new Data<ScenarioTextContent>().GetData(path);
+                ContentDict = content.ToDictionary(kv => kv.UniqueId, kv => new ScenarioTextContentInfo(kv));
+                foreach (var group in content)
+                {
+                    if (!ContentGroupDict.ContainsKey(group.GroupId))
+                    {
+                        ContentGroupDict.Add(group.GroupId, new());
+                    }
 
+                    ContentGroupDict[group.GroupId] ??= new();
+
+                    ContentGroupDict[group.GroupId].Add(new ScenarioTextContentInfo(group));
+                }
+            }
+
+        }
+        public static bool TryGetTextContent(long uniqueId,out ScenarioTextContentInfo info)
+        {
+            return ContentDict.TryGetValue(uniqueId, out info);
+        }
+        public static bool TryGetTextContent(long groupId,out List<ScenarioTextContentInfo> list)
+        {
+            return ContentGroupDict.TryGetValue(groupId, out list);
+        }
         public static bool TryGetWorld(long uniqueId, out ScenarioWorldInfo info)
         {
             return WorldDict.TryGetValue(uniqueId, out info);

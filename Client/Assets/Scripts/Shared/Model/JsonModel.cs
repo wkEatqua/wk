@@ -57,7 +57,7 @@
     public class ScenarioPageImage : JsonModel
     {
         public long UniqueId { get; set; }
-        public long PageId { get; set; }
+        public long GroupId { get; set; }
         public string ImagePath { get; set; }
         public int ImageActiveOrder { get; set; }
     }
@@ -68,13 +68,15 @@
         public long UniqueId { get; set; }
         public string DevName { get; set; }
         public long SelectGroupId { get; set; }
+        public long TextContentId { get; set; }      
+        public long ResultContentGroupId { get; set; }
     }
     [System.Serializable]
 
     public class ScenarioPageText : JsonModel
     {
         public long UniqueId { get; set; }
-        public long PageId { get; set; }
+        public long GroupId { get; set; }
         public int Order { get; set; }
         public string Text { get; set; }
     }
@@ -89,10 +91,16 @@
         public int SelectValue { get; set; }
         public int SelectEnergy { get; set; }
         public int SelectVerisimilitude { get; set; }
-        public string ResultText { get; set; }
+        public long ResultTextContentId { get; set; }        
     }
     [System.Serializable]
-
+    public class ScenarioTextContent: JsonModel
+    {
+        public long GroupId { get; set; }
+        public long UniqueId { get; set; }
+        public long TextGroupId { get; set; }
+        public long ImageGroupId { get; set; }
+    }
     public class ScenarioDice : JsonModel
     {
         public long ChapterId { get; set; }

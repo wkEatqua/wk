@@ -86,7 +86,7 @@ public class DiceWindow : MonoBehaviour
         {
             resultText.text = "¼º°ø";
             resultText.color = Color.green;
-            finishButton.onClick.AddListener(() => canvas.ToNextPage(info));
+            finishButton.onClick.AddListener(() => canvas.ToResult(info));
         }
         else
         {

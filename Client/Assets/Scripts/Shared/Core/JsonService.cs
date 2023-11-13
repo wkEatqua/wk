@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.IO;
+using Newtonsoft.Json;
 using System;
 #if SERVER
 using System;
@@ -13,6 +14,22 @@ namespace Shared.Core
 {
     public class JsonService
     {
+        static int blockSize = 1024;
+        static int largeBufferMultiple = 1024 * 1024;
+        static int maxBufferSize = 1024 * largeBufferMultiple;
+
+        static Microsoft.IO.RecyclableMemoryStreamManager _manager = new Microsoft.IO.RecyclableMemoryStreamManager(blockSize,
+                                                largeBufferMultiple,
+                                                maxBufferSize);
+
+        static JsonService()
+        {
+            //_manager.GenerateCallStacks = true;
+            _manager.AggressiveBufferReturn = true;
+            _manager.MaximumFreeLargePoolBytes = maxBufferSize * 4;
+            _manager.MaximumFreeSmallPoolBytes = 100 * blockSize;
+        }
+
         public static string Serialize<T>(T source, JsonSerializerSettings setting)
         {
             try
@@ -52,8 +69,7 @@ namespace Shared.Core
             TypeNameHandling = TypeNameHandling.None,
             NullValueHandling = NullValueHandling.Ignore,
             DefaultValueHandling = DefaultValueHandling.Ignore,
-            
-            // Converters = { new Newtonsoft.Json.Converters.VectorConverter() }
+            //Converters = { new Newtonsoft.Json.Converters.VectorConverter() }
         };
 
 

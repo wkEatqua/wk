@@ -12,6 +12,7 @@ namespace Shared.Model
         public long AccountId { get; set; }
         // 최대 10자까지 가능
         public string Nickname { get; set; }
+        public string PasswordHash { get; set; }
         public DateTime CreateDate { get; set; }
         public int Level { get; set; }
         public int Exp { get; set; }

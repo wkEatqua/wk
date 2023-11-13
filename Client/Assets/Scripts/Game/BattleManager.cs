@@ -46,18 +46,32 @@ namespace WK.Battle
 
 
 
-        int RelationShipValue=5;
+       
         public TextMeshProUGUI uiRelationShowText; //개연성 텍스트
-        int DEMValue=0;
+        
         public TextMeshProUGUI uiDEMShowText; // dem 게이지 텍스트
         public Image uiDEMShowGauge; // dem 게이지 이미지
 
+        int RelationShipValue = 5;
+        int DEMValue = 0;
+
         int MAXDEMGuage = 100; //dem 게이지 full
-        int MAXRLSGuage = 10; //relationship 게이지 full
-        int MAXRLSorigin = 5; //relationship 
+        int MAXRelatinshipGuage = 10; //relationship 게이지 full
+        int MAXRelationshiporigin = 5; //relationship 
 
 
         
+        public void GlobalDataLoad()
+        {
+            //스테이지 데이터로드
+
+            
+
+            Player.DataLoad();
+            Enemy.DataLoad();
+        }
+
+
 
         public void init()
         {
@@ -191,9 +205,9 @@ namespace WK.Battle
         // 개연성 게이지 변경
         public void SetRelationGauge(int point)
         {
-            if (MAXRLSGuage < MAXRLSorigin) return;
+            if (MAXRelatinshipGuage < MAXRelationshiporigin) return;
             RelationShipValue -= point;
-            uiRelationShowText.text = "개연성\n"+ RelationShipValue + "/" + MAXRLSorigin;
+            uiRelationShowText.text = "개연성\n"+ RelationShipValue + "/" + MAXRelationshiporigin;
         }
 
         // DEM 게이지 변경

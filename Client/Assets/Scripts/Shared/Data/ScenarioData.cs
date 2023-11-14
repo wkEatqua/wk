@@ -10,21 +10,19 @@ namespace Shared.Data
 {
     public class ScenarioWorldInfo
     {
-        public long UniqueId => data.UniqueId;
+        public long UniqueId
+        {
+            get
+            {
+                return data.UniqueId;
+            }
+        }
         public string LocalizeKey => data.LocalizeKey;
-
         public string Name => data.Name;
         readonly ScenarioWorld data;
 
-        public ScenarioWorldInfo(ScenarioWorld data) { this.data = data; }
-
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"UniqueId : {UniqueId}");
-            sb.AppendLine($"LocalizeKey : {LocalizeKey}");
-            return sb.ToString();
-        }
+        public ScenarioWorldInfo(ScenarioWorld data) 
+        { this.data = data; }       
     }
     public class ScenarioPageImageInfo
     {
@@ -283,6 +281,7 @@ namespace Shared.Data
         public static IDictionary<long,ScenarioIntroInfo> IntroDict = new Dictionary<long, ScenarioIntroInfo>();
         public static IDictionary<long,ScenarioTextContentInfo> ContentDict = new Dictionary<long, ScenarioTextContentInfo>();
         public static IDictionary<long, List<ScenarioTextContentInfo>> ContentGroupDict = new Dictionary<long, List<ScenarioTextContentInfo>>();
+
         public override void ProcessDataLoad(string path)
         {
             WorldDict.Clear();
@@ -437,6 +436,7 @@ namespace Shared.Data
             }
 
         }
+
         public static bool TryGetTextContent(long uniqueId,out ScenarioTextContentInfo info)
         {
             return ContentDict.TryGetValue(uniqueId, out info);
@@ -448,8 +448,7 @@ namespace Shared.Data
         public static bool TryGetWorld(long uniqueId, out ScenarioWorldInfo info)
         {
             return WorldDict.TryGetValue(uniqueId, out info);
-        }
-        
+        }      
         public static bool TryGetChapter(long uniqueId, out ScenarioChapterInfo info)
         {
             return ChapterDict.TryGetValue(uniqueId, out info);

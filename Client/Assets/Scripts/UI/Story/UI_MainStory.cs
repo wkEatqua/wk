@@ -11,6 +11,7 @@ using Febucci.UI;
 using System.Linq;
 using Unity.VisualScripting;
 
+
 public class UI_MainStory : MonoBehaviour
 {
     [Header("ÇÁ¸®ÆÕ")]
@@ -130,6 +131,7 @@ public class UI_MainStory : MonoBehaviour
         }
         selectButtons.Clear();
         ScenarioData.TryGetTextContent(Pages[data.Page].ResultContentGroupId, out resultTexts);
+
         ShowTexts(Pages[data.Page].TextContentId);       
         storyList.Last().typeWriter.onTextShowed.AddListener(ShowSelections);       
     }

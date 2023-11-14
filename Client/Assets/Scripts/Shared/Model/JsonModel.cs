@@ -34,6 +34,7 @@
         public string Name { get; set; }
         public string LocalizeKey { get; set; }
     }
+
     [System.Serializable]
 
     public class ScenarioChapter : JsonModel

@@ -52,7 +52,7 @@ namespace WK.Battle
         public string CRT; //치명타율
         public string LUK; //행운
 
-        public Hero hero;
+        
         public Skill[] Skills;
         public int[] diceValues;
 

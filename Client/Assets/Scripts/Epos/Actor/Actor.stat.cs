@@ -120,7 +120,7 @@ namespace Epos
             get { return curHp; }
             set
             {               
-                if (value < 0)
+                if (value <= 0)
                 {
                     curHp = 0;
                     Die();

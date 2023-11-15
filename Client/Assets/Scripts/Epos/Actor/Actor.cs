@@ -17,5 +17,12 @@ namespace Epos
         {
             Destroy(gameObject);
         }
+
+        public abstract float OnHit(float dmg);
+        
+        public virtual void Attack(Actor target)
+        {
+            target.OnHit(Atk);
+        }
     }
 }

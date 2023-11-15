@@ -34,40 +34,41 @@
             this.ExcelLabel = new System.Windows.Forms.Label();
             this.ExportButton = new System.Windows.Forms.Button();
             this.ResultTextBox = new System.Windows.Forms.TextBox();
+            this.CheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
-            // excelLoadTextBox
+            // ExcelLoadTextBox
             // 
             this.ExcelLoadTextBox.Location = new System.Drawing.Point(9, 27);
             this.ExcelLoadTextBox.MaximumSize = new System.Drawing.Size(261, 92);
             this.ExcelLoadTextBox.MinimumSize = new System.Drawing.Size(261, 92);
             this.ExcelLoadTextBox.Multiline = true;
-            this.ExcelLoadTextBox.Name = "excelLoadTextBox";
+            this.ExcelLoadTextBox.Name = "ExcelLoadTextBox";
             this.ExcelLoadTextBox.ReadOnly = true;
             this.ExcelLoadTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.ExcelLoadTextBox.Size = new System.Drawing.Size(261, 92);
             this.ExcelLoadTextBox.TabIndex = 0;
             this.ExcelLoadTextBox.TextChanged += new System.EventHandler(this.ExcelLoadTextBox_TextChanged);
             // 
-            // excelLoadButton
+            // ExcelLoadButton
             // 
             this.ExcelLoadButton.Location = new System.Drawing.Point(276, 27);
-            this.ExcelLoadButton.Name = "excelLoadButton";
+            this.ExcelLoadButton.Name = "ExcelLoadButton";
             this.ExcelLoadButton.Size = new System.Drawing.Size(75, 23);
             this.ExcelLoadButton.TabIndex = 1;
             this.ExcelLoadButton.Text = "Load";
             this.ExcelLoadButton.UseVisualStyleBackColor = true;
             this.ExcelLoadButton.Click += new System.EventHandler(this.ExcelLoadButton_Click);
             // 
-            // excelOpenFileDialog
+            // ExcelOpenFileDialog
             // 
             this.ExcelOpenFileDialog.FileName = "openFileDialog1";
             // 
-            // excelLabel
+            // ExcelLabel
             // 
             this.ExcelLabel.AutoSize = true;
             this.ExcelLabel.Location = new System.Drawing.Point(9, 9);
-            this.ExcelLabel.Name = "excelLabel";
+            this.ExcelLabel.Name = "ExcelLabel";
             this.ExcelLabel.Size = new System.Drawing.Size(63, 15);
             this.ExcelLabel.TabIndex = 2;
             this.ExcelLabel.Text = "Excel Data";
@@ -82,19 +83,31 @@
             this.ExportButton.UseVisualStyleBackColor = true;
             this.ExportButton.Click += new System.EventHandler(this.ExportButton_Click);
             // 
-            // ResultBox
+            // ResultTextBox
             // 
             this.ResultTextBox.Enabled = false;
             this.ResultTextBox.Location = new System.Drawing.Point(9, 125);
-            this.ResultTextBox.Name = "ResultBox";
+            this.ResultTextBox.Name = "ResultTextBox";
             this.ResultTextBox.Size = new System.Drawing.Size(342, 23);
             this.ResultTextBox.TabIndex = 4;
+            // 
+            // CheckBox
+            // 
+            this.CheckBox.AutoSize = true;
+            this.CheckBox.Location = new System.Drawing.Point(277, 55);
+            this.CheckBox.Name = "CheckBox";
+            this.CheckBox.Size = new System.Drawing.Size(84, 19);
+            this.CheckBox.TabIndex = 5;
+            this.CheckBox.Text = "Is Debug";
+            this.CheckBox.UseVisualStyleBackColor = true;
+            this.CheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
             // 
             // JsonConverter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(358, 156);
+            this.Controls.Add(this.CheckBox);
             this.Controls.Add(this.ResultTextBox);
             this.Controls.Add(this.ExportButton);
             this.Controls.Add(this.ExcelLabel);
@@ -120,5 +133,6 @@
         private TextBox ResultTextBox;
 
         private List<string> excelFilePaths = new List<string>();
+        private CheckBox CheckBox;
     }
 }

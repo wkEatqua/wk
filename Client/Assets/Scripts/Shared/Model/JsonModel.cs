@@ -168,4 +168,11 @@
         public string ScriptText { get; set; }
         public long UniqueId { get; set; }
     }
+
+    [System.Serializable]
+    public class EposLevel : JsonModel
+	{
+        public long Level { get; set; }
+        public long TileNumber { get; set; }
+	}
 }

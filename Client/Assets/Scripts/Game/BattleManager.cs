@@ -21,8 +21,8 @@ namespace WK.Battle
             RESULT
         }
 
-        [Header("====½ºÅ×ÀÌÁö±âº»Á¤º¸====")]
-        public int[] diceRange = { 5, 11, 12 }; // È¿°ú1´Ü°è 5 È¿°ú2´Ü°è 11 È¿°ú3´Ü°è 12
+        [Header("====ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½âº»ï¿½ï¿½ï¿½ï¿½====")]
+        public int[] diceRange = { 5, 11, 12 }; // È¿ï¿½ï¿½1ï¿½Ü°ï¿½ 5 È¿ï¿½ï¿½2ï¿½Ü°ï¿½ 11 È¿ï¿½ï¿½3ï¿½Ü°ï¿½ 12
         public Sprite diceImg;
 
 
@@ -30,15 +30,15 @@ namespace WK.Battle
         [SerializeField] public EnemyBattleInfo Enemy;
 
         [Space(20)]
-        [Header("====ÆË¾÷====")]
-        public DicePopup DiceRollingPAN; //ÁÖ»çÀ§±¼¸®´ÂÆÇ
+        [Header("====ï¿½Ë¾ï¿½====")]
+        public DicePopup DiceRollingPAN; //ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
          
 
-        [SerializeField] bool isMyTurn = true;  // true : ÇÃ·¹ÀÌ¾î ÅÏ  false: Àû ÅÏ
-        public GameObject interactionEnable; //»óÈ£ÀÛ¿ë °¡´É»óÅÂ true ºÒ°¡´É false
+        [SerializeField] bool isMyTurn = true;  // true : ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½  false: ï¿½ï¿½ ï¿½ï¿½
+        public GameObject interactionEnable; //ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½É»ï¿½ï¿½ï¿½ true ï¿½Ò°ï¿½ï¿½ï¿½ false
 
         [Space(20)]
-        [Header("====½ºÅ³ÀÌÆåÆ®====")]
+        [Header("====ï¿½ï¿½Å³ï¿½ï¿½ï¿½ï¿½Æ®====")]
         [SerializeField] public GameObject Effect_HURT;
         [SerializeField] public GameObject Effect_ATTACK;
 
@@ -47,23 +47,23 @@ namespace WK.Battle
 
 
        
-        public TextMeshProUGUI uiRelationShowText; //°³¿¬¼º ÅØ½ºÆ®
+        public TextMeshProUGUI uiRelationShowText; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ®
         
-        public TextMeshProUGUI uiDEMShowText; // dem °ÔÀÌÁö ÅØ½ºÆ®
-        public Image uiDEMShowGauge; // dem °ÔÀÌÁö ÀÌ¹ÌÁö
+        public TextMeshProUGUI uiDEMShowText; // dem ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ®
+        public Image uiDEMShowGauge; // dem ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½
 
         int RelationShipValue = 5;
         int DEMValue = 0;
 
-        int MAXDEMGuage = 100; //dem °ÔÀÌÁö full
-        int MAXRelatinshipGuage = 10; //relationship °ÔÀÌÁö full
+        int MAXDEMGuage = 100; //dem ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ full
+        int MAXRelatinshipGuage = 10; //relationship ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ full
         int MAXRelationshiporigin = 5; //relationship 
 
 
         
         public void GlobalDataLoad()
         {
-            //½ºÅ×ÀÌÁö µ¥ÀÌÅÍ·Îµå
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í·Îµï¿½
 
             
 
@@ -96,12 +96,12 @@ namespace WK.Battle
 
  
 
-            public void initPlayerDataLoad() //ÇÃ·¹ÀÌ¾î, Àû ÇÃ·¹ÀÌ¾î µ¥ÀÌÅÍ ·Îµå
+            public void initPlayerDataLoad() //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½, ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
         {
-            Player.HavingDice = 4; //ÀÓ½Ã ÁÖ»çÀ§°¹¼ö --Áö¿ï°Í
-            //½ºÅ×ÀÌÁöÁ¤º¸
-            //ÀûÁ¤º¸
-            //¼ÒÀ¯Ä³¸¯ÅÍ,½ºÅ³ Á¤º¸...µîµî ·Îµå
+            Player.HavingDice = 4; //ï¿½Ó½ï¿½ ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ --ï¿½ï¿½ï¿½ï¿½ï¿½
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            //ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½...ï¿½ï¿½ï¿½ ï¿½Îµï¿½
 
             gameState = GameState.START;
         }
@@ -109,12 +109,12 @@ namespace WK.Battle
 
         public void SwitchingCharacter()
         {
-            //Ä³¸¯ÅÍ ½ºÀ§Äª
+            //Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Äª
         }
 
         
 
-        // #0 °ÔÀÓ½ÃÀÛ 
+        // #0 ï¿½ï¿½ï¿½Ó½ï¿½ï¿½ï¿½ 
         public IEnumerator GameBegin()
         {
             if (gameState != GameState.READY) StopCoroutine(GameBegin());
@@ -132,13 +132,13 @@ namespace WK.Battle
 
 
 
-        #region # ÁÖ»çÀ§ ±¼¸®±â 
+        #region # ï¿½Ö»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
         public void OnBtnClickDiceLoll()
         {
-            if (DiceRollingPAN.gameObject.activeSelf) return; //ÀÌ¹ÌÈ°¼ºÈ­µÇ¾îÀÖ´Ù¸é return
+            if (DiceRollingPAN.gameObject.activeSelf) return; //ï¿½Ì¹ï¿½È°ï¿½ï¿½È­ï¿½Ç¾ï¿½ï¿½Ö´Ù¸ï¿½ return
 
             interactionEnable.SetActive(false);
-            StartCoroutine(BattleDiceRollingStart()); //ÁÖ»çÀ§±¼¸®±â
+            StartCoroutine(BattleDiceRollingStart()); //ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         }
 
 
@@ -200,24 +200,24 @@ namespace WK.Battle
         #endregion
 
 
-        #region # ½ºÅ³¹ßµ¿
+        #region # ï¿½ï¿½Å³ï¿½ßµï¿½
 
-        // °³¿¬¼º °ÔÀÌÁö º¯°æ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         public void SetRelationGauge(int point)
         {
             if (MAXRelatinshipGuage < MAXRelationshiporigin) return;
             RelationShipValue -= point;
-            uiRelationShowText.text = "°³¿¬¼º\n"+ RelationShipValue + "/" + MAXRelationshiporigin;
+            uiRelationShowText.text = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\n"+ RelationShipValue + "/" + MAXRelationshiporigin;
         }
 
-        // DEM °ÔÀÌÁö º¯°æ
+        // DEM ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         public void SetDEMGauge(int point)
         {
             DEMValue += point;
 
             uiDEMShowGauge.fillAmount = DEMValue / MAXDEMGuage; 
-            //uiDEMShowText.text = "DEM\n"+Mathf.Floor(MAXDEMGuage / DEMValue) * 100 +"%"; // Ã¤¿öÁø ÆÛ¼¾Æ®
-            uiDEMShowText.text = "DEM\n"+ (DEMValue/ MAXDEMGuage)*100 +"%"; // Ã¤¿öÁø ÆÛ¼¾Æ®
+            //uiDEMShowText.text = "DEM\n"+Mathf.Floor(MAXDEMGuage / DEMValue) * 100 +"%"; // Ã¤ï¿½ï¿½ï¿½ï¿½ ï¿½Û¼ï¿½Æ®
+            uiDEMShowText.text = "DEM\n"+ (DEMValue/ MAXDEMGuage)*100 +"%"; // Ã¤ï¿½ï¿½ï¿½ï¿½ ï¿½Û¼ï¿½Æ®
 
             Debug.Log("DEMValue = "+DEMValue);
         }
@@ -238,7 +238,7 @@ namespace WK.Battle
 
 
 
-        // UI »óÈ£ÀÛ¿ë ================== (ÀÓ½Ã)
+        // UI ï¿½ï¿½È£ï¿½Û¿ï¿½ ================== (ï¿½Ó½ï¿½)
 
         public void PlayEffectHURT()
         {

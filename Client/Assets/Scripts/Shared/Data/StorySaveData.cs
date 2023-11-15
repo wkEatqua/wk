@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+#if !JSON_CONVERTER || !SERVER
 using UnityEngine;
+#endif
 
 public class StorySaveData : SaveData
 {
@@ -19,6 +21,7 @@ public class StorySaveData : SaveData
 
     public override void Load()
     {
+#if !JSON_CONVERTER || !SERVER
         ChapterId = MainStoryManager.chapterId;
         SaveManager.SaveData data = gameData.Manager.DataList.Find(x => x.SaveId == ChapterId);
         
@@ -34,11 +37,12 @@ public class StorySaveData : SaveData
             Hp = storyData.Hp;
             isLoaded = true;
         }
-
+#endif
     }
 
     public override void Save()
     {
+#if !JSON_CONVERTER || !SERVER
         ChapterId = MainStoryManager.chapterId;
         WorldId = MainStoryManager.worldId;
 
@@ -63,5 +67,6 @@ public class StorySaveData : SaveData
         storyData.CurSelectedVeris = CurSelectedVeris;
         storyData.CurMaxVeris = CurMaxVeris;
         storyData.Hp = Hp;
+#endif
     }
 }

@@ -153,7 +153,7 @@ namespace WK.Battle
             }
             else 
             { 
-                DiceRollingPAN.SetDice(Enemy.BaseDiceCount); 
+                //DiceRollingPAN.SetDice(Enemy.BaseDiceCount); 
             }
             
 

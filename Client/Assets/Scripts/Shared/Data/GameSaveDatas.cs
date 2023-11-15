@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 public abstract class SaveData
@@ -27,7 +26,7 @@ public class GameSaveDatas
         {
             if (datas == null)
             {
-                var types = TypeCache.GetTypesDerivedFrom(typeof(SaveData)).Where(x => x.IsSubclassOf(typeof(SaveData)));
+                var types =(typeof(SaveData)).Assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(SaveData)));
                 datas = new List<SaveData>();
 
                 foreach (var type in types)

@@ -13,8 +13,14 @@ public class TileManager : MonoBehaviour
 	[SerializeField]
 	private long TileInterval;
 
+	[SerializeField]
+	private float TileScale;
+
     [SerializeField]
     private GameObject TileContainer;
+
+	[SerializeField]
+	private GameObject TilePrefab;
 
 	[SerializeField]
     List<List<Tile>> TileMap;
@@ -27,7 +33,7 @@ public class TileManager : MonoBehaviour
 			TileContainer = GameObject.Find("TileContainer");
 		}
 
-		
+		TileMap = new List<List<Tile>>();
 	}
 	private void Start()
 	{
@@ -52,18 +58,70 @@ public class TileManager : MonoBehaviour
 				RemoveTile(i, j);
 			}
 		}
+		TileMap = null;
 	}
 
-	private IEnumerator LoadLevel()
+	private void LoadLevel()
 	{
 		Debug.Log($"Level : {this.Level}");
+
+		// Load TileNumber and TileInterver
+
+		// Debug Code 시작 (삭제할 것)
+		switch(Level)
+		{
+			case 1:
+				TileNumber = 3;
+				TileInterval = 20;
+				TileScale = 1;
+				break;
+			case 2:
+				TileNumber = 3;
+				TileInterval = 10;
+				TileScale = 0.9f;
+				break;
+			case 3:
+				TileNumber = 3;
+				TileInterval = 5;
+				TileScale = 0.7f;
+				break;
+		}
+		// DebugCode 끝
+		
+	}
+
+	private IEnumerator CreateTile(int x, int y)
+	{
+		GameObject TileObject = Instantiate(TilePrefab, TileContainer.transform);
+		Tile tileComponent = TileObject.GetComponent<Tile>();
+		tileComponent.SetScale(TileScale);
+		//tileComponent.SetPosition(0, 0);
+		TileMap[x][y] = tileComponent;
 		yield return null;
 	}
 
+	private void CreateAllTile()
+	{
+		TileMap = new List<List<Tile>>();
+		for (int i = 0; i < TileNumber; i++)
+		{
+			TileMap.Add(new List<Tile>());
+		}
+
+		for (int i = 0; i < TileNumber; i++)
+		{
+			for (int j = 0; j < TileNumber; j++)
+			{
+				TileMap[i].Add(null);
+				StartCoroutine(CreateTile(i, j));
+			}
+		}
+	}
 	public void OnBtnClickLevelButton(int Level)
 	{
 		this.Level = Level;
 		RemoveAllTile();
-		StartCoroutine(LoadLevel());
+		LoadLevel();
+		CreateAllTile();
 	}
 }

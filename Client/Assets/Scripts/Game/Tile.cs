@@ -9,7 +9,7 @@ public class Tile : MonoBehaviour
 		transform.localScale = new Vector3(Scale, 0.1f, Scale);
 	}
 
-	public void SetPosition(int x, int y)
+	public void SetPosition(float x, float y)
 	{
 		transform.localPosition = new Vector3(x, y, 0);
 	}

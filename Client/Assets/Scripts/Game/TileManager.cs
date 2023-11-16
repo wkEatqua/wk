@@ -71,17 +71,17 @@ public class TileManager : MonoBehaviour
 		switch(Level)
 		{
 			case 1:
-				TileNumber = 3;
+				TileNumber = 7;
 				TileInterval = 20;
 				TileScale = 1;
 				break;
 			case 2:
-				TileNumber = 3;
+				TileNumber = 11;
 				TileInterval = 10;
 				TileScale = 0.9f;
 				break;
 			case 3:
-				TileNumber = 3;
+				TileNumber = 15;
 				TileInterval = 5;
 				TileScale = 0.7f;
 				break;
@@ -93,10 +93,13 @@ public class TileManager : MonoBehaviour
 	private IEnumerator CreateTile(int x, int y)
 	{
 		GameObject TileObject = Instantiate(TilePrefab, TileContainer.transform);
-		Tile tileComponent = TileObject.GetComponent<Tile>();
-		tileComponent.SetScale(TileScale);
-		//tileComponent.SetPosition(0, 0);
-		TileMap[x][y] = tileComponent;
+		Tile TileComponent = TileObject.GetComponent<Tile>();
+		TileComponent.SetScale(TileScale);
+		int mid = (int)TileNumber / 2;
+		float PosX = (x - mid) * 1.1f;
+		float PosY = (y - mid) * 1.1f;
+		TileComponent.SetPosition(PosX, PosY);
+		TileMap[x][y] = TileComponent;
 		yield return null;
 	}
 

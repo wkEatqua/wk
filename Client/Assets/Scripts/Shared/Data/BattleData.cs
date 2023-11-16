@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Shared.Model;
+#if !JSON_CONVERTER || !SERVER
 using WK.Battle;
+#endif
 
 namespace Shared.Data
 {
@@ -30,7 +32,9 @@ namespace Shared.Data
         //public NameText Name;
         public string Name;
         public string HeroIcon;
+#if !JSON_CONVERTER || !SERVER
         public WeaponType WeaponType;
+#endif
         public string MainIllust;
         public int HeroStamina;
         public int NeedTransForm;

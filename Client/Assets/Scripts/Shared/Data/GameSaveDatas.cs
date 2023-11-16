@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+#if !JSON_CONVERTER || !SERVER
 using UnityEngine;
+#endif
 
 public abstract class SaveData
 {
@@ -38,7 +40,7 @@ public class GameSaveDatas
             return datas;
         }
     }
-
+#if !JSON_CONVERTER || !SERVER
     readonly SaveManager manager;
     public SaveManager Manager => manager;
     public GameSaveDatas(SaveManager manager)
@@ -60,4 +62,5 @@ public class GameSaveDatas
             data.Load();
         }
     }
+#endif
 }

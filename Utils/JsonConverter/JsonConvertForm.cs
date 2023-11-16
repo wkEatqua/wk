@@ -6,8 +6,11 @@ namespace JsonConverter
 {
     public partial class JsonConverter : Form
     {
+        bool IsDebug = false; 
         string ClientOutPutDirectory = "..\\..\\Client\\Assets\\Resources\\JsonData";
         string ServerOutPutDirectory = "..\\..\\Server\\JsonData";
+
+        string DebugOutPutDirectory = "..\\..\\..\\JsonData";
 
         List<Type> TypeList = new List<Type>();
 
@@ -28,6 +31,11 @@ namespace JsonConverter
 
         }
 
+        private void CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            IsDebug = CheckBox.Checked;
+        }
+
         private void ExportButton_Click(object sender, EventArgs e)
         {
             if (!excelFilePaths.Any()) { return; }
@@ -46,8 +54,15 @@ namespace JsonConverter
                     var data = new ExcelMapper(filePath).Fetch(type);
                     var result = JsonService.SerializePlainObject(data);
 
-                    CreateFile(ClientOutPutDirectory, fileName, result);
-                    CreateFile(ServerOutPutDirectory, fileName, result);
+                    if (IsDebug)
+                    {
+                        CreateFile(DebugOutPutDirectory, fileName, result);
+                    }
+                    else
+                    {
+                        CreateFile(ClientOutPutDirectory, fileName, result);
+                        CreateFile(ServerOutPutDirectory, fileName, result);
+                    }
 
                     ResultTextBox.Text = $"{fileName} parse done.";
                 }
@@ -116,6 +131,5 @@ namespace JsonConverter
         {
             return (T)Convert.ChangeType(value, typeof(T));
         }
-
     }
 }

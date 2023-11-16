@@ -18,11 +18,19 @@ namespace Epos
             Destroy(gameObject);
         }
 
-        public abstract float OnHit(float dmg);
+        public abstract int OnHit(int dmg);
         
-        public virtual void Attack(Actor target)
+        public virtual int Attack(Actor target)
         {
-            target.OnHit(Atk);
+            int dmg = Atk;
+            float rand = Random.Range(0, 100);
+
+            if(rand <= CritProb)
+            {
+                dmg =(int)(dmg * CritProb / 100f);
+            }
+            target.OnHit(dmg);
+            return dmg;
         }
     }
 }

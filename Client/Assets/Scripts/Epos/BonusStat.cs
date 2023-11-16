@@ -7,15 +7,15 @@ using UnityEngine;
 public struct StatKeyPair<T> where T : Enum
 {
     public T Key;
-    public float Value;
+    public int Value;
 }
 [System.Serializable]
 public class BonusStat<T> where T : Enum
 {
     // 영구 추가 스탯 관련 클래스 (무기, 악세서리 등)
 
-    public readonly IDictionary<T, float> Value = new Dictionary<T, float>(); // 추가값
-    public readonly IDictionary<T, float> Ratio = new Dictionary<T, float>(); // 추가 배율
+    public readonly IDictionary<T, int> Value = new Dictionary<T, int>(); // 추가값
+    public readonly IDictionary<T, int> Ratio = new Dictionary<T, int>(); // 추가 배율
 
     [Header("추가 스탯 값, 스탯 타입과 정수 입력")]
     [SerializeField] List<StatKeyPair<T>> values = new();
@@ -57,11 +57,11 @@ public class BonusStat<T> where T : Enum
                 Ratio[x] = 0;
         }
     }
-    public void AddValue(T type, float value) // 값 추가
+    public void AddValue(T type, int value) // 값 추가
     {
         Value[type] = value;
     }
-    public void AddRatio(T type, float ratio) // 배율 추가
+    public void AddRatio(T type, int ratio) // 배율 추가
     {
         Ratio[type] = ratio;
     }

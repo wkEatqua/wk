@@ -10,17 +10,17 @@ namespace Epos
     [System.Serializable]
     public class BaseStat
     {
-        [SerializeField] float MaxHp; // 최대 체력    
-        [SerializeField] float Atk;  // 공격력       
-        [SerializeField] float AtkRange; // 공격 사거리
-        [SerializeField] float Def; // 방어력       
-        [SerializeField] float CritProb; // 크리티컬 확률
-        [SerializeField] float CritDmg; // 크리티컬 데미지       
-        [SerializeField] float DmgTake = 100; // 받는 피해량
+        [SerializeField] int MaxHp; // 최대 체력    
+        [SerializeField] int Atk;  // 공격력       
+        [SerializeField] int AtkRange; // 공격 사거리
+        [SerializeField] int Def; // 방어력       
+        [SerializeField] int CritProb; // 크리티컬 확률
+        [SerializeField] int CritDmg = 125; // 크리티컬 데미지       
+        [SerializeField] int DmgTake = 100; // 받는 피해량
 
-        public Dictionary<ActorStatType, float> stats = new();
+        public Dictionary<ActorStatType, int> stats = new();
 
-        public float maxHp
+        public int maxHp
         {
             get { return stats[ActorStatType.MaxHp]; }
             set
@@ -28,32 +28,32 @@ namespace Epos
                 stats[ActorStatType.MaxHp] = value < 0 ? 0 : value;
             }
         }
-        public float atk
+        public int atk
         {
             get { return stats[ActorStatType.Atk]; }
             set { stats[ActorStatType.Atk] = value < 0 ? 0 : value; }
         }       
-        public float atkRange
+        public int atkRange
         {
             get { return stats[ActorStatType.AtkRange]; }
             set { stats[ActorStatType.AtkRange] = value < 0 ? 0 : value; }
         }
-        public float dmgTake
+        public int dmgTake
         {
             get { return stats[ActorStatType.DmgTake]; }
             set { stats[ActorStatType.DmgTake] = value; }
         }
-        public float def
+        public int def
         {
             get { return stats[ActorStatType.Def]; }
             set { stats[ActorStatType.Def] = value; }
         }       
-        public float critProb
+        public int critProb
         {
             get { return stats[ActorStatType.CritProb]; }
             set { stats[ActorStatType.CritProb] = value < 0 ? 0 : value; }
         }
-        public float critDmg
+        public int critDmg
         {
             get { return stats[ActorStatType.CritDmg]; }
             set { stats[ActorStatType.CritDmg] = value < 0 ? 0 : value; }
@@ -78,7 +78,7 @@ namespace Epos
                 ActorStatType statType = (ActorStatType)Enum.Parse(typeof(ActorStatType), field.Name);
                 if (stats.ContainsKey(statType))
                 {
-                    stats[statType] += (float)field.GetValue(this);
+                    stats[statType] += (int)field.GetValue(this);
                 }
             }
         }
@@ -86,7 +86,7 @@ namespace Epos
     public partial class Actor : MonoBehaviour
     {
         [Tooltip("0이 아닌 값으로 설정하면 해당 체력으로 생성(디버그용)")]
-        [SerializeField] protected float curHp = 0; // 현재 체력   
+        [SerializeField] protected int curHp = 0; // 현재 체력   
 
         [SerializeField] BaseStat baseStat = new();
         public BaseStat BaseStat => baseStat;
@@ -115,7 +115,7 @@ namespace Epos
                 statStrategies.Add(x, new BasicStatStrategy(this));
             }
         }
-        virtual public float CurHp
+        virtual public int CurHp
         {
             get { return curHp; }
             set
@@ -129,61 +129,62 @@ namespace Epos
                 else curHp = value;                
             }
         }
-        virtual public float MaxHp
+        virtual public int MaxHp
         {
             get
             {
-                float value = statStrategies[ActorStatType.MaxHp].GetFinalStat(ActorStatType.MaxHp);
+                int value = statStrategies[ActorStatType.MaxHp].GetFinalStat(ActorStatType.MaxHp);
                 if (value < 0) return 0;
                 return value;
             }
         }
 
-        virtual public float Atk
+        virtual public int Atk
         {
             get
             {
-                float value = statStrategies[ActorStatType.Atk].GetFinalStat(ActorStatType.Atk);
+                int value = statStrategies[ActorStatType.Atk].GetFinalStat(ActorStatType.Atk);
                 if (value < 0) return 0;
                 return value;
             }
         }
-        virtual public float AtkRange
+        virtual public int AtkRange
         {
             get
             {
-                float value = statStrategies[ActorStatType.AtkRange].GetFinalStat(ActorStatType.AtkRange);
+                int value = statStrategies[ActorStatType.AtkRange].GetFinalStat(ActorStatType.AtkRange);
                 if (value < 0) return 0;
                 return value;
             }
         }
-        virtual public float DmgTake
+        virtual public int DmgTake
         {
             get
             {
-                float value = statStrategies[ActorStatType.DmgTake].GetFinalStat(ActorStatType.DmgTake);
+                int value = statStrategies[ActorStatType.DmgTake].GetFinalStat(ActorStatType.DmgTake);
                 if (value < 0) return 0;
                 return value;
             }
         }
-        virtual public float Def
+        virtual public int Def
         {
             get
             {
-                float value = statStrategies[ActorStatType.Def].GetFinalStat(ActorStatType.Def);
+                int value = statStrategies[ActorStatType.Def].GetFinalStat(ActorStatType.Def);
 
                 return value;
             }
         }
 
-        virtual public float CritProb
+        virtual public int CritProb
         {
             get
             {
-                float value = statStrategies[ActorStatType.CritProb].GetFinalStat(ActorStatType.CritProb);
-                if (value < 0) return 0;
-                else if (value > 100) return 100;
-
+                int value = statStrategies[ActorStatType.CritProb].GetFinalStat(ActorStatType.CritProb);
+                if (value < 0)
+                    return 0;
+                else if (value > 100)
+                    return 100;
                 return value;
             }
         }
@@ -198,7 +199,7 @@ namespace Epos
             }
         }       
 
-        public void AddStat(ActorStatType statType, float amount, StatType type)
+        public void AddStat(ActorStatType statType, int amount, StatType type)
         {
             switch (type)
             {

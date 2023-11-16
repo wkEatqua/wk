@@ -8,7 +8,7 @@ namespace Epos
     {
         public interface IStatStrategy
         {
-            float GetFinalStat(ActorStatType type);
+            int GetFinalStat(ActorStatType type);
         }
         public class BasicStatStrategy : IStatStrategy
         {
@@ -18,20 +18,20 @@ namespace Epos
                 this.actor = actor;
             }
 
-            public float GetFinalStat(ActorStatType type)
+            public int GetFinalStat(ActorStatType type)
             {
-                return (actor.BaseStat.stats[type] + actor.BonusStat.Value[type]) * (1 + actor.BonusStat.Ratio[type] / 100);
+                return (int)((actor.BaseStat.stats[type] + actor.BonusStat.Value[type]) * (1 + actor.BonusStat.Ratio[type] / 100f));
             }
         }
 
         public class FixStatStrategy : IStatStrategy
         {
-            readonly float value;
-            public FixStatStrategy(float value)
+            readonly int value;
+            public FixStatStrategy(int value)
             {
                 this.value = value;
             }
-            public float GetFinalStat(ActorStatType type)
+            public int GetFinalStat(ActorStatType type)
             {
                 return value;
             }

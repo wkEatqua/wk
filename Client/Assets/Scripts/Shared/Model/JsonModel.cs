@@ -175,5 +175,9 @@
 	{
         public long Level { get; set; }
         public long TileNumber { get; set; }
+
+        public float TileInterval { get; set; }
+
+        public float TileScale { get; set; }
 	}
 }

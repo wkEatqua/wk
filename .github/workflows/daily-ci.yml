@@ -1,10 +1,8 @@
-name: Build and Deploy
+name: Daily CI
 on:
-  # push:
-  #   branches: [ main ]
-  # pull_request:
+  schedule:
+    - cron: '0 11 * * *' # KST 20:00
   workflow_dispatch:
-  # merge_group:
 
 env:
   UNITY_LICENSE:
@@ -39,7 +37,6 @@ env:
     Zj8drTE/MEjE08PXEtk1eoSS6nTt9f5o59HuWuyV27RRmImbZys0UDwiHcpc3asWxryOEorjnXvJ&#13;\n\
     UshQDz1PvkbCpWSt+3X/e/3BWiEIUqBTIPr73A==</SignatureValue></Signature></root>\n"
 
-
 jobs:
   buildForWindows:
     name: Build for ${{ matrix.targetPlatform }}
@@ -48,13 +45,10 @@ jobs:
       fail-fast: false
       matrix:
         targetPlatform:
-          - StandaloneWindows
           - StandaloneWindows64
           
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.head_ref }}
           
       - uses: actions/cache@v3
         with:
@@ -62,7 +56,8 @@ jobs:
           key: Library-${{ matrix.targetPlatform }}
 
       - name: 유니티 빌드
-        uses: game-ci/unity-builder@v3
+        # log 파일 작성을 위해 수정한 버전입니다.
+        uses: rollrat/unity-builder@main
         env:
           UNITY_EMAIL: rollrat.cse@gmail.com
           UNITY_PASSWORD: Aqwer1234
@@ -71,3 +66,64 @@ jobs:
           projectPath: Client
           unityVersion: 2022.3.8f1
           allowDirtyBuild: true
+          
+      - name: AWS 설정
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: AKIAX6FZX7BIKZELWZIV
+          aws-secret-access-key: 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
+          aws-region: ap-northeast-2
+          
+      - name: 파일이름 및 날짜 출력
+        id: ciinfo
+        if: always()
+        run: |
+          echo "filename=$(date +'daily-%Y-%m-%dT%H.%M.%S-${{ matrix.targetPlatform }}.zip')" >> $GITHUB_OUTPUT
+          echo "today=$(date +'%Y.%m-%d')" >> $GITHUB_OUTPUT
+        
+      - name: 빌드 결과물 압축 및 s3로 업로드
+        if: success()
+        run: |
+          zip -qq -r ./build.zip ./build
+          aws s3 cp --region ap-northeast-2 ./build.zip s3://wk-cd-artifacts/${{ steps.ciinfo.outputs.filename }} --acl=public-read
+          
+      - name: CI 결과 및 빌드 아티팩트를 디스코드로 전송
+        if: success()
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: https://discord.com/api/webhooks/1174515555294785586/P8DhDILhFczo7q0bBBoM9DrOxfQbx1Jwv_o01i7IerhBLuPA-AJdoJrQLtBPpJWp8sqb
+          title: "[${{ steps.ciinfo.outputs.today }}] Wk Daily CI Success (${{ matrix.targetPlatform }}) 🥳"
+          color: 0x28e1ff
+          nodetail: true
+          description: |
+            [다운로드 ${{ steps.ciinfo.outputs.filename }}](https://wk-cd-artifacts.s3.ap-northeast-2.amazonaws.com/${{ steps.ciinfo.outputs.filename }})
+            CI 로그: [${{ github.head_ref }} / ${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          # avatar_url: todo ci 성공 아바타 ~
+
+      - name: CI 실패 결과 추출
+        id: faillog
+        if: failure()
+        shell: bash
+        run: |
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          ERROR_LOG=$(grep '^Assets\/.*error' log.txt | sort -u)
+          echo "faillog<<$EOF" >> $GITHUB_OUTPUT
+          echo "$ERROR_LOG" >> $GITHUB_OUTPUT
+          echo "$EOF" >> $GITHUB_OUTPUT
+          
+      - name: CI 실패 결과 디스코드로 전송
+        if: failure()
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: https://discord.com/api/webhooks/1174515555294785586/P8DhDILhFczo7q0bBBoM9DrOxfQbx1Jwv_o01i7IerhBLuPA-AJdoJrQLtBPpJWp8sqb
+          title: "[${{ steps.ciinfo.outputs.today }}] Wk Daily CI Fail (${{ matrix.targetPlatform }}) 😭"
+          nodetail: true
+          color: 0xff9300
+          description: |
+            CI 실패! 빌드 에러를 확인해주세요!
+            ```
+            ${{ steps.faillog.outputs.faillog }})
+            ```
+            CI 로그: [${{ github.head_ref }} / ${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          # avatar_url: todo ci 실패 아바타 ~
+      

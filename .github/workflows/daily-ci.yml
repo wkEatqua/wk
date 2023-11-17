@@ -97,7 +97,7 @@ jobs:
           nodetail: true
           description: |
             [다운로드 ${{ steps.ciinfo.outputs.filename }}](https://wk-cd-artifacts.s3.ap-northeast-2.amazonaws.com/${{ steps.ciinfo.outputs.filename }})
-            CI 커밋 아이디: [${{ github.head_ref }} / ${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            CI 로그: [${{ github.head_ref }} / ${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
           # avatar_url: todo ci 성공 아바타 ~
 
       - name: CI 실패 결과 추출
@@ -124,6 +124,6 @@ jobs:
             ```
             ${{ steps.faillog.outputs.faillog }})
             ```
-            CI 커밋 아이디: [${{ github.head_ref }} / ${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            CI 로그: [${{ github.head_ref }} / ${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
           # avatar_url: todo ci 실패 아바타 ~
       

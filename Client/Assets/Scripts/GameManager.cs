@@ -8,7 +8,7 @@ public class GameManager : Singleton<GameManager>
 {
     static bool dataloaded;
 
-    public int scriptIndex = -1;
+    [HideInInspector] public int scriptIndex = -1;
 
     static SaveManager save;
     public static SaveManager Save

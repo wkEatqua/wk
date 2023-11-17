@@ -16,7 +16,12 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: d9b0786f1c442ee4eb74b0b2307d9df9
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 14f190ee840b2894d98ef2a3d57d76af
+    m_Address: Assets/Prefabs/Dice Window.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4c8c4683d3621694c8b9b341c33558dc, type: 2}
   m_SchemaSet:

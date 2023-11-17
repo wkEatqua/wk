@@ -100,8 +100,6 @@ public class SaveManager
 
     List<SaveData> Load<T>() where T : SaveData
     {
-
-#if UNITY_EDITOR
         TextAsset[] jsonFiles = Resources.LoadAll<TextAsset>(Path.Combine("JsonData/Save/", typeof(T).Name));
 
         if (jsonFiles == null)
@@ -110,19 +108,6 @@ public class SaveManager
         }
 
         List<SaveData> jsons = jsonFiles.Select(x => JsonUtility.FromJson<T>(x.text) as SaveData).ToList();
-#else
-        string path = Path.Combine(Application.persistentDataPath, distJsonFilePath, "SaveData");
-
-        if (File.Exists(path))
-        {
-            // Read the JSON string from the file
-            json = File.ReadAllText(path);           
-        }
-        else
-        {
-            return null;
-        }
-#endif
 
         return jsons;
     }

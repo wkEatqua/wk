@@ -1,10 +1,10 @@
 name: Build and Deploy
 on:
-  push:
-    branches: [ main ]
-  pull_request:
+  # push:
+  #   branches: [ main ]
+  # pull_request:
   workflow_dispatch:
-  merge_group:
+  # merge_group:
 
 env:
   UNITY_LICENSE:

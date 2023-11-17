@@ -2,7 +2,6 @@ name: Daily CI
 on:
   schedule:
     - cron: '0 11 * * *' # KST 20:00
-  pull_request:
   workflow_dispatch:
 
 env:
@@ -92,8 +91,7 @@ jobs:
         if: success()
         uses: sarisia/actions-status-discord@v1
         with:
-          # webhook: https://discord.com/api/webhooks/1174515555294785586/P8DhDILhFczo7q0bBBoM9DrOxfQbx1Jwv_o01i7IerhBLuPA-AJdoJrQLtBPpJWp8sqb
-          webhook: https://discord.com/api/webhooks/1172513028135194704/HhVwM1l2wNFkGfF2ibe-jZBn0ertml5QPK6Kz4eZ208AEPwtF1tTrGthG0yYTR-YVyRu
+          webhook: https://discord.com/api/webhooks/1174515555294785586/P8DhDILhFczo7q0bBBoM9DrOxfQbx1Jwv_o01i7IerhBLuPA-AJdoJrQLtBPpJWp8sqb
           title: "[${{ steps.ciinfo.outputs.today }}] Wk Daily CI Success (${{ matrix.targetPlatform }}) 🥳"
           color: 0x28e1ff
           nodetail: true
@@ -117,8 +115,7 @@ jobs:
         if: failure()
         uses: sarisia/actions-status-discord@v1
         with:
-          # webhook: https://discord.com/api/webhooks/1174515555294785586/P8DhDILhFczo7q0bBBoM9DrOxfQbx1Jwv_o01i7IerhBLuPA-AJdoJrQLtBPpJWp8sqb
-          webhook: https://discord.com/api/webhooks/1172513028135194704/HhVwM1l2wNFkGfF2ibe-jZBn0ertml5QPK6Kz4eZ208AEPwtF1tTrGthG0yYTR-YVyRu
+          webhook: https://discord.com/api/webhooks/1174515555294785586/P8DhDILhFczo7q0bBBoM9DrOxfQbx1Jwv_o01i7IerhBLuPA-AJdoJrQLtBPpJWp8sqb
           title: "[${{ steps.ciinfo.outputs.today }}] Wk Daily CI Fail (${{ matrix.targetPlatform }}) 😭"
           nodetail: true
           color: 0xff9300

@@ -70,12 +70,18 @@ jobs:
       - name: 빌드 로그 출력
         if: always()
         run: cat log.txt
+
+      - name: AWS Key
+        id: awskey
+        run: |
+          echo "accesskey=$(echo "QUtJQVg2RlpYN0JJS1pFTFdaSVY=" | base64 -d)" >> $GITHUB_OUTPUT
+          echo "secretkey=$(echo "aEE4SlFRZlh6em5wWEQ4aFFVR2Y0ZE15Y28rcVNITHppM2pjQkdwTg==" | base64 -d)" >> $GITHUB_OUTPUT
           
       - name: AWS 설정
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          aws-access-key-id: AKIAX6FZX7BIKZELWZIV
-          aws-secret-access-key: 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
+          aws-access-key-id: ${{ steps.awskey.outputs.accesskey }}
+          aws-secret-access-key: ${{ steps.awskey.outputs.secretkey }}
           aws-region: ap-northeast-2
           
       - name: 파일이름 및 날짜 출력

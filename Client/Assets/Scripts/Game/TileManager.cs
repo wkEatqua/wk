@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Shared.Data;
 
 public class TileManager : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class TileManager : MonoBehaviour
     private long TileNumber;
 
 	[SerializeField]
-	private long TileInterval;
+	private float TileInterval;
 
 	[SerializeField]
 	private float TileScale;
@@ -66,27 +67,40 @@ public class TileManager : MonoBehaviour
 		Debug.Log($"Level : {this.Level}");
 
 		// Load TileNumber and TileInterver
+		EposData.TryGetEposLevel(Level, out EposLevelInfo info);
+		if (null == info)
+		{
+			Debug.Log($"info is null");
+			TileNumber = 5;
+			TileInterval = 1.1f;
+			TileScale = 0.9f;
+			return;
+		}
+		TileNumber = info.TileNumber;
+		TileInterval = info.TileInterval;
+		TileScale = info.TileScale;
 
 		// Debug Code 시작 (삭제할 것)
-		switch(Level)
-		{
-			case 1:
-				TileNumber = 7;
-				TileInterval = 20;
-				TileScale = 1;
-				break;
-			case 2:
-				TileNumber = 11;
-				TileInterval = 10;
-				TileScale = 0.9f;
-				break;
-			case 3:
-				TileNumber = 15;
-				TileInterval = 5;
-				TileScale = 0.7f;
-				break;
-		}
+		//switch(Level)
+		//{
+		//	case 1:
+		//		TileNumber = 7;
+		//		TileInterval = 20;
+		//		TileScale = 1;
+		//		break;
+		//	case 2:
+		//		TileNumber = 11;
+		//		TileInterval = 10;
+		//		TileScale = 0.9f;
+		//		break;
+		//	case 3:
+		//		TileNumber = 15;
+		//		TileInterval = 5;
+		//		TileScale = 0.8f;
+		//		break;
+		//}
 		// DebugCode 끝
+		
 		
 	}
 
@@ -96,8 +110,8 @@ public class TileManager : MonoBehaviour
 		Tile TileComponent = TileObject.GetComponent<Tile>();
 		TileComponent.SetScale(TileScale);
 		int mid = (int)TileNumber / 2;
-		float PosX = (x - mid) * 1.1f;
-		float PosY = (y - mid) * 1.1f;
+		float PosX = (x - mid) * TileInterval;
+		float PosY = (y - mid) * TileInterval;
 		TileComponent.SetPosition(PosX, PosY);
 		TileMap[x][y] = TileComponent;
 		yield return null;

@@ -2,143 +2,211 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Shared.Data;
+using Epos;
+using DG.Tweening;
 
-public class TileManager : MonoBehaviour
+public class TileManager : Singleton<TileManager>
 {
-	[SerializeField]
-	private long Level;
+    [SerializeField]
+    private long Level;
 
     [SerializeField]
     private long TileNumber;
 
-	[SerializeField]
-	private float TileInterval;
+    [SerializeField]
+    private float TileInterval;
 
-	[SerializeField]
-	private float TileScale;
+    [SerializeField]
+    private float TileScale;
 
     [SerializeField]
     private GameObject TileContainer;
 
-	[SerializeField]
-	private GameObject TilePrefab;
+    [SerializeField]
+    private GameObject TilePrefab;
 
-	[SerializeField]
+    [SerializeField]
     List<List<Tile>> TileMap;
 
-	private void Init()
-	{
-		// Set TileContainer
-		if (null == TileContainer)
-		{
-			TileContainer = GameObject.Find("TileContainer");
-		}
+    private void Init()
+    {
+        // Set TileContainer
+        if (null == TileContainer)
+        {
+            TileContainer = GameObject.Find("TileContainer");
+        }
 
-		TileMap = new List<List<Tile>>();
-	}
-	private void Start()
-	{
-		Init();
-	}
+        TileMap = new List<List<Tile>>();
+    }
+    private void Start()
+    {
+        Init();
+    }
 
-	private void RemoveTile(int x, int y)
-	{
-		if (TileMap[x][y] == null)
-			return;
+    public void RemoveTile(int x, int y)
+    {
+        if (TileMap[x][y] == null)
+            return;
 
-		Destroy(TileMap[x][y].gameObject);
-		TileMap[x][y] = null;
-	}
+        Destroy(TileMap[x][y].gameObject);
+        TileMap[x][y] = null;
+    }
 
-	private void RemoveAllTile()
-	{
-		for (int i = 0; i < TileMap.Count; i++)
-		{
-			for (int j = 0; j < TileMap[i].Count; j++)
-			{
-				RemoveTile(i, j);
-			}
-		}
-		TileMap = null;
-	}
+    private void RemoveAllTile()
+    {
+        for (int i = 0; i < TileMap.Count; i++)
+        {
+            for (int j = 0; j < TileMap[i].Count; j++)
+            {
+                RemoveTile(i, j);
+            }
+        }
+        TileMap = null;
+    }
 
-	private void LoadLevel()
-	{
-		Debug.Log($"Level : {this.Level}");
+    private void LoadLevel()
+    {
+        Debug.Log($"Level : {this.Level}");
 
-		// Load TileNumber and TileInterver
-		EposData.TryGetEposLevel(Level, out EposLevelInfo info);
-		if (null == info)
-		{
-			Debug.Log($"info is null");
-			TileNumber = 5;
-			TileInterval = 1.1f;
-			TileScale = 0.9f;
-			return;
-		}
-		TileNumber = info.TileNumber;
-		TileInterval = info.TileInterval;
-		TileScale = info.TileScale;
+        // Load TileNumber and TileInterver
+        EposData.TryGetEposLevel(Level, out EposLevelInfo info);
+        if (null == info)
+        {
+            Debug.Log($"info is null");
+            TileNumber = 5;
+            TileInterval = 1.1f;
+            TileScale = 0.9f;
+            return;
+        }
+        TileNumber = info.TileNumber;
+        TileInterval = info.TileInterval;
+        TileScale = info.TileScale;
 
-		// Debug Code 시작 (삭제할 것)
-		//switch(Level)
-		//{
-		//	case 1:
-		//		TileNumber = 7;
-		//		TileInterval = 20;
-		//		TileScale = 1;
-		//		break;
-		//	case 2:
-		//		TileNumber = 11;
-		//		TileInterval = 10;
-		//		TileScale = 0.9f;
-		//		break;
-		//	case 3:
-		//		TileNumber = 15;
-		//		TileInterval = 5;
-		//		TileScale = 0.8f;
-		//		break;
-		//}
-		// DebugCode 끝
-		
-		
-	}
+        // Debug Code 시작 (삭제할 것)
+        //switch(Level)
+        //{
+        //	case 1:
+        //		TileNumber = 7;
+        //		TileInterval = 20;
+        //		TileScale = 1;
+        //		break;
+        //	case 2:
+        //		TileNumber = 11;
+        //		TileInterval = 10;
+        //		TileScale = 0.9f;
+        //		break;
+        //	case 3:
+        //		TileNumber = 15;
+        //		TileInterval = 5;
+        //		TileScale = 0.8f;
+        //		break;
+        //}
+        // DebugCode 끝
 
-	private IEnumerator CreateTile(int x, int y)
-	{
-		GameObject TileObject = Instantiate(TilePrefab, TileContainer.transform);
-		Tile TileComponent = TileObject.GetComponent<Tile>();
-		TileComponent.SetScale(TileScale);
-		int mid = (int)TileNumber / 2;
-		float PosX = (x - mid) * TileInterval;
-		float PosY = (y - mid) * TileInterval;
-		TileComponent.SetPosition(PosX, PosY);
-		TileMap[x][y] = TileComponent;
-		yield return null;
-	}
 
-	private void CreateAllTile()
-	{
-		TileMap = new List<List<Tile>>();
-		for (int i = 0; i < TileNumber; i++)
-		{
-			TileMap.Add(new List<Tile>());
-		}
+    }
 
-		for (int i = 0; i < TileNumber; i++)
-		{
-			for (int j = 0; j < TileNumber; j++)
-			{
-				TileMap[i].Add(null);
-				StartCoroutine(CreateTile(i, j));
-			}
-		}
-	}
-	public void OnBtnClickLevelButton(int Level)
-	{
-		this.Level = Level;
-		RemoveAllTile();
-		LoadLevel();
-		CreateAllTile();
-	}
+    private IEnumerator CreateTile(int x, int y)
+    {
+        if (TileMap[x][y] != null) yield break;
+
+        GameObject TileObject = Instantiate(TilePrefab, TileContainer.transform);
+        Tile TileComponent = TileObject.GetComponent<Tile>();
+        TileComponent.SetScale(TileScale);
+        int mid = (int)TileNumber / 2;
+        float PosX = (x - mid) * TileInterval;
+        float PosY = (y - mid) * TileInterval;
+        TileComponent.SetPosition(PosX, PosY);
+        TileMap[x][y] = TileComponent;
+        yield return null;
+    }
+
+    public void CreateATile(int x, int y)
+    {
+        StartCoroutine(CreateTile(x, y));
+    }
+
+    public void PullTiles(int x, int y, Direction direction)
+    {
+        if (x < 0 || y < 0 || x >= TileMap.Count || TileMap[x].Count <= y)
+        {
+            return;
+        }
+
+        if (TileMap[x][y] != null) return;
+
+        switch (direction)
+        {
+            case Direction.Left:
+                for (int i = y; i > 0; i--)
+                {
+                    if (TileMap[x][i - 1] != null)
+                    {
+                        TileMap[x][i - 1].transform.DOMove(new Vector3(x, i, 0), 0.5f).SetEase(Ease.Linear);
+                    }
+                    TileMap[x][i] = TileMap[x][i - 1];
+                }
+
+                StartCoroutine(CreateTile(x, 0));
+                break;
+            case Direction.Right:
+                for (int i = y; i < TileMap[x].Count - 1; i++)
+                {
+                    if (TileMap[x][i + 1] != null)
+                    {
+                        TileMap[x][i + 1].transform.DOMove(new Vector3(x, i, 0), 0.5f).SetEase(Ease.Linear);
+                    }
+                    TileMap[x][i] = TileMap[x][i + 1];
+                }
+
+                StartCoroutine(CreateTile(x, TileMap[x].Count - 1));
+                break;
+            case Direction.Top:
+                for (int i = x; i > 0; i--)
+                {
+                    if (TileMap[i-1][y] != null)
+                    {
+                        TileMap[i-1][y].transform.DOMove(new Vector3(x, i, 0), 0.5f).SetEase(Ease.Linear);
+                    }
+                    TileMap[i][y] = TileMap[i-1][y];
+                }
+                StartCoroutine(CreateTile(0,y));
+                break;
+            case Direction.Bottom:
+                for (int i = x; i < TileMap.Count -1; i++)
+                {
+                    if (TileMap[i + 1][y] != null)
+                    {
+                        TileMap[i + 1][y].transform.DOMove(new Vector3(x, i, 0), 0.5f).SetEase(Ease.Linear);
+                    }
+                    TileMap[i][y] = TileMap[i + 1][y];
+                }
+                StartCoroutine(CreateTile(TileMap.Count - 1, y));
+                break;
+        }
+    }
+    private void CreateAllTile()
+    {
+        TileMap = new List<List<Tile>>();
+        for (int i = 0; i < TileNumber; i++)
+        {
+            TileMap.Add(new List<Tile>());
+        }
+
+        for (int i = 0; i < TileNumber; i++)
+        {
+            for (int j = 0; j < TileNumber; j++)
+            {
+                TileMap[i].Add(null);
+                StartCoroutine(CreateTile(i, j));
+            }
+        }
+    }
+    public void OnBtnClickLevelButton(int Level)
+    {
+        this.Level = Level;
+        RemoveAllTile();
+        LoadLevel();
+        CreateAllTile();
+    }
 }

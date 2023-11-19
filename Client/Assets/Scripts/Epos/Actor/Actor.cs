@@ -8,10 +8,14 @@ namespace Epos
     {
         protected virtual void Awake()
         {
-            if (curHp == 0) curHp = MaxHp;
 
             InitStatStrategy();
             bonusStats.Add(bonusStat);
+        }
+
+        public virtual void Start()
+        {
+            if (curHp == 0) curHp = MaxHp;
         }
         public virtual void Die()
         {

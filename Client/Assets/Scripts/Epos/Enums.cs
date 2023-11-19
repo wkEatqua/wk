@@ -12,4 +12,8 @@ namespace Epos
         Value, Ratio
     }
 
+    public enum Direction
+    {
+       Left,Right, Top, Bottom
+    }
 }

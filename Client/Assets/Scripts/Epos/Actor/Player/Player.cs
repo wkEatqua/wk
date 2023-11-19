@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -48,6 +49,13 @@ namespace Epos
             removes.ForEach(weapon => meleeWeapons.Remove(weapon));
 
             return dmg;
+        }
+
+        public override void Start()
+        {
+            base.Start();
+
+            transform.DOJump(transform.position + Vector3.right * 10, 2, 1, 1).SetEase(Ease.Linear);
         }
     }
 }

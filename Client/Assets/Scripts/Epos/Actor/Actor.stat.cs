@@ -58,7 +58,7 @@ namespace Epos
             set { stats[ActorStatType.CritDmg] = value < 0 ? 0 : value; }
         }
         
-        public void Init()
+        public BaseStat()
         {
             var fields = typeof(BaseStat).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
             stats.Clear();

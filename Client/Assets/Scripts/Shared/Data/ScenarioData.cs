@@ -420,19 +420,19 @@ namespace Shared.Data
             ContentDict.Clear();
             ContentGroupDict.Clear();
             {
-                var content = new Data<ScenarioTextContent>().GetData(path);
-                ContentDict = content.ToDictionary(kv => kv.UniqueId, kv => new ScenarioTextContentInfo(kv));
-                foreach (var group in content)
-                {
-                    if (!ContentGroupDict.ContainsKey(group.GroupId))
-                    {
-                        ContentGroupDict.Add(group.GroupId, new());
-                    }
+                //var content = new Data<ScenarioTextContent>().GetData(path);
+                //ContentDict = content.ToDictionary(kv => kv.UniqueId, kv => new ScenarioTextContentInfo(kv));
+                //foreach (var group in content)
+                //{
+                //    if (!ContentGroupDict.ContainsKey(group.GroupId))
+                //    {
+                //        ContentGroupDict.Add(group.GroupId, new());
+                //    }
 
-                    ContentGroupDict[group.GroupId] ??= new();
+                //    ContentGroupDict[group.GroupId] ??= new();
 
-                    ContentGroupDict[group.GroupId].Add(new ScenarioTextContentInfo(group));
-                }
+                //    ContentGroupDict[group.GroupId].Add(new ScenarioTextContentInfo(group));
+                //}
             }
 
         }

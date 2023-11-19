@@ -1,13 +1,16 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Epos
 {
     public class Player : Actor
     {
-        public readonly List<MeleeWeapon> meleeWeapons = new();
-        
+        List<MeleeWeapon> meleeWeapons = new();
+        List<Armour> armours = new();
+
         public override int Atk
         {
             get
@@ -25,6 +28,25 @@ namespace Epos
 
             if (dmg < 0) dmg = 0;
 
+            foreach (Armour armour in armours)
+            {
+                int dur = armour.durability;
+                if (dur >= dmg)
+                {
+                    armour.durability -= dmg;
+                    break;
+                }
+                else
+                {
+                    armour.durability = 0;
+                    dmg -= dur;
+                }
+            }
+
+            armours = armours.Where(x => x.durability > 0).ToList();
+
+            if (dmg < 0) dmg = 0;
+
             CurHp -= dmg;
 
             return dmg;
@@ -34,20 +56,35 @@ namespace Epos
             int hp = target.CurHp;
 
             int dmg = base.Attack(target);
-            List<MeleeWeapon> removes = new();
 
-            foreach(var weapon in meleeWeapons)
+            int durabilityMinus = Mathf.Min(dmg, hp);
+            foreach (MeleeWeapon wp in meleeWeapons)
             {
-                weapon.durability -= hp;            
-                if(weapon.durability <= 0)
+                int dur = wp.durability;
+                if (dur >= durabilityMinus)
                 {
-                    removes.Add(weapon);
+                    wp.durability -= durabilityMinus;
+                    break;
+                }
+                else
+                {
+                    wp.durability = 0;
+                    durabilityMinus -= dur;
                 }
             }
+            meleeWeapons = meleeWeapons.Where(wp => wp.durability > 0).ToList();
 
-            removes.ForEach(weapon => meleeWeapons.Remove(weapon));
-
+            if(target != null && target.gameObject.activeSelf && target.CurHp > 0)
+            {
+                OnHit(target.CurHp);
+            }
             return dmg;
+        }
+
+        public override void Start()
+        {
+            base.Start();
+
         }
     }
 }

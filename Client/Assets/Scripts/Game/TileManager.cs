@@ -4,6 +4,7 @@ using UnityEngine;
 using Shared.Data;
 using Epos;
 using DG.Tweening;
+using Febucci.UI.Effects;
 
 public class TileManager : Singleton<TileManager>
 {
@@ -27,6 +28,9 @@ public class TileManager : Singleton<TileManager>
 
     [SerializeField]
     List<List<Tile>> TileMap;
+
+    Tweener tweener = null;
+    public Tweener Tweener => tweener;
 
     private void Init()
     {
@@ -117,6 +121,7 @@ public class TileManager : Singleton<TileManager>
         float PosX = (x - mid) * TileInterval;
         float PosY = (y - mid) * TileInterval;
         TileComponent.SetPosition(PosX, PosY);
+        TileComponent.SetIndex(x, y);
         TileMap[x][y] = TileComponent;
         yield return null;
     }
@@ -135,53 +140,115 @@ public class TileManager : Singleton<TileManager>
 
         if (TileMap[x][y] != null) return;
 
+        int mid = (int)TileNumber / 2;
+
         switch (direction)
         {
             case Direction.Left:
+
                 for (int i = y; i > 0; i--)
                 {
                     if (TileMap[x][i - 1] != null)
                     {
-                        TileMap[x][i - 1].transform.DOMove(new Vector3(x, i, 0), 0.5f).SetEase(Ease.Linear);
+                        tweener = TileMap[x][i - 1].transform.DOMove(new Vector3((x - mid) * TileInterval, (i - mid) * TileInterval, 0), 0.5f).
+                            SetEase(Ease.Linear);
+
+                        if (i == 1) tweener.onComplete += () =>
+                        {
+                            StartCoroutine(CreateTile(x, 0));
+                            tweener = null;
+                        };
                     }
                     TileMap[x][i] = TileMap[x][i - 1];
-                }
+                    TileMap[x][i].SetIndex(x, i);
+                    TileMap[x][i - 1] = null;
 
-                StartCoroutine(CreateTile(x, 0));
+                }
+                if (tweener == null)
+                {
+                    StartCoroutine(CreateTile(x, 0));
+                }
                 break;
             case Direction.Right:
+
                 for (int i = y; i < TileMap[x].Count - 1; i++)
                 {
                     if (TileMap[x][i + 1] != null)
                     {
-                        TileMap[x][i + 1].transform.DOMove(new Vector3(x, i, 0), 0.5f).SetEase(Ease.Linear);
+                        tweener = TileMap[x][i + 1].transform.DOMove(new Vector3((x - mid) * TileInterval, (i - mid) * TileInterval, 0), 0.5f).
+                            SetEase(Ease.Linear);
+
+                        if (i == TileMap[x].Count - 2)
+                        {
+                            tweener.onComplete += () =>
+                            {
+                                StartCoroutine(CreateTile(x, TileMap[x].Count - 1));
+                                tweener = null;
+                            };
+                        }
                     }
                     TileMap[x][i] = TileMap[x][i + 1];
+                    TileMap[x][i].SetIndex(x, i);
+                    TileMap[x][i + 1] = null;
                 }
-
-                StartCoroutine(CreateTile(x, TileMap[x].Count - 1));
+                if (tweener == null)
+                {                   
+                    StartCoroutine(CreateTile(x, TileMap[x].Count - 1));
+                }
                 break;
             case Direction.Top:
-                for (int i = x; i > 0; i--)
-                {
-                    if (TileMap[i-1][y] != null)
-                    {
-                        TileMap[i-1][y].transform.DOMove(new Vector3(x, i, 0), 0.5f).SetEase(Ease.Linear);
-                    }
-                    TileMap[i][y] = TileMap[i-1][y];
-                }
-                StartCoroutine(CreateTile(0,y));
-                break;
-            case Direction.Bottom:
-                for (int i = x; i < TileMap.Count -1; i++)
+                for (int i = x; i < TileMap.Count - 1; i++)
                 {
                     if (TileMap[i + 1][y] != null)
                     {
-                        TileMap[i + 1][y].transform.DOMove(new Vector3(x, i, 0), 0.5f).SetEase(Ease.Linear);
+                        tweener = TileMap[i + 1][y].transform.DOMove(new Vector3((i - mid) * TileInterval, (y - mid) * TileInterval, 0), 0.5f).
+                            SetEase(Ease.Linear);
+
+                        if( i == TileMap.Count - 2)
+                        {
+                            tweener.onComplete += () =>
+                            {
+                                StartCoroutine(CreateTile(TileMap.Count - 1, y));
+                                tweener = null;
+                            };
+                        }
                     }
                     TileMap[i][y] = TileMap[i + 1][y];
+                    TileMap[i][y].SetIndex(i, y);
+                    TileMap[i + 1][y] = null;
                 }
-                StartCoroutine(CreateTile(TileMap.Count - 1, y));
+                if (tweener == null)
+                {
+                    StartCoroutine(CreateTile(TileMap.Count - 1, y));
+                }
+                break;
+            case Direction.Bottom:
+                for (int i = x; i > 0; i--)
+                {
+                    if (TileMap[i - 1][y] != null)
+                    {
+                        tweener = TileMap[i - 1][y].transform.DOMove(new Vector3((i - mid) * TileInterval, (y - mid) * TileInterval, 0), 0.5f).
+                            SetEase(Ease.Linear);
+
+                        if( i == 1)
+                        {
+                            tweener.onComplete += () =>
+                            {
+                                StartCoroutine(CreateTile(0, y));
+                                tweener = null;
+                            };
+                        }
+                    }
+
+                    TileMap[i][y] = TileMap[i - 1][y];
+                    TileMap[i][y].SetIndex(i, y);
+                    TileMap[i - 1][y] = null;
+                }
+
+                if (tweener == null)
+                {
+                    StartCoroutine(CreateTile(0, y));
+                }
                 break;
         }
     }

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -14,7 +14,7 @@ using Unity.VisualScripting;
 
 public class UI_MainStory : MonoBehaviour
 {
-    [Header("ÇÁ¸®ÆÕ")]
+    [Header("í”„ë¦¬íŒ¹")]
     public SelectButton selectButton;
     public UI_StoryShow storyTextPrefab;
     public Image storySDImage;
@@ -216,14 +216,14 @@ public class UI_MainStory : MonoBehaviour
         {
             SelectButton obj = Instantiate(selectButton, selectArea.transform);
             obj.tmp.text = selectInfoGroup[i].SelectText;
-            obj.tmp2.text = $"(±â·Â {selectInfoGroup[i].SelectEnergy} È¸º¹)";
+            obj.tmp2.text = $"(ê¸°ë ¥ {selectInfoGroup[i].SelectEnergy} íšŒë³µ)";
 
             switch (selectInfoGroup[i].SelectType)
             {
                 case SelectType.None:
                     break;
                 case SelectType.Dice:
-                    obj.tmp2.text += $" ÁÖ»çÀ§ {selectInfoGroup[i].SelectValue} ÇÊ¿ä";
+                    obj.tmp2.text += $" ì£¼ì‚¬ìœ„ {selectInfoGroup[i].SelectValue} í•„ìš”";
                     break;
             }
             

@@ -98,7 +98,7 @@ public class TileManager : Singleton<TileManager>
 
         // Instantiate -> Pooling
         //GameObject TileObject = Instantiate(TilePrefab, TileContainer.transform);
-        GameObject TileObject = TilePool.Get("Tile");
+        GameObject TileObject = TilePool.Get("Assets/Prefabs/Debug/Tile.prefab");
         Tile TileComponent = TileObject.GetComponent<Tile>();
         TileComponent.SetScale(TileScale);
         int mid = (int)TileNumber / 2;

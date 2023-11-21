@@ -7,6 +7,9 @@ public class Tile : MonoBehaviour
 {
 	int x, y;
 
+    GameObject obj;
+    public GameObject Obj => obj;
+
 	public void SetScale(float Scale)
 	{
 		transform.localScale = new Vector3(Scale, 0.1f, Scale);
@@ -22,11 +25,16 @@ public class Tile : MonoBehaviour
 		this.y = y;
 	}
 
+    public void SetObject(GameObject obj)
+    {
+        this.obj = obj;
+        obj.transform.position = transform.position;
+        obj.transform.SetParent(transform);
+    }
     private void OnMouseDown()
     {
 		if (TileManager.Instance.Tweener != null) return;
 
-		Debug.Log(x +" " + y);
 		TileManager.Instance.RemoveTile(x, y);
 		var enumValues = Enum.GetValues(typeof(Epos.Direction));
 		Epos.Direction dir = (Epos.Direction)enumValues.GetValue(UnityEngine.Random.Range(0, enumValues.Length));

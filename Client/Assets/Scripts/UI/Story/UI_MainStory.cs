@@ -132,7 +132,7 @@ public class UI_MainStory : MonoBehaviour
         selectButtons.Clear();
         ScenarioData.TryGetTextContent(Pages[data.Page].ResultContentGroupId, out resultTexts);
 
-        ShowTexts(Pages[data.Page].TextContentId);       
+        ShowTexts(Pages[data.Page].TextContentId);
         storyList.Last().typeWriter.onTextShowed.AddListener(ShowSelections);       
     }
 

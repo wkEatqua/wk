@@ -5,6 +5,7 @@ using Shared.Data;
 using Epos;
 using DG.Tweening;
 using Febucci.UI.Effects;
+using Apis;
 
 public class TileManager : Singleton<TileManager>
 {
@@ -44,7 +45,7 @@ public class TileManager : Singleton<TileManager>
     }
     private void Start()
     {
-        Init();
+        Init();        
     }
 
     public void RemoveTile(int x, int y)
@@ -268,6 +269,11 @@ public class TileManager : Singleton<TileManager>
                 StartCoroutine(CreateTile(i, j));
             }
         }
+
+        int mid = (int)TileNumber / 2;
+        GameObject player = ResourceUtil.Instantiate("Player");
+        player.transform.rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
+        TileMap[mid][mid].SetObject(player);
     }
     public void OnBtnClickLevelButton(int Level)
     {

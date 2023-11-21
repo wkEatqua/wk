@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Epos
 {
     public abstract partial class Actor : MonoBehaviour
     {
+        public UnityEvent OnSelect = new();
         protected virtual void Awake()
         {
 
@@ -35,6 +37,10 @@ namespace Epos
             }
             target.OnHit(dmg);
             return dmg;
+        }
+        void OnMouseDown()
+        {
+            OnSelect.Invoke();
         }
     }
 }

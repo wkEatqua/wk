@@ -88,7 +88,7 @@ namespace Apis
             GameObject go;
             try
             {
-                go = AddressableUtil.InstantiateAsync($"Prefabs/{addressableName}").WaitForCompletion();
+                go = AddressableUtil.InstantiateAsync(addressableName).WaitForCompletion();
             }
             catch
             {

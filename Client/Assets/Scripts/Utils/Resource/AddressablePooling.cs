@@ -48,11 +48,11 @@ public class AddressablePooling
     
     public GameObject Get(string addressableName)
     {
-        GameObject obj = ResourceUtil.Load<GameObject>(addressableName);
-         
-        if(obj != null)
+        GameObject obj1 = ResourceUtil.Load<GameObject>(addressableName);
+        GameObject obj2 = null;
+        if(obj1 != null)
         {
-            string name = obj.name;
+            string name = obj1.name;
             if (!queue.ContainsKey(name))
             {
                 queue.Add(name, new Queue<GameObject>());
@@ -65,24 +65,25 @@ public class AddressablePooling
 
             if (queue[name].Count > 0)
             {
-                obj = queue[name].Dequeue();
-                obj.SetActive(true);
-                obj.transform.SetParent(null);
+                obj2 = queue[name].Dequeue();
+                obj2.SetActive(true);
+                obj2.transform.SetParent(null);
             }
         }
-        Addressables.Release(obj);
+        Addressables.Release(obj1);
 
-        return obj;
+        return obj2;
     }
 
     public GameObject Get(AssetReference assetReference)
     {
-        GameObject obj = ResourceUtil.Load<GameObject>(assetReference);
+        GameObject obj1 = ResourceUtil.Load<GameObject>(assetReference);
+        GameObject obj2 = null;
 
-        if (obj != null)
+        if (obj1 != null)
         {
-            string name = obj.name;
-            Addressables.Release(obj);
+            string name = obj1.name;
+            Addressables.Release(obj1);
             if (!queue.ContainsKey(name))
             {
                 queue.Add(name, new Queue<GameObject>());
@@ -95,13 +96,13 @@ public class AddressablePooling
 
             if (queue[name].Count > 0)
             {
-                obj = queue[name].Dequeue();
-                obj.SetActive(true);
-                obj.transform.SetParent(null);
+                obj2 = queue[name].Dequeue();
+                obj2.SetActive(true);
+                obj2.transform.SetParent(null);
             }
         }
 
-        return obj;
+        return obj2;
     }
 
     public void Return(GameObject obj)

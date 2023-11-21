@@ -27,6 +27,8 @@ public class TileManager : Singleton<TileManager>
     [SerializeField]
     private GameObject TilePrefab;
 
+    AddressablePooling TilePool;
+
     [SerializeField]
     List<List<Tile>> TileMap;
 
@@ -42,6 +44,8 @@ public class TileManager : Singleton<TileManager>
         }
 
         TileMap = new List<List<Tile>>();
+
+        TilePool = new AddressablePooling("Tile");
     }
     private void Start()
     {
@@ -53,7 +57,7 @@ public class TileManager : Singleton<TileManager>
         if (TileMap[x][y] == null)
             return;
 
-        Destroy(TileMap[x][y].gameObject);
+        TilePool.Return(TileMap[x][y].gameObject);
         TileMap[x][y] = null;
     }
 
@@ -86,36 +90,16 @@ public class TileManager : Singleton<TileManager>
         TileNumber = info.TileNumber;
         TileInterval = info.TileInterval;
         TileScale = info.TileScale;
-
-        // Debug Code 시작 (삭제할 것)
-        //switch(Level)
-        //{
-        //	case 1:
-        //		TileNumber = 7;
-        //		TileInterval = 20;
-        //		TileScale = 1;
-        //		break;
-        //	case 2:
-        //		TileNumber = 11;
-        //		TileInterval = 10;
-        //		TileScale = 0.9f;
-        //		break;
-        //	case 3:
-        //		TileNumber = 15;
-        //		TileInterval = 5;
-        //		TileScale = 0.8f;
-        //		break;
-        //}
-        // DebugCode 끝
-
-
     }
 
     private IEnumerator CreateTile(int x, int y)
     {
-        if (TileMap[x][y] != null) yield break;
+        if (TileMap[x][y] != null) 
+            yield break;
 
-        GameObject TileObject = Instantiate(TilePrefab, TileContainer.transform);
+        // Instantiate -> Pooling
+        //GameObject TileObject = Instantiate(TilePrefab, TileContainer.transform);
+        GameObject TileObject = TilePool.Get("Assets/Prefabs/Debug/Tile.prefab");
         Tile TileComponent = TileObject.GetComponent<Tile>();
         TileComponent.SetScale(TileScale);
         int mid = (int)TileNumber / 2;

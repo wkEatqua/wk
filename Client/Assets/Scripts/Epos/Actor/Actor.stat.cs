@@ -9,13 +9,13 @@ namespace Epos
     [System.Serializable]
     public class BaseStat
     {
-        [SerializeField] int MaxHp; // ÃÖ´ë Ã¼·Â    
-        [SerializeField] int Atk;  // °ø°İ·Â       
-        [SerializeField] int AtkRange; // °ø°İ »ç°Å¸®
-        [SerializeField] int Def; // ¹æ¾î·Â       
-        [SerializeField] int CritProb; // Å©¸®Æ¼ÄÃ È®·ü
-        [SerializeField] int CritDmg = 125; // Å©¸®Æ¼ÄÃ µ¥¹ÌÁö       
-        [SerializeField] int DmgTake = 100; // ¹Ş´Â ÇÇÇØ·®
+        [SerializeField] int MaxHp; // ìµœëŒ€ ì²´ë ¥    
+        [SerializeField] int Atk;  // ê³µê²©ë ¥       
+        [SerializeField] int AtkRange; // ê³µê²© ì‚¬ê±°ë¦¬
+        [SerializeField] int Def; // ë°©ì–´ë ¥       
+        [SerializeField] int CritProb; // í¬ë¦¬í‹°ì»¬ í™•ë¥ 
+        [SerializeField] int CritDmg = 125; // í¬ë¦¬í‹°ì»¬ ë°ë¯¸ì§€       
+        [SerializeField] int DmgTake = 100; // ë°›ëŠ” í”¼í•´ëŸ‰
 
         public Dictionary<ActorStatType, int> stats = new();
 
@@ -82,10 +82,10 @@ namespace Epos
             }
         }
     }
-    public partial class Actor : MonoBehaviour
+    public partial class Actor
     {
-        [Tooltip("0ÀÌ ¾Æ´Ñ °ªÀ¸·Î ¼³Á¤ÇÏ¸é ÇØ´ç Ã¼·ÂÀ¸·Î »ı¼º(µğ¹ö±×¿ë)")]
-        [SerializeField] protected int curHp = 0; // ÇöÀç Ã¼·Â   
+        [Tooltip("0ì´ ì•„ë‹Œ ê°’ìœ¼ë¡œ ì„¤ì •í•˜ë©´ í•´ë‹¹ ì²´ë ¥ìœ¼ë¡œ ìƒì„±(ë””ë²„ê·¸ìš©)")]
+        [SerializeField] protected int curHp = 0; // í˜„ì¬ ì²´ë ¥   
 
         [SerializeField] BaseStat baseStat = new();
         public BaseStat BaseStat => baseStat;

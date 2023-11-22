@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Epos
 {
-    public partial class Actor : MonoBehaviour
+    public partial class Actor
     {
         public interface IStatStrategy
         {

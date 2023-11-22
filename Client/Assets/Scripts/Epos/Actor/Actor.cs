@@ -5,9 +5,8 @@ using UnityEngine.Events;
 
 namespace Epos
 {
-    public abstract partial class Actor : MonoBehaviour
-    {
-        public UnityEvent OnSelect = new();
+    public abstract partial class Actor : TileObject
+    {      
         protected virtual void Awake()
         {
 
@@ -35,12 +34,8 @@ namespace Epos
             {
                 dmg =(int)(dmg * CritProb / 100f);
             }
-            target.OnHit(dmg);
+            dmg = target.OnHit(dmg);
             return dmg;
-        }
-        void OnMouseDown()
-        {
-            OnSelect.Invoke();
-        }
+        }        
     }
 }

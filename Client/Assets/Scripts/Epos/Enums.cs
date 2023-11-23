@@ -14,6 +14,6 @@ namespace Epos
 
     public enum Direction
     {
-       Left,Right, Top, Bottom
+       Left,Right, Up, Down
     }
 }

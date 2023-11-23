@@ -4,9 +4,9 @@ using UnityEngine;
 using Shared.Data;
 using Epos;
 using DG.Tweening;
-using Febucci.UI.Effects;
 using Apis;
 using System;
+using System.Linq;
 
 public class TileManager : Singleton<TileManager>
 {
@@ -35,6 +35,8 @@ public class TileManager : Singleton<TileManager>
 
     Tweener tweener = null;
     public Tweener Tweener => tweener;
+
+    public readonly Queue<(int x, int y)> graceTiles = new();
 
     private void Init()
     {
@@ -113,7 +115,15 @@ public class TileManager : Singleton<TileManager>
         TileObject.transform.SetParent(TileContainer.transform);
         yield return null;
     }
+    public bool CheckIndex(int x,int y)
+    {
+        if (x < 0 || y < 0 || x >= TileMap.Count || TileMap[x].Count <= y)
+        {
+            return false;
+        }
 
+        return true;
+    }
     public IEnumerator PullTiles(int x, int y, Direction direction)
     {
         if (x < 0 || y < 0 || x >= TileMap.Count || TileMap[x].Count <= y)
@@ -179,7 +189,7 @@ public class TileManager : Singleton<TileManager>
                     StartCoroutine(CreateTile(x, TileMap[x].Count - 1));
                 }
                 break;
-            case Direction.Top:
+            case Direction.Up:
                 for (int i = x; i < TileMap.Count - 1; i++)
                 {
                     if (TileMap[i + 1][y] != null)
@@ -205,7 +215,7 @@ public class TileManager : Singleton<TileManager>
                     StartCoroutine(CreateTile(TileMap.Count - 1, y));
                 }
                 break;
-            case Direction.Bottom:
+            case Direction.Down:
                 for (int i = x; i > 0; i--)
                 {
                     if (TileMap[i - 1][y] != null)
@@ -259,8 +269,47 @@ public class TileManager : Singleton<TileManager>
         player.transform.rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
         TileMap[mid][mid].SetObject(player);
     }
-    public void OnBtnClickLevelButton(int Level)
+
+    public bool CheckPlayer(Direction dir,int x,int y)
     {
+        if (!CheckIndex(x, y)) return false;
+
+        switch (dir)
+        {
+            case Direction.Left:
+
+                for (int i = y - 1; i >= 0; i--)
+                {
+                    if (TileMap[x][i].Selector.Obj is Player) return true;
+                }
+
+                break;
+            case Direction.Right:
+
+                for (int i = y + 1; i < TileMap[x].Count; i++)
+                {
+                    if (TileMap[x][i].Selector.Obj is Player) return true;                                  
+                }                
+                break;
+            case Direction.Up:
+                for (int i = x + 1; i < TileMap.Count; i++)
+                {
+                    if (TileMap[i][y].Selector.Obj is Player) return true;
+                }
+                
+                break;
+            case Direction.Down:
+                for (int i = x - 1; i >= 0; i--)
+                {
+                    if (TileMap[i][y].Selector.Obj is Player) return true;
+                }
+                break;
+        }
+
+        return false;
+    }
+    public void OnBtnClickLevelButton(int Level)
+    {        
         this.Level = Level;
         RemoveAllTile();
         LoadLevel();
@@ -300,6 +349,43 @@ public class TileManager : Singleton<TileManager>
             foreach(var y in x)
             {
                 action(y);
+            }
+        }
+    }
+
+    public IEnumerator RemoveAndCreateGrace()
+    {
+        Queue<Tile> queue = new();
+
+        Traverse(x =>
+        {
+            if (x.Type == Tile.TileType.Grace) queue.Enqueue(x);
+        });
+
+        while (queue.Count > 0)
+        {
+            Tile grace = queue.Dequeue();
+            int x = grace.X;
+            int y = grace.Y;
+
+            List<Direction> directions = new()
+                {
+                    Direction.Left,Direction.Right,Direction.Up,Direction.Down
+                };
+
+            directions = directions.Where(dir => !CheckPlayer(dir, x, y)).ToList();
+            RemoveTile(x, y);
+
+            yield return PullTiles(x, y, directions[UnityEngine.Random.Range(0, directions.Count)]);
+        }
+
+        while (graceTiles.Count > 0)
+        {
+            (int x,int y) = graceTiles.Dequeue();
+
+            if(CheckIndex(x,y))
+            {
+                TileMap[x][y].Type = Tile.TileType.Grace;
             }
         }
     }

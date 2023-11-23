@@ -14,11 +14,22 @@ namespace Epos
         public TileObject Obj => obj;
         Renderer render;
         public bool selectable;
+        ICommand command;
+
         private void Awake()
         {
             tile = GetComponent<Tile>();
-            selectable = false;      
+            selectable = false;
             render = GetComponent<Renderer>();
+            OnSelected.AddListener(() =>
+            {
+                command = CommandFactory.CreateCommand(tile, obj);
+
+                if (command != null)
+                {
+                    StartCoroutine(command.Excute());
+                }
+            });
             OnConfirmed.AddListener(() => TileManager.Instance.Traverse(x => x.Selector.selectable = false));
         }
 
@@ -32,7 +43,7 @@ namespace Epos
 
         private void OnDisable()
         {
-            if(obj != null)
+            if (obj != null)
             {
                 Destroy(obj.gameObject);
             }
@@ -41,6 +52,8 @@ namespace Epos
         public void SetObject(TileObject obj)
         {
             this.obj = obj;
+            if (obj == null) return;
+
             obj.transform.position = transform.position;
             obj.transform.SetParent(transform);
             obj.tile = tile;
@@ -48,7 +61,7 @@ namespace Epos
 
         private void Update()
         {
-            switch(tile.Type)
+            switch (tile.Type)
             {
                 case Tile.TileType.Normal:
                     if (selectable)
@@ -65,6 +78,6 @@ namespace Epos
                     selectable = false;
                     break;
             }
-        }       
+        }
     }
 }

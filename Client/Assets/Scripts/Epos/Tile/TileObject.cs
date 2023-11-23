@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Epos
 {
@@ -13,6 +14,6 @@ namespace Epos
 
         public abstract ObjectType Type { get; }
 
-        public Tile tile;       
+        public Tile tile;
     }
 }

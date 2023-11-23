@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -16,6 +17,7 @@ namespace Epos
         EventHandler onPlayerTurnEnd;
         EventHandler onEnemyTurnStart;
         EventHandler onEnemyTurnEnd;
+
 
         public event EventHandler OnPlayerTurnStart
         {
@@ -77,26 +79,25 @@ namespace Epos
         enum TurnType { Player,Enemy}
         TurnType turnType;
 
+
+        private void Start()
+        {
+            OnEnemyTurnStart += TileManager.Instance.RemoveAndCreateGrace;
+        }
         protected override void Awake()
         {
             base.Awake();
             turnCount = 0;           
             
-            OnPlayerTurnStart += AddTurn;           
-          
-            turnType = TurnType.Player;        
+            OnPlayerTurnStart += AddTurn;
+            turnType = TurnType.Player;           
         }
-
         IEnumerator AddTurn()
         {
             turnCount++;
             yield break;
         }
-        private void Start()
-        {
-            
-        }
-        
+               
         IEnumerator InvokeEvent(EventHandler eventHandler)
         {
             if (eventHandler == null) yield break;
@@ -126,6 +127,7 @@ namespace Epos
                     break;
                 case TurnType.Enemy:
                     yield return StartCoroutine(InvokeEvent(onEnemyTurnStart));
+                    EndTurn();
                     break;
             }
         }
@@ -143,7 +145,7 @@ namespace Epos
                     turnType = TurnType.Player;
                     break;
             }
-            StartCoroutine(StartTurnCoroutine());
+            StartTurn();
         }
     }
 }

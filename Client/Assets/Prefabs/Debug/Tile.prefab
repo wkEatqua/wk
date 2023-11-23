@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1469056230709558680}
   - component: {fileID: 7067198953261314875}
   - component: {fileID: 7446934497415369054}
+  - component: {fileID: -1121508429132690036}
   m_Layer: 0
   m_Name: Tile
   m_TagString: Untagged
@@ -63,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0267e9f26d8013a4dad93ea393e7039c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -118,3 +119,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6ed7daa19652414ab92cd01f208ee74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Type: 0
+--- !u!114 &-1121508429132690036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395699701763114048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6391c49d18bc5de4fb969ddae9fc338b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnSelected:
+    m_PersistentCalls:
+      m_Calls: []
+  selectable: 0

@@ -20,19 +20,19 @@ namespace Shared.Data
         static IDictionary<long,List<CharacterScriptInfo>> charDict = new Dictionary<long,List<CharacterScriptInfo>>();
         public override void ProcessDataLoad(string path)
         {
-            //var group = new Data<CharacterScript>().GetData(path);
+            var group = new Data<CharacterScript>().GetData(path);
 
-            //foreach (var x in group)
-            //{
-            //    if (!charDict.ContainsKey(x.GroupId))
-            //    {
-            //        charDict.Add(x.GroupId, new());
-            //    }
+            foreach (var x in group)
+            {
+                if (!charDict.ContainsKey(x.GroupId))
+                {
+                    charDict.Add(x.GroupId, new());
+                }
 
-            //    charDict[x.GroupId] ??= new();
+                charDict[x.GroupId] ??= new();
 
-            //    charDict[x.GroupId].Add(new CharacterScriptInfo(x));
-            //}
+                charDict[x.GroupId].Add(new CharacterScriptInfo(x));
+            }
         }
 
         public static bool TryGetCharacterScript(long groupId, out List<CharacterScriptInfo> list)

@@ -131,4 +131,4 @@ MonoBehaviour:
     CritDmg: 125
     DmgTake: 100
     MoveSpeed: 2
-  moveType: 0
+  moveType: 1

@@ -103,7 +103,7 @@ public class TileManager : Singleton<TileManager>
         TileScale = info.TileScale;
     }
 
-    private IEnumerator CreateTile(int x, int y)
+    public IEnumerator CreateTile(int x, int y)
     {
         if (TileMap[x][y] != null)
             yield break;

@@ -33,13 +33,13 @@ namespace Epos
         }
         public interface IMoveStrategy
         {
-            IEnumerator Move(Actor obj);
+            IEnumerator Move(EliteMonster obj);
         }
 
 
         public class MoveToClosest : IMoveStrategy
         {
-            public IEnumerator Move(Actor obj)
+            public IEnumerator Move(EliteMonster obj)
             {
                 Dictionary<Tile, bool> visited = new();
                 TileManager.Instance.Traverse(x => visited.Add(x, false));
@@ -119,18 +119,9 @@ namespace Epos
                     (int x, int y) pos = list[i];
                     int removePosX = obj.tile.X;
                     int removePosY = obj.tile.Y;
-                    yield return obj.MoveTo(pos.x, pos.y);
+                    yield return obj.StartCoroutine(obj.MoveTo(pos.x, pos.y));
                                      
-                    TileManager.Instance.RemoveTile(removePosX, removePosY);
-                    List<Direction> directions = new() { Direction.Left, Direction.Right, Direction.Up, Direction.Down };
-                    directions = directions.Where(dir => !TileManager.Instance.Check(dir, removePosX, removePosY,
-                        tile =>
-                        {                           
-                            return tile.Selector.Obj != null && (tile.Selector.Obj == obj || tile.Selector.Obj is Player);
-                        })).ToList();
-
-                    yield return obj.StartCoroutine(TileManager.Instance.PullTiles(removePosX, removePosY,
-                        directions[UnityEngine.Random.Range(0, directions.Count)]));
+                    yield return obj.StartCoroutine(obj.RemoveAndPullTiles(removePosX, removePosY));
                 }
 
             }
@@ -138,7 +129,7 @@ namespace Epos
 
         public class MoveRandomly : IMoveStrategy
         {
-            public IEnumerator Move(Actor obj)
+            public IEnumerator Move(EliteMonster obj)
             {
                 for (int i = 0; i < obj.MoveSpeed; i++)
                 {
@@ -164,20 +155,32 @@ namespace Epos
                     int removePosX = obj.tile.X;
                     int removePosY = obj.tile.Y;
 
-                    yield return obj.MoveTo(pos.x, pos.y);
+                    yield return obj.StartCoroutine(obj.MoveTo(pos.x, pos.y));
                     
-                    TileManager.Instance.RemoveTile(removePosX, removePosY);
-
-                    List<Direction> directions = new() { Direction.Left,Direction.Right,Direction.Up,Direction.Down };
-                    directions = directions.Where(dir => !TileManager.Instance.Check(dir, removePosX, removePosY,
-                        tile =>
-                        {
-                            return tile.Selector.Obj != null && (tile.Selector.Obj == obj || tile.Selector.Obj is Player);
-                        })).ToList();
-                    
-                    yield return obj.StartCoroutine(TileManager.Instance.PullTiles(removePosX, removePosY, 
-                        directions[UnityEngine.Random.Range(0, directions.Count)]));
+                    yield return obj.StartCoroutine(obj.RemoveAndPullTiles(removePosX, removePosY));
                 }
+            }
+        }
+
+        IEnumerator RemoveAndPullTiles(int x,int y)
+        {
+            TileManager.Instance.RemoveTile(x, y);
+
+            List<Direction> directions = new() { Direction.Left, Direction.Right, Direction.Up, Direction.Down };
+            directions = directions.Where(dir => !TileManager.Instance.Check(dir, x, y,
+                tile =>
+                {
+                    return tile.Selector.Obj != null && (tile.Selector.Obj == this || tile.Selector.Obj is Player);
+                })).ToList();
+
+            if (directions.Count > 0)
+            {
+                yield return StartCoroutine(TileManager.Instance.PullTiles(x, y,
+                    directions[UnityEngine.Random.Range(0, directions.Count)]));
+            }
+            else
+            {
+                yield return StartCoroutine(TileManager.Instance.CreateTile(x, y));
             }
         }
         protected override IEnumerator UseTurn()

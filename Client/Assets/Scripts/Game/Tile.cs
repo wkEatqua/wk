@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-	int x, y;   
+	[SerializeField] int x, y;   
     public int X => x;
     public int Y => y;
 

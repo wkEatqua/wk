@@ -17,7 +17,22 @@ namespace Epos
 
         protected virtual void OnDisable()
         {
+            if(TurnManager.Instance != null)
             TurnManager.Instance.OnEnemyTurnStart -= UseTurn;
+        }
+
+        public override int OnHit(int dmg)
+        {
+            if (dmg >= CurHp)
+            {
+                CurHp = 0;
+                dmg = CurHp;
+            }
+            else
+            {
+                CurHp -= dmg;
+            }
+            return dmg;
         }
     }
 }

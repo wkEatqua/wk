@@ -79,11 +79,6 @@ namespace Epos
         enum TurnType { Player,Enemy}
         TurnType turnType;
 
-
-        private void Start()
-        {
-            OnEnemyTurnStart += TileManager.Instance.RemoveAndCreateGrace;
-        }
         protected override void Awake()
         {
             base.Awake();

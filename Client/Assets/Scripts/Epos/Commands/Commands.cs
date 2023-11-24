@@ -18,11 +18,13 @@ namespace Epos
         public IEnumerator Excute()
         {
             tile.Selector.OnConfirmed.Invoke();
-            yield return player.transform.DOMove(tile.transform.position, 1f).WaitForCompletion();
+            int graceX = player.tile.X;
+            int graceY = player.tile.Y;
 
-            TileManager.Instance.graceTiles.Enqueue((player.tile.X, player.tile.Y));
-            player.tile.SetObject(null);
-            tile.SetObject(player);
+            yield return player.MoveTo(tile.X, tile.Y);
+
+            TileManager.Instance.graceTiles.Enqueue((graceX, graceY));           
+            TurnManager.Instance.EndTurn();
         }
     }
 }

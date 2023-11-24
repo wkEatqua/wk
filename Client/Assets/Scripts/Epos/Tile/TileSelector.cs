@@ -30,7 +30,7 @@ namespace Epos
                     StartCoroutine(command.Excute());
                 }
             });
-            OnConfirmed.AddListener(() => TileManager.Instance.Traverse(x => x.Selector.selectable = false));
+            OnConfirmed.AddListener(() => TileManager.Instance.Traverse(x => x.Selector.selectable = false));           
         }
 
         private void OnMouseDown()

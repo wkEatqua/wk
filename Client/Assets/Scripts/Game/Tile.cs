@@ -12,13 +12,17 @@ public class Tile : MonoBehaviour
 
     TileSelector selector;
     public TileSelector Selector => selector;
-
+   
     public enum TileType
     {
-        Normal,Grace
+        Normal,Grace,UnMovable
     }
-
+    public enum TileDifficulty
+    {
+        Empty, Easy, Normal, Danger, Hard, Nightmare, Disaster
+    }
     public TileType Type;
+    public TileDifficulty Difficulty;
 
     private void Awake()
     {

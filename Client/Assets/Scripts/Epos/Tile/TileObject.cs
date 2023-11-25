@@ -31,5 +31,10 @@ namespace Epos
             yield return new WaitForEndOfFrame();
 
         }
+
+        public void Die()
+        {
+            transform.DOMoveZ(transform.position.z + 2, 1f).OnComplete(() => Destroy(gameObject));
+        }
     }
 }

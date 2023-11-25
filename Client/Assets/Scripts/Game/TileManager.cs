@@ -279,7 +279,7 @@ public class TileManager : Singleton<TileManager>
         EliteMonster monster = ResourceUtil.Instantiate("EliteMonster").GetComponent<EliteMonster>();
         monster.transform.rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
         TileMap[(int)TileNumber - 1][(int)TileNumber - 1].SetObject(monster);
-        monster.GetComponent<Renderer>().material.color = Color.red;
+        monster.GetComponentInChildren<Renderer>().material.color = Color.red;
     }
     public delegate bool CheckHanlder(Tile tile);
     public bool Check(Direction dir, int x, int y, CheckHanlder handler)
@@ -336,7 +336,7 @@ public class TileManager : Singleton<TileManager>
     void MakeSelectable(int x, int y)
     {
         if (x >= 0 && x < TileMap.Count && y >= 0 && y < TileMap.Count)
-        {
+        {          
             TileMap[x][y].Selector.selectable = true;
         }
     }

@@ -125,7 +125,13 @@ namespace Epos
         {
             get { return curHp; }
             set
-            {               
+            {
+                if (value < curHp)
+                {
+                    float dmg = curHp - value;
+                    DmgTextShow.ShowDmg(transform.position, Color.yellow, dmg);
+                }
+
                 if (value <= 0)
                 {
                     curHp = 0;

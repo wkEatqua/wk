@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,13 +17,19 @@ namespace Epos
 
         public virtual void Start()
         {
-            if (curHp == 0) curHp = MaxHp;       
-        }
-        public virtual void Die()
-        {
-            Destroy(gameObject);
-        }
+        }       
 
+        public virtual void OnEnable()
+        {
+            if (curHp == 0) curHp = MaxHp;
+        }
+        protected virtual void OnDestroy()
+        {
+            if(tile != null)
+            {
+                tile.SetObject(null);
+            }
+        }
         public abstract int OnHit(int dmg);
         
         public virtual int Attack(Actor target)

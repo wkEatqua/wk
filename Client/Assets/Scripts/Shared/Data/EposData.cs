@@ -30,9 +30,19 @@ namespace Shared.Data
 		}
 	}
 
+    public class EposLevelExpInfo
+    {
+        public long Level => data.Level;
+        public int Exp => data.Exp;
+
+        readonly EposLevelExp data;
+
+        public EposLevelExpInfo(EposLevelExp data) { this.data = data; }
+    }
 	public class EposData : Database
 	{
 		public static IDictionary<long, EposLevelInfo> LevelDict = new Dictionary<long, EposLevelInfo>();
+        static IDictionary<long, EposLevelExpInfo> ExpDict = new Dictionary<long, EposLevelExpInfo>();
 		public override void ProcessDataLoad(string path)
 		{
 			LevelDict.Clear();
@@ -41,11 +51,20 @@ namespace Shared.Data
 
 				LevelDict = levels.ToDictionary(kv => kv.Level, kv => new EposLevelInfo(kv));
 			}
+
+            ExpDict.Clear();
+            {
+                ExpDict = new Data<EposLevelExp>().GetData(path).ToDictionary(kv => kv.Level,kv  => new EposLevelExpInfo(kv));
+            }
 		}
 
 		public static bool TryGetEposLevel(long Level, out EposLevelInfo info)
 		{
 			return LevelDict.TryGetValue(Level, out info);
 		}
+        public static bool TryGetEposExp(long level,out EposLevelExpInfo info)
+        {
+            return ExpDict.TryGetValue(level, out info);
+        }
 	}
 }

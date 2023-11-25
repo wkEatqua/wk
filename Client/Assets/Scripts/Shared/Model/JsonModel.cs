@@ -1,4 +1,4 @@
-﻿namespace Shared.Model
+namespace Shared.Model
 {
     /// <summary>
     /// 추출 가능한 데이터 클래스
@@ -27,6 +27,8 @@
     {
         Character,
     }
+
+    #region 사상지평
     [System.Serializable]
     public class ScenarioWorld : JsonModel
     {
@@ -36,7 +38,6 @@
     }
 
     [System.Serializable]
-
     public class ScenarioChapter : JsonModel
     {
         public long WorldId { get; set; }
@@ -53,8 +54,8 @@
 
         public long StarRewardId { get; set; }
     }
+    
     [System.Serializable]
-
     public class ScenarioPageImage : JsonModel
     {
         public long UniqueId { get; set; }
@@ -62,6 +63,7 @@
         public string ImagePath { get; set; }
         public int ImageActiveOrder { get; set; }
     }
+    
     [System.Serializable]
     public class ScenarioPage : JsonModel
     {
@@ -72,8 +74,8 @@
         public long TextContentId { get; set; }      
         public long ResultContentGroupId { get; set; }
     }
+    
     [System.Serializable]
-
     public class ScenarioPageText : JsonModel
     {
         public long UniqueId { get; set; }
@@ -81,8 +83,8 @@
         public int Order { get; set; }
         public string Text { get; set; }
     }
+    
     [System.Serializable]
-
     public class ScenarioSelect : JsonModel
     {
         public long UniqueId { get; set; }
@@ -94,6 +96,7 @@
         public int SelectVerisimilitude { get; set; }
         public long ResultTextContentId { get; set; }        
     }
+    
     [System.Serializable]
     public class ScenarioTextContent: JsonModel
     {
@@ -102,6 +105,8 @@
         public long TextGroupId { get; set; }
         public long ImageGroupId { get; set; }
     }
+
+    [System.Serializable]
     public class ScenarioDice : JsonModel
     {
         public long ChapterId { get; set; }
@@ -128,8 +133,8 @@
         public int? DiceProb19 { get; set; }
         public int? DiceProb20 { get; set; }
     }
+    
     [System.Serializable]
-
     public class ScenarioChapterReward : JsonModel
     {
         public long UniqueId { get; set; }
@@ -138,8 +143,8 @@
         public int RewardAmount { get; set; }
 
     }
+    
     [System.Serializable]
-
     public class ScenarioEnding : JsonModel
     {
         public long UniqueId { get; set; }
@@ -148,6 +153,7 @@
         public string Name { get; set; }
     }
 
+    [System.Serializable]
     public class ScenarioIntro : JsonModel
     {
         public long ChapterId { get; set; }
@@ -169,7 +175,9 @@
         public string ScriptText { get; set; }
         public long UniqueId { get; set; }
     }
+    #endregion
 
+    #region 에포스
     [System.Serializable]
     public class EposLevel : JsonModel
 	{
@@ -180,4 +188,11 @@
 
         public float TileScale { get; set; }
 	}
+    [System.Serializable]
+    public class EposLevelExp : JsonModel
+    {
+        public long Level { get; set; }
+        public int Exp { get; set; }
+    }
+    #endregion
 }

@@ -27,4 +27,27 @@ namespace Epos
             TurnManager.Instance.EndTurn();
         }
     }
+
+    public class AttackCommand : ICommand
+    {
+        readonly Player player;
+        readonly Monster target;
+
+        public AttackCommand(Player player, Monster target)
+        {
+            this.player = player;
+            this.target = target;
+        }
+
+        public IEnumerator Excute()
+        {
+            if(target != null)
+            {
+                target.tile.Selector.OnConfirmed.Invoke();
+                player.Attack(target);
+                yield return new WaitForSeconds(1f);
+                TurnManager.Instance.EndTurn();
+            }
+        }
+    }
 }

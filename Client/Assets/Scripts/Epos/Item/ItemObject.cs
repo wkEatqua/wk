@@ -4,10 +4,11 @@ using UnityEngine;
 
 namespace Epos
 {
-    public class RangeWeapon : ItemObject
+    public abstract class ItemObject : TileObject
     {
-        public override void Collect()
+        public virtual void Collect()
         {
+            Die();
         }
     }
 }

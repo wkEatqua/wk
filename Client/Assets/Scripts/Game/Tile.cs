@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Shared.Model;
 
 public class Tile : MonoBehaviour
 {
@@ -17,12 +18,9 @@ public class Tile : MonoBehaviour
     {
         Normal,Grace,UnMovable
     }
-    public enum TileDifficulty
-    {
-        Empty, Easy, Normal, Danger, Hard, Nightmare, Disaster
-    }
+    
     public TileType Type;
-    public TileDifficulty Difficulty;
+    public TileDifficulty Difficulty = TileDifficulty.None;
 
     private void Awake()
     {

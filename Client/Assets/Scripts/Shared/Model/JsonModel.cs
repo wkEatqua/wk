@@ -28,6 +28,10 @@ namespace Shared.Model
         Character,
     }
 
+    public enum TileDifficulty
+    {
+        None, Easy, Normal, Danger, Hard, Nightmare, Disaster
+    }
     #region 사상지평
     [System.Serializable]
     public class ScenarioWorld : JsonModel
@@ -192,6 +196,12 @@ namespace Shared.Model
     public class EposLevelExp : JsonModel
     {
         public long Level { get; set; }
+        public int Exp { get; set; }
+    }
+    [System.Serializable]
+    public class EposTileExp : JsonModel
+    {
+        public TileDifficulty Difficulty { get; set; }
         public int Exp { get; set; }
     }
     #endregion

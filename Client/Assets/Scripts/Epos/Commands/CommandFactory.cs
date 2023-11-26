@@ -19,6 +19,11 @@ namespace Epos
             {
                 return new AttackCommand(player, monster);
             }
+            else if(tileObject is InteractableObject interact)
+            {
+                return new InteractCommand(interact);
+            }
+           
             return null;
         }
     }

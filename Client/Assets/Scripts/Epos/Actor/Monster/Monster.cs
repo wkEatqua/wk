@@ -5,11 +5,10 @@ using UnityEngine;
 namespace Epos
 {
     public abstract class Monster : Actor
-    {
-        public override ObjectType Type => ObjectType.Monster;     
-
-        private void OnEnable()
+    {       
+        public override void OnEnable()
         {
+            base.OnEnable();
             TurnManager.Instance.OnEnemyTurnStart -= UseTurn;
             TurnManager.Instance.OnEnemyTurnStart += UseTurn;
         }

@@ -1063,8 +1063,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1159790452}
   - component: {fileID: 1159790453}
+  - component: {fileID: 1159790454}
   m_Layer: 0
-  m_Name: TurnManager
+  m_Name: EposManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1097,6 +1098,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8463a0fa9d57bb643b0334e97779d803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1159790454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1159790450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5e9bd6648881d5458798e250c64aab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gold: 0
+  moveCount: 0
+  eventCount: 0
+  level: 0
+  itemCount: 0
+  OnMove:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1300775803
 GameObject:
   m_ObjectHideFlags: 0

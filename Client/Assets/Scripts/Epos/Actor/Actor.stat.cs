@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using UnityEditor.SceneTemplate;
 using UnityEngine;
 
 namespace Epos
@@ -130,6 +129,11 @@ namespace Epos
                 {
                     float dmg = curHp - value;
                     DmgTextShow.ShowDmg(transform.position, Color.yellow, dmg);
+                }
+                else
+                {
+                    float dmg = value = curHp;
+                    DmgTextShow.ShowDmg(transform.position, Color.green, dmg);
                 }
 
                 if (value <= 0)

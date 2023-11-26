@@ -23,6 +23,7 @@ namespace Epos
 
             yield return player.MoveTo(tile.X, tile.Y);
 
+            EposManager.Instance.OnMove.Invoke(tile);
             TileManager.Instance.graceTiles.Enqueue((graceX, graceY));           
             TurnManager.Instance.EndTurn();
         }
@@ -48,6 +49,20 @@ namespace Epos
                 yield return new WaitForSeconds(1f);
                 TurnManager.Instance.EndTurn();
             }
+        }
+    }
+
+    public class InteractCommand : ICommand
+    {
+        InteractableObject obj;
+        public InteractCommand(InteractableObject obj)
+        {
+            this.obj = obj;
+        }
+        public IEnumerator Excute()
+        {
+            obj.OnInteract();
+            yield return null;
         }
     }
 }

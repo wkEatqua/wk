@@ -1,4 +1,5 @@
 using Shared.Data;
+using Shared.Model;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,7 +26,7 @@ namespace Epos
             set
             {
                 exp = value;
-                while (EposData.TryGetEposExp(level, out EposLevelExpInfo info) && exp >= info.Exp)
+                while (EposData.TryGetEposMaxExp(level, out EposLevelExpInfo info) && exp >= info.Exp)
                 {
                     exp -= info.Exp;
                     level++;
@@ -34,12 +35,31 @@ namespace Epos
         }
 
         [HideInInspector] public UnityEvent<Tile> OnMove = new();
+        Player player;
+        public Player Player => player;
 
         protected override void Awake()
         {
             base.Awake();
 
-            OnMove.AddListener(tile => Exp += 10);
+            OnMove.AddListener(tile =>
+            {
+                int value = 0;
+
+                if (tile.Difficulty != TileDifficulty.None)
+                {
+                    EposData.TryGetEposTileExp(tile.Difficulty, out EposTileExpInfo info);
+                    value = info.Exp;
+                }
+                Exp += value;
+            });
+
+            player = FindAnyObjectByType<Player>();
+        }
+
+        private void Start()
+        {
+           
         }
     }
 }

@@ -4,10 +4,13 @@ using UnityEngine;
 
 namespace Epos
 {
-    public class RangeWeapon : ItemObject
+    public class GoldObject : ItemObject
     {
+        public int gold = 10;
         public override void Collect()
         {
+            base.Collect();
+            EposManager.Instance.gold += gold;
         }
     }
 }

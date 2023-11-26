@@ -1293,6 +1293,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f339cf1f828128489b736158aa6f51d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LoadingImage: {fileID: 1946421496}
+  NextSceneName: GameTest
 --- !u!1 &806106249
 GameObject:
   m_ObjectHideFlags: 0
@@ -1427,6 +1429,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 806106249}
   m_CullTransparentMesh: 1
+--- !u!1 &926214403
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 926214405}
+  - component: {fileID: 926214404}
+  m_Layer: 0
+  m_Name: SceneChangeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &926214404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926214403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beef788df6d622f4c9cbc5b547682f02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &926214405
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926214403}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 518.0518, y: 86.319984, z: 3.8676353}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &968900239
 GameObject:
   m_ObjectHideFlags: 0
@@ -3022,3 +3068,4 @@ SceneRoots:
   - {fileID: 1095851183}
   - {fileID: 968900243}
   - {fileID: 1257446853}
+  - {fileID: 926214405}

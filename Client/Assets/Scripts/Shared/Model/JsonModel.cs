@@ -204,5 +204,21 @@ namespace Shared.Model
         public TileDifficulty Difficulty { get; set; }
         public int Exp { get; set; }
     }
+
+    [System.Serializable]
+    public class EposTilePercent : JsonModel
+    {
+        public long PlayerLevel { get; set; }
+        public float Level1Tile { get; set; }
+        public float Level2Tile { get; set; }
+        public float Level3Tile { get; set; }
+        public float Level4Tile { get; set; }
+        public float Level5Tile { get; set; }
+        public float Level6Tile { get; set; }
+        public float EmptyTile { get; set; }
+        public float UnmovableTile { get; set; }
+        public float ObjectTile { get; set; }
+    }
     #endregion
+
 }

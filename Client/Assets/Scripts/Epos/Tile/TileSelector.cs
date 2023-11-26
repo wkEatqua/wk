@@ -30,7 +30,7 @@ namespace Epos
                     StartCoroutine(command.Excute());
                 }
             });
-            OnConfirmed.AddListener(() => TileManager.Instance.Traverse(x => x.Selector.selectable = false));
+            OnConfirmed.AddListener(() => TileManager.Instance.Traverse(x => x.Selector.selectable = false));           
         }
 
         private void OnMouseDown()
@@ -64,6 +64,7 @@ namespace Epos
             switch (tile.Type)
             {
                 case Tile.TileType.Normal:
+                case Tile.TileType.UnMovable:
                     if (selectable)
                     {
                         render.material.color = Color.green;

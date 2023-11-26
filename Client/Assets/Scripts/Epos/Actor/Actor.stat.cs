@@ -16,6 +16,7 @@ namespace Epos
         [SerializeField] int CritProb; // 크리티컬 확률
         [SerializeField] int CritDmg = 125; // 크리티컬 데미지       
         [SerializeField] int DmgTake = 100; // 받는 피해량
+        [SerializeField] int MoveSpeed = 1; // 한 턴에 이동 거리
 
         public Dictionary<ActorStatType, int> stats = new();
 
@@ -57,8 +58,13 @@ namespace Epos
             get { return stats[ActorStatType.CritDmg]; }
             set { stats[ActorStatType.CritDmg] = value < 0 ? 0 : value; }
         }
-        
-        public BaseStat()
+        public int moveSpeed
+        {
+            get { return stats[ActorStatType.MoveSpeed]; }
+            set { stats[ActorStatType.MoveSpeed] = value < 0 ? 0 : value; }
+        }
+
+        public void Init()
         {
             var fields = typeof(BaseStat).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
             stats.Clear();
@@ -73,10 +79,10 @@ namespace Epos
                 {
                     continue;
                 }
-
+                
                 ActorStatType statType = (ActorStatType)Enum.Parse(typeof(ActorStatType), field.Name);
                 if (stats.ContainsKey(statType))
-                {
+                {                    
                     stats[statType] += (int)field.GetValue(this);
                 }
             }
@@ -118,13 +124,24 @@ namespace Epos
         {
             get { return curHp; }
             set
-            {               
+            {
+                if (value < curHp)
+                {
+                    float dmg = curHp - value;
+                    DmgTextShow.ShowDmg(transform.position, Color.yellow, dmg);
+                }
+                else
+                {
+                    float dmg = value = curHp;
+                    DmgTextShow.ShowDmg(transform.position, Color.green, dmg);
+                }
+
                 if (value <= 0)
                 {
                     curHp = 0;
                     Die();
                 }
-                else if (value > BaseStat.maxHp) curHp = BaseStat.maxHp;
+                else if (value > MaxHp) curHp = MaxHp;
                 else curHp = value;                
             }
         }
@@ -198,6 +215,16 @@ namespace Epos
             }
         }       
 
+        public virtual int MoveSpeed
+        {
+            get
+            {
+                float value = statStrategies[ActorStatType.MoveSpeed].GetFinalStat(ActorStatType.MoveSpeed);
+                if (value < 0) return 0;
+
+                return (int)Mathf.Round(value);
+            }
+        }
         public void AddStat(ActorStatType statType, int amount, StatType type)
         {
             switch (type)

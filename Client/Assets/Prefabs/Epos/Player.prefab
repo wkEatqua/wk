@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4748648410194342387}
   - component: {fileID: 7219074425909746096}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -45,9 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f34d41b8548f6d744b54d68dcfb2fa80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnSelect:
-    m_PersistentCalls:
-      m_Calls: []
+  tile: {fileID: 0}
   curHp: 0
   baseStat:
     MaxHp: 1000
@@ -57,6 +55,7 @@ MonoBehaviour:
     CritProb: 0
     CritDmg: 0
     DmgTake: 100
+    MoveSpeed: 1
 --- !u!1 &7594893173988545533
 GameObject:
   m_ObjectHideFlags: 0
@@ -68,7 +67,7 @@ GameObject:
   - component: {fileID: 8899851578351726764}
   - component: {fileID: 3728602491922491911}
   - component: {fileID: 8087922245740856085}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}

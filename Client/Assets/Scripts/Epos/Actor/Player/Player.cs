@@ -11,7 +11,6 @@ namespace Epos
         List<MeleeWeapon> meleeWeapons = new();
         List<Armour> armours = new();
 
-        public override ObjectType Type => ObjectType.Player;
         public override int Atk
         {
             get
@@ -82,6 +81,14 @@ namespace Epos
             return dmg;
         }
 
+        public void Equip(MeleeWeapon wp)
+        {
+            meleeWeapons.Add(wp);
+        }
+        public void Equip(Armour armour)
+        {
+            armours.Add(armour);
+        }
         public override void Start()
         {
             base.Start();

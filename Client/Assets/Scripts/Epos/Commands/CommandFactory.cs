@@ -9,12 +9,21 @@ namespace Epos
     {
         public static ICommand CreateCommand(Tile tile, TileObject tileObject)
         {
-            if (tileObject == null)
+            Player player = Object.FindAnyObjectByType<Player>();
+
+            if (tileObject == null && tile.Type == Tile.TileType.Normal)
             {
-                Player player = Object.FindAnyObjectByType<Player>();
                 return new MoveCommand(player, tile);
             }
-
+            else if(tileObject is Monster monster)
+            {
+                return new AttackCommand(player, monster);
+            }
+            else if(tileObject is InteractableObject interact)
+            {
+                return new InteractCommand(interact);
+            }
+           
             return null;
         }
     }

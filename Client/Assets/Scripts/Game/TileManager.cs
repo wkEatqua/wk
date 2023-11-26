@@ -30,8 +30,8 @@ public class TileManager : Singleton<TileManager>
 
     AddressablePooling TilePool;
 
-    [SerializeField]
-    List<List<Tile>> TileMap;
+    public List<List<Tile>> TileMap;
+
 
     Tweener tweener = null;
     public Tweener Tweener => tweener;
@@ -54,13 +54,20 @@ public class TileManager : Singleton<TileManager>
     {
         Init();
         TurnManager.Instance.OnPlayerTurnStart += MakeInjectedSelectable;
+        TurnManager.Instance.OnPlayerTurnEnd += ResetTiles;
+        TurnManager.Instance.OnEnemyTurnStart += RemoveAndCreateGrace;
     }
 
+    public IEnumerator ResetTiles()
+    {
+        Traverse(x => x.Selector.selectable = false);
+        yield return null;
+    }
     public void RemoveTile(int x, int y)
     {
         if (TileMap[x][y] == null)
             return;
-
+        
         TilePool.Return(TileMap[x][y].gameObject);
         TileMap[x][y] = null;
     }
@@ -96,9 +103,9 @@ public class TileManager : Singleton<TileManager>
         TileScale = info.TileScale;
     }
 
-    private IEnumerator CreateTile(int x, int y)
+    public IEnumerator CreateTile(int x, int y)
     {
-        if (TileMap[x][y] != null) 
+        if (TileMap[x][y] != null)
             yield break;
 
         // Instantiate -> Pooling
@@ -115,7 +122,7 @@ public class TileManager : Singleton<TileManager>
         TileObject.transform.SetParent(TileContainer.transform);
         yield return null;
     }
-    public bool CheckIndex(int x,int y)
+    public bool CheckIndex(int x, int y)
     {
         if (x < 0 || y < 0 || x >= TileMap.Count || TileMap[x].Count <= y)
         {
@@ -160,7 +167,7 @@ public class TileManager : Singleton<TileManager>
                 if (tweener == null)
                 {
                     StartCoroutine(CreateTile(x, 0));
-                }              
+                }
                 break;
             case Direction.Right:
 
@@ -185,7 +192,7 @@ public class TileManager : Singleton<TileManager>
                     TileMap[x][i + 1] = null;
                 }
                 if (tweener == null)
-                {                   
+                {
                     StartCoroutine(CreateTile(x, TileMap[x].Count - 1));
                 }
                 break;
@@ -197,7 +204,7 @@ public class TileManager : Singleton<TileManager>
                         tweener = TileMap[i + 1][y].transform.DOMove(new Vector3((i - mid) * TileInterval, (y - mid) * TileInterval, 0), 0.5f).
                             SetEase(Ease.Linear);
 
-                        if( i == TileMap.Count - 2)
+                        if (i == TileMap.Count - 2)
                         {
                             tweener.onComplete += () =>
                             {
@@ -223,7 +230,7 @@ public class TileManager : Singleton<TileManager>
                         tweener = TileMap[i - 1][y].transform.DOMove(new Vector3((i - mid) * TileInterval, (y - mid) * TileInterval, 0), 0.5f).
                             SetEase(Ease.Linear);
 
-                        if( i == 1)
+                        if (i == 1)
                         {
                             tweener.onComplete += () =>
                             {
@@ -268,9 +275,14 @@ public class TileManager : Singleton<TileManager>
         Player player = ResourceUtil.Instantiate("Player").GetComponent<Player>();
         player.transform.rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
         TileMap[mid][mid].SetObject(player);
-    }
 
-    public bool CheckPlayer(Direction dir,int x,int y)
+        EliteMonster monster = ResourceUtil.Instantiate("EliteMonster").GetComponent<EliteMonster>();
+        monster.transform.rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
+        TileMap[(int)TileNumber - 1][(int)TileNumber - 1].SetObject(monster);
+        monster.GetComponentInChildren<Renderer>().material.color = Color.red;
+    }
+    public delegate bool CheckHanlder(Tile tile);
+    public bool Check(Direction dir, int x, int y, CheckHanlder handler)
     {
         if (!CheckIndex(x, y)) return false;
 
@@ -278,30 +290,34 @@ public class TileManager : Singleton<TileManager>
         {
             case Direction.Left:
 
+                if (y - 1 < 0) return true;
                 for (int i = y - 1; i >= 0; i--)
                 {
-                    if (TileMap[x][i].Selector.Obj is Player) return true;
+                    if (handler(TileMap[x][i])) return true;
                 }
 
                 break;
             case Direction.Right:
 
+                if (y + 1 >= TileMap[x].Count) return true;
                 for (int i = y + 1; i < TileMap[x].Count; i++)
                 {
-                    if (TileMap[x][i].Selector.Obj is Player) return true;                                  
-                }                
+                    if (handler(TileMap[x][i])) return true;
+                }
                 break;
             case Direction.Up:
+                if (x + 1 >= TileMap.Count) return true;
                 for (int i = x + 1; i < TileMap.Count; i++)
                 {
-                    if (TileMap[i][y].Selector.Obj is Player) return true;
+                    if (handler(TileMap[i][y])) return true;
                 }
-                
+
                 break;
             case Direction.Down:
+                if (x - 1 < 0) return true;
                 for (int i = x - 1; i >= 0; i--)
                 {
-                    if (TileMap[i][y].Selector.Obj is Player) return true;
+                    if (handler(TileMap[i][y])) return true;
                 }
                 break;
         }
@@ -309,7 +325,7 @@ public class TileManager : Singleton<TileManager>
         return false;
     }
     public void OnBtnClickLevelButton(int Level)
-    {        
+    {
         this.Level = Level;
         RemoveAllTile();
         LoadLevel();
@@ -319,8 +335,8 @@ public class TileManager : Singleton<TileManager>
 
     void MakeSelectable(int x, int y)
     {
-        if(x >=0 && x < TileMap.Count && y >=0 && y < TileMap.Count)
-        {
+        if (x >= 0 && x < TileMap.Count && y >= 0 && y < TileMap.Count)
+        {          
             TileMap[x][y].Selector.selectable = true;
         }
     }
@@ -328,7 +344,7 @@ public class TileManager : Singleton<TileManager>
     {
         Player player = FindObjectOfType<Player>();
 
-        if(player != null)
+        if (player != null)
         {
             int x = player.tile.X;
             int y = player.tile.Y;
@@ -336,7 +352,7 @@ public class TileManager : Singleton<TileManager>
             MakeSelectable(x + 1, y);
             MakeSelectable(x - 1, y);
             MakeSelectable(x, y + 1);
-            MakeSelectable(x, y - 1);           
+            MakeSelectable(x, y - 1);
         }
 
         yield return null;
@@ -344,9 +360,9 @@ public class TileManager : Singleton<TileManager>
 
     public void Traverse(Action<Tile> action)
     {
-        foreach(var x in TileMap)
+        foreach (var x in TileMap)
         {
-            foreach(var y in x)
+            foreach (var y in x)
             {
                 action(y);
             }
@@ -373,7 +389,11 @@ public class TileManager : Singleton<TileManager>
                     Direction.Left,Direction.Right,Direction.Up,Direction.Down
                 };
 
-            directions = directions.Where(dir => !CheckPlayer(dir, x, y)).ToList();
+            directions = directions.Where(dir => !Check(dir, x, y, (tile) =>
+            {
+                return tile.Selector.Obj != null && tile.Selector.Obj is Player;
+            })).ToList();
+
             RemoveTile(x, y);
 
             yield return PullTiles(x, y, directions[UnityEngine.Random.Range(0, directions.Count)]);
@@ -381,9 +401,9 @@ public class TileManager : Singleton<TileManager>
 
         while (graceTiles.Count > 0)
         {
-            (int x,int y) = graceTiles.Dequeue();
+            (int x, int y) = graceTiles.Dequeue();
 
-            if(CheckIndex(x,y))
+            if (CheckIndex(x, y))
             {
                 TileMap[x][y].Type = Tile.TileType.Grace;
             }

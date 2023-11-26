@@ -3,22 +3,24 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Shared.Model;
 
 public class Tile : MonoBehaviour
 {
-	int x, y;   
+	[SerializeField] int x, y;   
     public int X => x;
     public int Y => y;
 
     TileSelector selector;
     public TileSelector Selector => selector;
-
+   
     public enum TileType
     {
-        Normal,Grace
+        Normal,Grace,UnMovable
     }
-
+    
     public TileType Type;
+    public TileDifficulty Difficulty = TileDifficulty.None;
 
     private void Awake()
     {

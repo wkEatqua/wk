@@ -5,7 +5,7 @@ namespace Epos
 {
     public enum ActorStatType
     {
-        MaxHp, Atk, AtkRange, Def, DmgTake, CritProb, CritDmg
+        MaxHp, Atk, AtkRange, Def, DmgTake, CritProb, CritDmg, MoveSpeed
     }
     public enum StatType
     {

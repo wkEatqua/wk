@@ -18,11 +18,51 @@ namespace Epos
         public IEnumerator Excute()
         {
             tile.Selector.OnConfirmed.Invoke();
-            yield return player.transform.DOMove(tile.transform.position, 1f).WaitForCompletion();
+            int graceX = player.tile.X;
+            int graceY = player.tile.Y;
 
-            TileManager.Instance.graceTiles.Enqueue((player.tile.X, player.tile.Y));
-            player.tile.SetObject(null);
-            tile.SetObject(player);
+            yield return player.MoveTo(tile.X, tile.Y);
+
+            EposManager.Instance.OnMove.Invoke(tile);
+            TileManager.Instance.graceTiles.Enqueue((graceX, graceY));           
+            TurnManager.Instance.EndTurn();
+        }
+    }
+
+    public class AttackCommand : ICommand
+    {
+        readonly Player player;
+        readonly Monster target;
+
+        public AttackCommand(Player player, Monster target)
+        {
+            this.player = player;
+            this.target = target;
+        }
+
+        public IEnumerator Excute()
+        {
+            if(target != null)
+            {
+                target.tile.Selector.OnConfirmed.Invoke();
+                player.Attack(target);
+                yield return new WaitForSeconds(1f);
+                TurnManager.Instance.EndTurn();
+            }
+        }
+    }
+
+    public class InteractCommand : ICommand
+    {
+        InteractableObject obj;
+        public InteractCommand(InteractableObject obj)
+        {
+            this.obj = obj;
+        }
+        public IEnumerator Excute()
+        {
+            obj.OnInteract();
+            yield return null;
         }
     }
 }

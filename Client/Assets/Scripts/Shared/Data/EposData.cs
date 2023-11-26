@@ -30,6 +30,26 @@ namespace Shared.Data
 		}
 	}
 
+    public class EposLevelExpInfo
+    {
+        public long Level => data.Level;
+        public int Exp => data.Exp;
+
+        readonly EposLevelExp data;
+
+        public EposLevelExpInfo(EposLevelExp data) { this.data = data; }
+    }
+    public class EposTileExpInfo
+    {
+        public TileDifficulty Difficulty => data.Difficulty;
+        public int Exp => data.Exp;
+        readonly EposTileExp data;
+        public EposTileExpInfo(EposTileExp data)
+        {
+            this.data = data;
+        }
+    }
+	
     public class EposTilePercentInfo
     {
         public long PlayerLevel => data.PlayerLevel;
@@ -67,6 +87,9 @@ namespace Shared.Data
     public class EposData : Database
 	{
 		public static IDictionary<long, EposLevelInfo> LevelDict = new Dictionary<long, EposLevelInfo>();
+        static IDictionary<long, EposLevelExpInfo> MaxExpDict = new Dictionary<long, EposLevelExpInfo>();
+        static IDictionary<TileDifficulty, EposTileExpInfo> TileExpDict = new Dictionary<TileDifficulty, EposTileExpInfo>();
+
 		public override void ProcessDataLoad(string path)
 		{
 			LevelDict.Clear();
@@ -75,11 +98,29 @@ namespace Shared.Data
 
 				LevelDict = levels.ToDictionary(kv => kv.Level, kv => new EposLevelInfo(kv));
 			}
+
+            MaxExpDict.Clear();
+            {
+                MaxExpDict = new Data<EposLevelExp>().GetData(path).ToDictionary(kv => kv.Level,kv  => new EposLevelExpInfo(kv));
+            }
+
+            TileExpDict.Clear();
+            {
+                TileExpDict = new Data<EposTileExp>().GetData(path).ToDictionary(kv => kv.Difficulty, kv => new EposTileExpInfo(kv));
+            }
 		}
 
 		public static bool TryGetEposLevel(long Level, out EposLevelInfo info)
 		{
 			return LevelDict.TryGetValue(Level, out info);
 		}
+        public static bool TryGetEposMaxExp(long level,out EposLevelExpInfo info)
+        {
+            return MaxExpDict.TryGetValue(level, out info);
+        }
+        public static bool TryGetEposTileExp(TileDifficulty difficulty,out EposTileExpInfo info)
+        {
+            return TileExpDict.TryGetValue(difficulty, out info);
+        }
 	}
 }

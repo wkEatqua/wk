@@ -1,0 +1,4 @@
+boto3==1.28.58
+discord==2.3.2
+requests==2.27.1
+typer==0.9.0

@@ -4,9 +4,32 @@ using UnityEngine;
 
 public class UI_Title : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject LoadingImage;
+
+    [SerializeField]
+    private string NextSceneName = "";
+
+    private void Start()
+    {
+        if (null != LoadingImage)
+        {
+            LoadingImage.SetActive(false);
+        }
+    }
+
+    private void SceneChange()
+    {
+        SceneChangeManager.instance.SceneMove(NextSceneName);
+    }
+
     public void OnClickStartButton()
     {
+        LoadingImage.SetActive(true);
 
+        // Debug Code
+        Invoke("SceneChange", 1.0f);
+        // Debug Code End
     }
 
     public void OnClickGrownButton()

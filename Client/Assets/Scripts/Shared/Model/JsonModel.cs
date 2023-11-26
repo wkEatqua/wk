@@ -195,4 +195,32 @@ namespace Shared.Model
         public float UnmovableTile { get; set; }
         public float ObjectTile { get; set; }
     }
+
+    [System.Serializable]
+    public class EposObjectPercent : JsonModel
+    {
+        public long PlayerLevel { get; set; }
+        public float SmallHPRecover { get; set; }
+        public float LargeHPRecover { get; set; }
+        public float Event { get; set; }
+    }
+
+    public class EposTileObjectPercent : JsonModel
+    {
+        public long TileTier { get; set; }
+        public float SmallHPRecover { get; set; }
+        public float LargeHPRecover { get; set; }
+        public float Level1Monster { get; set; }
+        public float Level2Monster { get; set; }
+        public float Level3Monster { get; set; }
+        public float Level4Monster { get; set; }
+        public float Level5Monster { get; set; }
+        public float Level6Monster { get; set; }
+        public float Weapon { get; set; }
+        public float Armor { get; set; }
+        public float SmallGold { get; set; }
+        public float MediumGold { get; set; }
+        public float LargeGold { get; set; }
+        public float Card { get; set; }
+    }
 }

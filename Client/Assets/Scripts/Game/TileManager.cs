@@ -33,6 +33,8 @@ public class TileManager : Singleton<TileManager>
     [SerializeField]
     List<List<Tile>> TileMap;
 
+    private EposTilePercentInfo PercentInfo;
+
     Tweener tweener = null;
     public Tweener Tweener => tweener;
 
@@ -54,6 +56,17 @@ public class TileManager : Singleton<TileManager>
     {
         Init();
         TurnManager.Instance.OnPlayerTurnStart += MakeInjectedSelectable;
+    }
+
+    public void GetTilePercent(long PlayerLevel)
+    {
+        var BeforeInfo = PercentInfo;
+        EposData.TryGetEposTilePercent(PlayerLevel, out PercentInfo);
+        // if fail to load, use before data
+        if (PercentInfo == null)
+        {
+            PercentInfo = BeforeInfo;
+        }
     }
 
     public void RemoveTile(int x, int y)
@@ -315,6 +328,14 @@ public class TileManager : Singleton<TileManager>
         LoadLevel();
         CreateAllTile();
         TurnManager.Instance.StartTurn();
+    }
+
+    public void ShowPlayerLevelButton()
+    {
+        if (PercentInfo != null)
+        {
+            Debug.Log(PercentInfo.ToString());
+        }
     }
 
     void MakeSelectable(int x, int y)

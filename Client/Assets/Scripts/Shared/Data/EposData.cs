@@ -164,6 +164,16 @@ namespace Shared.Data
 				LevelDict = levels.ToDictionary(kv => kv.Level, kv => new EposLevelInfo(kv));
 			}
 
+            MaxExpDict.Clear();
+            {
+                MaxExpDict = new Data<EposLevelExp>().GetData(path).ToDictionary(kv => kv.Level, kv => new EposLevelExpInfo(kv));
+            }
+
+            TileExpDict.Clear();
+            {
+                TileExpDict = new Data<EposTileExp>().GetData(path).ToDictionary(kv => kv.Difficulty, kv => new EposTileExpInfo(kv));
+            }
+
             TilePercentDict.Clear();
             {
                 var Percents = new Data<EposTilePercent>().GetData(path);
@@ -196,17 +206,6 @@ namespace Shared.Data
             return TilePercentDict.TryGetValue(PlayerLevel, out Info);
         }
 
-            MaxExpDict.Clear();
-            {
-                MaxExpDict = new Data<EposLevelExp>().GetData(path).ToDictionary(kv => kv.Level,kv  => new EposLevelExpInfo(kv));
-            }
-
-            TileExpDict.Clear();
-            {
-                TileExpDict = new Data<EposTileExp>().GetData(path).ToDictionary(kv => kv.Difficulty, kv => new EposTileExpInfo(kv));
-            }
-		}
-
         public static bool TryGetEposObjectPercent(long PlayerLevel, out EposObjectPercentInfo Info)
         {
             return ObjectPercentDict.TryGetValue(PlayerLevel, out Info);
@@ -215,10 +214,7 @@ namespace Shared.Data
         {
             return TileObjectPercentDict.TryGetValue(TileTier, out Info);
         }
-		public static bool TryGetEposLevel(long Level, out EposLevelInfo info)
-		{
-			return LevelDict.TryGetValue(Level, out info);
-		}
+
         public static bool TryGetEposMaxExp(long level,out EposLevelExpInfo info)
         {
             return MaxExpDict.TryGetValue(level, out info);

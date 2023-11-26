@@ -1,4 +1,4 @@
-﻿namespace Shared.Model
+namespace Shared.Model
 {
     /// <summary>
     /// 추출 가능한 데이터 클래스
@@ -180,4 +180,19 @@
 
         public float TileScale { get; set; }
 	}
+
+    [System.Serializable]
+    public class EposTilePercent : JsonModel
+    {
+        public long PlayerLevel { get; set; }
+        public float Level1Tile { get; set; }
+        public float Level2Tile { get; set; }
+        public float Level3Tile { get; set; }
+        public float Level4Tile { get; set; }
+        public float Level5Tile { get; set; }
+        public float Level6Tile { get; set; }
+        public float EmptyTile { get; set; }
+        public float UnmovableTile { get; set; }
+        public float ObjectTile { get; set; }
+    }
 }

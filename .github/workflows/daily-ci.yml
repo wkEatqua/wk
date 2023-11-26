@@ -3,6 +3,14 @@ on:
   schedule:
     - cron: '0 11 * * *' # KST 20:00
   workflow_dispatch:
+    inputs:
+      scene:
+        type: choice
+        description: Including Scene Types
+        default: all
+        options:
+        - all
+        - contest
 
 env:
   UNITY_LICENSE:
@@ -54,6 +62,9 @@ jobs:
         with:
           path: Library
           key: Library-${{ matrix.targetPlatform }}
+
+      - name: (TODO) 빌드 타입 수정
+        run: echo '${{ github.event.inputs.scene }}'
 
       - name: 유니티 빌드
         # log 파일 작성을 위해 수정한 버전입니다.

@@ -53,15 +53,15 @@ namespace Shared.Data
     public class EposTilePercentInfo
     {
         public long PlayerLevel => data.PlayerLevel;
-        public float Level1Tile => data.Level1Tile;
-        public float Level2Tile => data.Level2Tile;
-        public float Level3Tile => data.Level3Tile;
-        public float Level4Tile => data.Level4Tile;
-        public float Level5Tile => data.Level5Tile;
-        public float Level6Tile => data.Level6Tile;
-        public float EmptyTile => data.EmptyTile;
-        public float UnmovableTile => data.UnmovableTile;
-        public float ObjectTile => data.ObjectTile;
+        public float Tier1 => data.Tier1;
+        public float Tier2 => data.Tier2;
+        public float Tier3 => data.Tier3;
+        public float Tier4 => data.Tier4;
+        public float Tier5 => data.Tier5;
+        public float Tier6 => data.Tier6;
+        public float Empty => data.Empty;
+        public float Unmovable => data.Unmovable;
+        public float Object => data.Object;
         
         readonly EposTilePercent data;
 
@@ -71,15 +71,15 @@ namespace Shared.Data
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"PlayerLevel : {PlayerLevel}");
-            sb.AppendLine($"Level1Tile : {Level1Tile}");
-            sb.AppendLine($"Level2Tile : {Level2Tile}");
-            sb.AppendLine($"Level3Tile : {Level3Tile}");
-            sb.AppendLine($"Level4Tile : {Level4Tile}");
-            sb.AppendLine($"Level5Tile : {Level5Tile}");
-            sb.AppendLine($"Level6Tile : {Level6Tile}");
-            sb.AppendLine($"EmptyTile : {EmptyTile}");
-            sb.AppendLine($"UnmovableTile : {UnmovableTile}");
-            sb.AppendLine($"ObjectTile : {ObjectTile}");
+            sb.AppendLine($"Tier1 : {Tier1}");
+            sb.AppendLine($"Tier2 : {Tier2}");
+            sb.AppendLine($"Tier3 : {Tier3}");
+            sb.AppendLine($"Tier4 : {Tier4}");
+            sb.AppendLine($"Tier5 : {Tier5}");
+            sb.AppendLine($"Tier6 : {Tier6}");
+            sb.AppendLine($"Empty : {Empty}");
+            sb.AppendLine($"Unmovable : {Unmovable}");
+            sb.AppendLine($"Object : {Object}");
             return sb.ToString();
         }
     }

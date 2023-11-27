@@ -12,8 +12,6 @@ public class TilingDebug : MonoBehaviour
     public void OnClickPlayerLevelButton()
     {
         int PlayerLevel = int.Parse(InputField.text);
-        TileManager.Instance.GetTilePercent(PlayerLevel);
-        TileManager.Instance.ShowPlayerLevelButton();
     }
 
     public void OnClickCheckInfoButton()

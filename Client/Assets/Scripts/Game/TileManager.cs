@@ -7,6 +7,8 @@ using DG.Tweening;
 using Apis;
 using System;
 using System.Linq;
+using Shared.Model;
+using System.Text.RegularExpressions;
 
 public class TileManager : Singleton<TileManager>
 {
@@ -32,6 +34,12 @@ public class TileManager : Singleton<TileManager>
 
     public List<List<Tile>> TileMap;
 
+    // Create Tile percentage
+    private EposTilePercentInfo TilePercentInfo;
+
+    private List<Tuple<string, float>> PercentLists = new List<Tuple<string, float>>();
+
+    private float MaxPercentage = 0;
 
     Tweener tweener = null;
     public Tweener Tweener => tweener;
@@ -53,6 +61,7 @@ public class TileManager : Singleton<TileManager>
     private void Start()
     {
         Init();
+
         TurnManager.Instance.OnPlayerTurnStart += MakeInjectedSelectable;
         TurnManager.Instance.OnPlayerTurnEnd += ResetTiles;
         TurnManager.Instance.OnEnemyTurnStart += RemoveAndCreateGrace;
@@ -103,6 +112,71 @@ public class TileManager : Singleton<TileManager>
         TileScale = info.TileScale;
     }
 
+    private void LoadTilePercents()
+    {
+        int playerLevel = EposManager.Instance.level;
+        if (playerLevel <= 0)
+            playerLevel = 1;
+
+        bool success = EposData.TryGetEposTilePercent(playerLevel, out TilePercentInfo);
+        if (success == false)
+        {
+            return;
+        }
+            
+        PercentLists.Clear();
+        var fields = typeof(EposTilePercentInfo).GetProperties(System.Reflection.BindingFlags.Public |
+                                                                System.Reflection.BindingFlags.NonPublic |
+                                                                System.Reflection.BindingFlags.Instance);
+
+        foreach (var field in fields)
+        {
+            if (field.PropertyType == typeof(Single))
+            {
+                float percentage = (float)field.GetValue(TilePercentInfo);
+                PercentLists.Add(new Tuple<string, float>(field.Name, percentage));
+                MaxPercentage += percentage;
+
+            }
+        }
+    }
+
+    private Tuple<Tile.TileType, int> GetTileType()
+    {
+        Tile.TileType tileType = Tile.TileType.Tier;
+        int tileTier = 0;
+        float rand = UnityEngine.Random.Range(0, MaxPercentage);
+
+        float sum = 0;
+        string result = "";
+        foreach (var percent in PercentLists)
+        {
+            sum += percent.Item2;
+            if (sum >= rand)
+            {
+                result = percent.Item1;
+                break;
+            }
+        }
+
+        Regex r = new Regex("[0-9]"); 
+        bool checkNumber = r.IsMatch(result);
+        if (checkNumber == true)
+        {
+            tileType = Tile.TileType.Tier;
+            string numberString = Regex.Replace(result, @"\D", "");
+            tileTier = int.Parse(numberString);
+        }
+        else
+        {
+            tileType = (Tile.TileType)Enum.Parse(typeof(Tile.TileType), result);
+        }
+
+        Debug.Log($"{tileType.ToString()}, {tileTier}, {rand}");
+
+        return new Tuple<Tile.TileType, int>(tileType, tileTier);
+    }
+
     public IEnumerator CreateTile(int x, int y)
     {
         if (TileMap[x][y] != null)
@@ -112,6 +186,10 @@ public class TileManager : Singleton<TileManager>
         //GameObject TileObject = Instantiate(TilePrefab, TileContainer.transform);
         GameObject TileObject = TilePool.Get("Assets/Prefabs/Debug/Tile.prefab");
         Tile TileComponent = TileObject.GetComponent<Tile>();
+        var TileTier = GetTileType();
+        TileComponent.SetTileType(TileTier.Item1);
+        TileComponent.SetTier(TileTier.Item2);
+        
         TileComponent.SetScale(TileScale);
         int mid = (int)TileNumber / 2;
         float PosX = (x - mid) * TileInterval;
@@ -329,6 +407,8 @@ public class TileManager : Singleton<TileManager>
         this.Level = Level;
         RemoveAllTile();
         LoadLevel();
+        LoadTilePercents();
+        GetTileType();
         CreateAllTile();
         TurnManager.Instance.StartTurn();
     }

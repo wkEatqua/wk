@@ -209,15 +209,15 @@ namespace Shared.Model
     public class EposTilePercent : JsonModel
     {
         public long PlayerLevel { get; set; }
-        public float Level1Tile { get; set; }
-        public float Level2Tile { get; set; }
-        public float Level3Tile { get; set; }
-        public float Level4Tile { get; set; }
-        public float Level5Tile { get; set; }
-        public float Level6Tile { get; set; }
-        public float EmptyTile { get; set; }
-        public float UnmovableTile { get; set; }
-        public float ObjectTile { get; set; }
+        public float Tier1 { get; set; }
+        public float Tier2 { get; set; }
+        public float Tier3 { get; set; }
+        public float Tier4 { get; set; }
+        public float Tier5 { get; set; }
+        public float Tier6 { get; set; }
+        public float Empty { get; set; }
+        public float Unmovable { get; set; }
+        public float Object { get; set; }
     }
 
     [System.Serializable]

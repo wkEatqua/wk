@@ -20,7 +20,7 @@ namespace Epos
             tile.Selector.OnConfirmed.Invoke();
             int graceX = player.tile.X;
             int graceY = player.tile.Y;
-
+            TileManager.Instance.playerLastPos = (graceX, graceY);
             yield return player.MoveTo(tile.X, tile.Y);
 
             EposManager.Instance.OnMove.Invoke(tile);

@@ -36,6 +36,7 @@ public class TileManager : Singleton<TileManager>
     Tweener tweener = null;
     
     public readonly Queue<(int x, int y)> graceTiles = new();
+    public (int x, int y) playerLastPos = (-1, -1);
 
     private void Init()
     {
@@ -401,12 +402,27 @@ public class TileManager : Singleton<TileManager>
 
             directions = directions.Where(dir => !Check(dir, x, y, (tile) =>
             {
-                return tile.Selector.Obj != null && tile.Selector.Obj is Player;
+                if(tile.Selector.Obj != null && tile.Selector.Obj is Player)
+                {
+                    return true;
+                }
+                if(playerLastPos.x == tile.X && playerLastPos.y == tile.Y)
+                {
+                    return true;
+                }
+
+                return false;
             })).ToList();
 
             RemoveTile(x, y);
-
-            yield return PullTiles(x, y, directions[UnityEngine.Random.Range(0, directions.Count)]);
+            if (directions.Count == 0)
+            {
+                yield return StartCoroutine(CreateTile(x, y));
+            }
+            else
+            {
+                yield return PullTiles(x, y, directions[UnityEngine.Random.Range(0, directions.Count)]);
+            }
         }
 
         while (graceTiles.Count > 0)

@@ -22,6 +22,17 @@ namespace Epos
                 return value;
             }
         }
+
+        public override int Def
+        {
+            get
+            {
+                int value = base.Def;
+                armours.ForEach(x => value += x.durability);
+
+                return value;
+            }
+        }
         public override int OnHit(int dmg)
         {           
             dmg -= Def;
@@ -93,6 +104,11 @@ namespace Epos
         {
             base.Start();
             EposManager.Instance.Player = this;
-        }             
+        }
+        private void Update()
+        {
+            Debug.Log(Atk);
+            Debug.Log(Def);
+        }
     }
 }

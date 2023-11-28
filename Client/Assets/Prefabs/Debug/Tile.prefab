@@ -122,6 +122,7 @@ MonoBehaviour:
   x: 0
   y: 0
   Type: 0
+  Difficulty: 0
 --- !u!114 &-1121508429132690036
 MonoBehaviour:
   m_ObjectHideFlags: 0

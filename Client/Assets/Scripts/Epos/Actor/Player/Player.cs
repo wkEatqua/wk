@@ -92,6 +92,7 @@ namespace Epos
         public override void Start()
         {
             base.Start();
+            EposManager.Instance.Player = this;
         }             
     }
 }

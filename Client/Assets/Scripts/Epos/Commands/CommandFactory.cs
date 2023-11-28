@@ -11,7 +11,7 @@ namespace Epos
         {
             Player player = Object.FindAnyObjectByType<Player>();
 
-            if (tileObject == null && tile.Type == Tile.TileType.Normal)
+            if ((tileObject == null || tileObject is ItemObject) && tile.Type == Tile.TileType.Normal)
             {
                 return new MoveCommand(player, tile);
             }
@@ -23,7 +23,7 @@ namespace Epos
             {
                 return new InteractCommand(interact);
             }
-           
+            
             return null;
         }
     }

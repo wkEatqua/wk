@@ -9,11 +9,11 @@ namespace Epos
 {
     public class EposManager : Singleton<EposManager>
     {
-        [HideInInspector] public int gold;
-        [HideInInspector] public int moveCount;
-        [HideInInspector] public int eventCount;
-        [HideInInspector] public int level;
-        [HideInInspector] public int itemCount;
+         public int gold;
+         public int moveCount;
+         public int eventCount;
+         public int level;
+         public int itemCount;
 
         int exp;
 
@@ -36,12 +36,22 @@ namespace Epos
 
         [HideInInspector] public UnityEvent<Tile> OnMove = new();
         Player player;
-        public Player Player => player;
+        public Player Player
+        {
+            get
+            {
+                return player;
+            }
+            set
+            {
+                player = value;
+            }
+        }
 
         protected override void Awake()
         {
             base.Awake();
-
+            OnMove.AddListener(tile => moveCount++);
             OnMove.AddListener(tile =>
             {
                 int value = 0;
@@ -53,8 +63,6 @@ namespace Epos
                 }
                 Exp += value;
             });
-
-            player = FindAnyObjectByType<Player>();
         }
 
         private void Start()

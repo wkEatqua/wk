@@ -1,4 +1,5 @@
 import discord
+import time
 import subprocess
 from discord import app_commands
 from discord.ext import commands
@@ -6,6 +7,7 @@ from discord.ext import commands
 
 def run_ci(build: str, scene: str) -> str:
     subprocess.Popen(["python3", "scripts.py", "run-ci", build, scene]).wait()
+    time.sleep(3)
     p = subprocess.Popen(
         ["python3", "scripts.py", "last-action-url", build], stdout=subprocess.PIPE
     )
@@ -45,7 +47,7 @@ class WkCiCog(commands.Cog):
             f"{build.name} {scenes.name}로 빌드를 시작합니다."
         )
         url = run_ci(build.value, scenes.value)
-        await interaction.response.send_message(f"action url: {url}")
+        await interaction.channel.send(f"Action Url: {url}")
 
 
 async def setup(bot: commands.Bot) -> None:

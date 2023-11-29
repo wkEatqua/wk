@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,32 +9,36 @@ using UnityEngine;
 
 namespace Assets.Editor
 {
-    public class Builder
+    internal static class Builder
     {
-        private static void BuildEmbeddedLinux(EmbeddedLinuxArchitecture architecture)
+        public static void Build()
         {
-            // Set architecture in BuildSettings
-            EditorUserBuildSettings.selectedEmbeddedLinuxArchitecture = architecture;
+            var options = GetValidatedOptions();
 
-            // Setup build options (e.g. scenes, build output location)
-            var options = new BuildPlayerOptions
+            if (options["buildMode"] == "debug")
             {
-                // Change to scenes from your project
-                scenes = new[]
-                {
-                    "Assets/Scenes/SampleScene.unity",
-                },
-                // Change to location the output should go
-                locationPathName = "../Build/",
-                options = BuildOptions.None,
-                target = BuildTarget.EmbeddedLinux
+                EditorUserBuildSettings.development = true;
+                EditorUserBuildSettings.allowDebugging = true;
+                EditorUserBuildSettings.waitForManagedDebugger = true;
+            }
+
+            var scenes = EditorBuildSettings.scenes.Where(scene => scene.enabled).Select(s => s.path).ToArray();
+            var scenesWantExclude = new[] { 
+                "Login Scene",
             };
-
-            var report = BuildPipeline.BuildPlayer(options);
-
+            var excludedScenes = scenes.Where(scene => !scenesWantExclude.Any(e => scene.Contains(e))).ToArray();
+            var playerOptions = new BuildPlayerOptions
+            {
+                scenes = excludedScenes,
+                locationPathName = "../build/",
+                options = BuildOptions.None,
+                target = BuildTarget.StandaloneWindows64
+            };
+            
+            var report = BuildPipeline.BuildPlayer(playerOptions);
             if (report.summary.result == BuildResult.Succeeded)
             {
-                Debug.Log($"Build successful - Build written to {options.locationPathName}");
+                Debug.Log($"Build successful");
             }
             else if (report.summary.result == BuildResult.Failed)
             {
@@ -42,11 +46,37 @@ namespace Assets.Editor
             }
         }
 
-        // This function will be called from the build process
-        public static void Build()
+        // https://note4iffydog.tistory.com/55
+
+        private static Dictionary<string, string> GetValidatedOptions()
         {
-            // Build EmbeddedLinux ARM64 Unity player
-            BuildEmbeddedLinux(EmbeddedLinuxArchitecture.Arm64);
+            ParseCommandLineArguments(out Dictionary<string, string> validatedOptions);
+
+            if (!validatedOptions.TryGetValue("buildMode", out var _))
+            {
+                const string defaultEnableBuildModeValue = "release";
+                validatedOptions.Add("buildMode", defaultEnableBuildModeValue);
+            }
+
+            return validatedOptions;
+        }
+
+        private static void ParseCommandLineArguments(out Dictionary<string, string> providedArguments)
+        {
+            string[] args = Environment.GetCommandLineArgs();
+
+            providedArguments = new Dictionary<string, string>();
+            for (int current = 0, next = 1; current < args.Length; current++, next++)
+            {
+                if (!args[current].StartsWith("-")) continue;
+
+                var flag = args[current].TrimStart('-');
+
+                var flagHasValue = next < args.Length && !args[next].StartsWith("-");
+                var value = flagHasValue ? args[next].TrimStart('-') : "";
+
+                providedArguments.Add(flag, value);
+            }
         }
     }
 }

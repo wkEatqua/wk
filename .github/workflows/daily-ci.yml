@@ -6,11 +6,18 @@ on:
     inputs:
       scene:
         type: choice
-        description: Including Scene Types
+        description: 씬 유형들 선택 
         default: all
         options:
-        - all
-        - contest
+        - all     # 모든 씬을 포함해서 빌드
+        - contest # 연공전 전용 빌드
+      build:
+        type: choice
+        description: 빌드 옵션 선택
+        default: release
+        options:
+        - release
+        - debug
 
 env:
   UNITY_LICENSE:
@@ -77,6 +84,9 @@ jobs:
           projectPath: Client
           unityVersion: 2022.3.8f1
           allowDirtyBuild: true
+          # https://stackoverflow.com/a/75835172/3355656
+          buildMethod: ${{ inputs.scene == 'all' && '' && Assets.Editor.Builder.Build }}
+          customParameters: -buildMode ${{ inputs.build }}
 
       - name: 빌드 로그 출력
         if: always()

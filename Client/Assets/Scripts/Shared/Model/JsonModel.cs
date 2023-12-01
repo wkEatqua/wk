@@ -8,7 +8,7 @@ namespace Shared.Model
 
     }
 
-
+    #region Enum
     public enum StarFlagType
     {
         Progress,
@@ -32,6 +32,8 @@ namespace Shared.Model
     {
         None, Easy, Normal, Danger, Hard, Nightmare, Disaster
     }
+    #endregion
+
     #region 사상지평
     [System.Serializable]
     public class ScenarioWorld : JsonModel
@@ -247,6 +249,49 @@ namespace Shared.Model
         public float LargeGold { get; set; }
         public float Card { get; set; }
     }
-    #endregion
+    [System.Serializable]
+    public class EposTile : JsonModel
+    {
+        public long ID { get; set; }
+        public long Lv { get; set; }
+        public long Tile1 { get; set; }
+        public long TileRate1 { get; set; }
+        public long Tile2 { get; set; }
+        public long TileRate2 { get; set; }
+        public long Tile3 { get; set; }
+        public long TileRate3 { get; set; }
+        public long Tile4 { get; set; }
+        public long TileRate4 { get; set; }
+        public long Tile5 { get; set; }
+        public long TileRate5 { get; set; }
+        public long Tile6 { get; set; }
+        public long TileRate6 { get; set; }
+        public long Tile7 { get; set; }
+        public long TileRate7 { get; set; }
+        public long Tile8 { get; set; }
+        public long TileRate8 { get; set; }
+        public long Tile9 { get; set; }
+        public long TileRate9 { get; set; }
+    }
+
+    [System.Serializable]
+    public class EposTileInfo : JsonModel
+    {
+        public long GroupID { get; set; }
+        public string Tile { get; set; }
+        public string TileModel { get; set; }
+        public string Tilepattern { get; set; }
+        public int EXP { get; set; }
+    }
+
+    [System.Serializable]
+    public class EposTierTile : JsonModel
+    {
+        public long GroupID { get; set; }
+        public string Tile { get; set; }
+        public long Object { get; set; }
+        public long ObjectRate { get; set; }
+    }
+        #endregion
 
 }

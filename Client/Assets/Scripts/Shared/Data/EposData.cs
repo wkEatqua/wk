@@ -8,6 +8,21 @@ using Shared.Model;
 
 namespace Shared.Data
 {
+    public class EposInfo
+    {
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            var fields = GetType().GetProperties();
+            foreach (var field in fields)
+            {
+                sb.AppendLine($"{field.Name}, {field.GetValue(this)}");
+            }
+
+            return sb.ToString();
+        }
+    }
+
 	public class EposLevelInfo
 	{
 		public long Level => data.Level;
@@ -146,12 +161,65 @@ namespace Shared.Data
         }
     }
 
+    public class EposTileInfo : EposInfo
+    {
+        public long ID => data.ID;
+        public long Lv => data.Lv;
+        public long Tile1 => data.Tile1;
+        public long TileRate1 => data.TileRate1;
+        public long Tile2 => data.Tile2;
+        public long TileRate2 => data.TileRate2;
+        public long Tile3 => data.Tile3;
+        public long TileRate3 => data.TileRate3;
+        public long Tile4 => data.Tile4;
+        public long TileRate4 => data.TileRate4;
+        public long Tile5 => data.Tile5;
+        public long TileRate5 => data.TileRate5;
+        public long Tile6 => data.Tile6;
+        public long TileRate6 => data.TileRate6;
+        public long Tile7 => data.Tile7;
+        public long TileRate7 => data.TileRate7;
+        public long Tile8 => data.Tile8;
+        public long TileRate8 => data.TileRate8;
+        public long Tile9 => data.Tile9;
+        public long TileRate9 => data.TileRate9;
+
+        readonly EposTile data;
+        public EposTileInfo(EposTile data) { this.data = data; }
+    }
+
+    public class EposTileInfoInfo : EposInfo
+    {
+        public long GroupID => data.GroupID;
+        public string Tile => data.Tile;
+        public string TileModel => data.TileModel;
+        public string Tilepattern => data.Tilepattern;
+        public int EXP => data.EXP;
+
+        readonly Shared.Model.EposTileInfo data;
+        public EposTileInfoInfo(Shared.Model.EposTileInfo data) { this.data = data; } 
+    }
+
+    public class EposTierTileInfo : EposInfo
+    {
+        public long GroupID => data.GroupID;
+        public string Tile => data.Tile;
+        public long Object => data.Object;
+        public long ObjectRate => data.ObjectRate;
+
+        readonly EposTierTile data;
+        public EposTierTileInfo(EposTierTile data) { this.data = data; }
+    }
+
     public class EposData : Database
 	{
 		public static IDictionary<long, EposLevelInfo> LevelDict = new Dictionary<long, EposLevelInfo>();
         public static IDictionary<long, EposTilePercentInfo> TilePercentDict = new Dictionary<long, EposTilePercentInfo>();
         public static IDictionary<long, EposObjectPercentInfo> ObjectPercentDict = new Dictionary<long, EposObjectPercentInfo>();
         public static IDictionary<long, EposTileObjectPercentInfo> TileObjectPercentDict = new Dictionary<long, EposTileObjectPercentInfo>();
+        public static IDictionary<long, EposTileInfo> TileDict = new Dictionary<long, EposTileInfo>();
+        public static IDictionary<long, EposTileInfoInfo> TileInfoDict = new Dictionary<long, EposTileInfoInfo>();
+        public static IDictionary<long, EposTierTileInfo> TierTileDict = new Dictionary<long, EposTierTileInfo>();
         static IDictionary<long, EposLevelExpInfo> MaxExpDict = new Dictionary<long, EposLevelExpInfo>();
         static IDictionary<TileDifficulty, EposTileExpInfo> TileExpDict = new Dictionary<TileDifficulty, EposTileExpInfo>();
 
@@ -194,6 +262,27 @@ namespace Shared.Data
 
                 TileObjectPercentDict = TileObjectPercents.ToDictionary(kv => kv.TileTier, kv => new EposTileObjectPercentInfo(kv));
             }
+
+            TileDict.Clear();
+            {
+                var Tiles = new Data<EposTile>().GetData(path);
+
+                TileDict = Tiles.ToDictionary(kv => kv.Lv, kv => new EposTileInfo(kv));
+            }
+
+            TileInfoDict.Clear();
+            {
+                var TileInfos = new Data<Model.EposTileInfo>().GetData(path);
+
+                TileInfoDict = TileInfos.ToDictionary(kv => kv.GroupID, kv => new EposTileInfoInfo(kv));
+            }
+
+            TierTileDict.Clear();
+            {
+                var TierTiles = new Data<EposTierTile>().GetData(path);
+
+                TierTileDict = TierTiles.ToDictionary(kv => kv.GroupID, kv => new EposTierTileInfo(kv));
+            }
 		}
 
 		public static bool TryGetEposLevel(long Level, out EposLevelInfo Info)
@@ -213,6 +302,11 @@ namespace Shared.Data
         public static bool TryGetEposTileObjectPercent(long TileTier, out EposTileObjectPercentInfo Info)
         {
             return TileObjectPercentDict.TryGetValue(TileTier, out Info);
+        }
+
+        public static bool TryGetEposTile(long Lv, out EposTileInfo Info)
+        {
+            return TileDict.TryGetValue(Lv, out Info);
         }
 
         public static bool TryGetEposMaxExp(long level,out EposLevelExpInfo info)

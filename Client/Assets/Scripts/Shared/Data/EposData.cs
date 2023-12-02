@@ -186,10 +186,10 @@ namespace Shared.Data
 		public static IDictionary<long, EposLevelInfo> LevelDict = new Dictionary<long, EposLevelInfo>();
         public static IDictionary<long, EposTileInfo> TileDict = new Dictionary<long, EposTileInfo>();
         public static IDictionary<long, EposTileInfoInfo> TileInfoDict = new Dictionary<long, EposTileInfoInfo>();
-        public static IDictionary<long, EposTierTileInfo> TierTileDict = new Dictionary<long, EposTierTileInfo>();
-        public static IDictionary<long, EposInteractionTileInfo> InteractionTileDict = new Dictionary<long, EposInteractionTileInfo>();
-        public static IDictionary<long, EposEnvironmentTileInfo> EnvironmentTileDict = new Dictionary<long, EposEnvironmentTileInfo>();
-        public static IDictionary<long, EposBlankTileInfo> BlankTileDict = new Dictionary<long, EposBlankTileInfo>();
+        public static readonly IDictionary<long, List<EposTierTileInfo>> TierTileDict = new Dictionary<long, List<EposTierTileInfo>>();
+        public static readonly IDictionary<long, List<EposInteractionTileInfo>> InteractionTileDict = new Dictionary<long, List<EposInteractionTileInfo>>();
+        public static readonly IDictionary<long, List<EposEnvironmentTileInfo>> EnvironmentTileDict = new Dictionary<long, List<EposEnvironmentTileInfo>>();
+        public static readonly IDictionary<long, List<EposBlankTileInfo>> BlankTileDict = new Dictionary<long, List<EposBlankTileInfo>>();
         public static IDictionary<long, EposObjectInfo> ObjectDict = new Dictionary<long, EposObjectInfo>();
         public static IDictionary<long, EposTrophyInfo> TrophyDict = new Dictionary<long, EposTrophyInfo>();
 
@@ -234,28 +234,68 @@ namespace Shared.Data
             {
                 var TierTiles = new Data<EposTierTile>().GetData(path);
 
-                TierTileDict = TierTiles.ToDictionary(kv => kv.GroupID, kv => new EposTierTileInfo(kv));
+                foreach(var TierTile in TierTiles)
+                {
+                    if (!TierTileDict.ContainsKey(TierTile.GroupID))
+                    {
+                        TierTileDict.Add(TierTile.GroupID, new());
+                    }
+
+                    TierTileDict[TierTile.GroupID] ??= new();
+
+                    TierTileDict[TierTile.GroupID].Add(new EposTierTileInfo(TierTile));
+                }
             }
 
             InteractionTileDict.Clear();
             {
                 var InteractionTiles = new Data<EposInteractionTile>().GetData(path);
 
-                InteractionTileDict = InteractionTiles.ToDictionary(kv => kv.GroupID, kv => new EposInteractionTileInfo(kv));
+                foreach(var InteractionTile in InteractionTiles)
+                {
+                    if (!InteractionTileDict.ContainsKey(InteractionTile.GroupID))
+                    {
+                        InteractionTileDict.Add(InteractionTile.GroupID, new());
+                    }
+
+                    InteractionTileDict[InteractionTile.GroupID] ??= new();
+
+                    InteractionTileDict[InteractionTile.GroupID].Add(new EposInteractionTileInfo(InteractionTile));
+                }
             }
 
             EnvironmentTileDict.Clear();
             {
                 var EnvironmentTiles = new Data<EposEnvironmentTile>().GetData(path);
 
-                EnvironmentTileDict = EnvironmentTiles.ToDictionary(kv => kv.GroupID, kv => new EposEnvironmentTileInfo(kv));
+                foreach (var EnvironmentTile in EnvironmentTiles)
+                {
+                    if (!EnvironmentTileDict.ContainsKey(EnvironmentTile.GroupID))
+                    {
+                        EnvironmentTileDict.Add(EnvironmentTile.GroupID, new());
+                    }
+
+                    EnvironmentTileDict[EnvironmentTile.GroupID] ??= new();
+
+                    EnvironmentTileDict[EnvironmentTile.GroupID].Add(new EposEnvironmentTileInfo(EnvironmentTile));
+                }
             }
 
             BlankTileDict.Clear();
             {
                 var BlankTiles = new Data<EposBlankTile>().GetData(path);
 
-                BlankTileDict = BlankTiles.ToDictionary(kv => kv.ID, kv => new EposBlankTileInfo(kv));
+                foreach (var BlankTile in BlankTiles)
+                {
+                    if (!BlankTileDict.ContainsKey(BlankTile.ID))
+                    {
+                        BlankTileDict.Add(BlankTile.ID, new());
+                    }
+
+                    BlankTileDict[BlankTile.ID] ??= new();
+
+                    BlankTileDict[BlankTile.ID].Add(new EposBlankTileInfo(BlankTile));
+                }
             }
 
             ObjectDict.Clear();
@@ -295,22 +335,22 @@ namespace Shared.Data
             return TileInfoDict.TryGetValue(GroupID, out Info);
         }
 
-        public static bool TryGetEposTierTile(long GroupID, out EposTierTileInfo Info)
+        public static bool TryGetEposTierTile(long GroupID, out List<EposTierTileInfo> Info)
         {
             return TierTileDict.TryGetValue(GroupID, out Info);
         }
 
-        public static bool TryGetEposInteractionTile(long GroupID, out EposInteractionTileInfo Info)
+        public static bool TryGetEposInteractionTile(long GroupID, out List<EposInteractionTileInfo> Info)
         {
             return InteractionTileDict.TryGetValue(GroupID, out Info);
         }
 
-        public static bool TryGetEposEnvironmentTile(long GroupID, out EposEnvironmentTileInfo Info)
+        public static bool TryGetEposEnvironmentTile(long GroupID, out List<EposEnvironmentTileInfo> Info)
         {
             return EnvironmentTileDict.TryGetValue(GroupID, out Info);
         }
 
-        public static bool TryGetEposBlankTile(long GroupID, out EposBlankTileInfo Info)
+        public static bool TryGetEposBlankTile(long GroupID, out List<EposBlankTileInfo> Info)
         {
             return BlankTileDict.TryGetValue(GroupID, out Info);
         }

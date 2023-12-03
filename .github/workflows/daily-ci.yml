@@ -70,8 +70,10 @@ jobs:
           path: Library
           key: Library-${{ matrix.targetPlatform }}
 
-      - name: (TODO) 빌드 타입 수정
-        run: echo '${{ github.event.inputs.scene }}'
+      - name: 빌드 타입 수정
+        id: buildvar
+        run: |
+          echo "buildMethod=$(${{ github.event.inputs.scene == 'all' }} && echo "" || echo "Assets.Editor.Builder.Build")" >> $GITHUB_OUTPUT
 
       - name: 유니티 빌드
         # log 파일 작성을 위해 수정한 버전입니다.
@@ -84,9 +86,8 @@ jobs:
           projectPath: Client
           unityVersion: 2022.3.8f1
           allowDirtyBuild: true
-          # https://stackoverflow.com/a/75835172/3355656
-          buildMethod: ${{ inputs.scene == 'all' && '' || 'Assets.Editor.Builder.Build' }}
-          customParameters: -buildMode ${{ inputs.build }}
+          buildMethod: ${{ steps.buildvar.outputs.buildMethod }}
+          customParameters: -buildMode ${{ github.event.inputs.build }}
 
       - name: 빌드 로그 출력
         if: always()
@@ -157,4 +158,3 @@ jobs:
             ```
             CI 로그: [${{ github.ref }} / ${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
           # avatar_url: todo ci 실패 아바타 ~
-      

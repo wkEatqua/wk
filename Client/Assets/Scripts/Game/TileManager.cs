@@ -276,10 +276,10 @@ public class TileManager : Singleton<TileManager>
         player.transform.rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
         TileMap[mid][mid].SetObject(player);
 
-        //EliteMonster monster = ResourceUtil.Instantiate("EliteMonster").GetComponent<EliteMonster>();
-        //monster.transform.rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
-        //TileMap[(int)TileNumber - 1][(int)TileNumber - 1].SetObject(monster);
-        //monster.GetComponentInChildren<Renderer>().material.color = Color.red;
+        EliteMonster monster = ResourceUtil.Instantiate("EliteMonster").GetComponent<EliteMonster>();
+        monster.transform.rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
+        TileMap[(int)TileNumber - 1][(int)TileNumber - 1].SetObject(monster);
+        monster.GetComponentInChildren<Renderer>().material.color = Color.red;
 
         ArmourObject armourObj = ResourceUtil.Instantiate("ArmourObj").GetComponent<ArmourObject>();
         TileMap[0][0].SetObject(armourObj);

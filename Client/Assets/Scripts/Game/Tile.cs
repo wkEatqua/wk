@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Shared.Model;
 using TMPro;
-
+using Shared.Data;
+using System.Text.RegularExpressions;
 
 public class Tile : MonoBehaviour
 {
@@ -40,11 +41,13 @@ public class Tile : MonoBehaviour
     public enum TileType
     {
         Tier,        
-        Empty,
-        Unmovable,
-        Object,
+        BlankTile,
+        EnvironmentTile,
+        InteractionTile,
         Grace,
     }
+
+    EposTileInfoInfo TileInfo;
 
     public TileType Type;
     public TileDifficulty Difficulty = TileDifficulty.None;
@@ -76,6 +79,15 @@ public class Tile : MonoBehaviour
 		this.x = x;
 		this.y = y;
 	}
+
+    public void SetTileInfo(EposTileInfoInfo Info)
+    {
+        this.TileInfo = Info;
+        SetTier(Info.Tier);
+
+        var TileType = (TileType)Enum.Parse(typeof(TileType), Info.Tile);
+        SetTileType(TileType);
+    }
 
     public void SetTileType(TileType type)
     {

@@ -237,6 +237,7 @@ namespace Shared.Model
     {
         public long GroupID { get; set; }
         public string Tile { get; set; }
+        public int Tier { get; set; }
         public string TileModel { get; set; }
         public string Tilepattern { get; set; }
         public int EXP { get; set; }

@@ -95,6 +95,7 @@ namespace Shared.Data
     {
         public long GroupID => data.GroupID;
         public string Tile => data.Tile;
+        public int Tier => data.Tier;
         public string TileModel => data.TileModel;
         public string Tilepattern => data.Tilepattern;
         public int EXP => data.EXP;

@@ -64,7 +64,7 @@ namespace Epos
             switch (tile.Type)
             {
                 case Tile.TileType.Tier:
-                case Tile.TileType.Unmovable:
+                case Tile.TileType.EnvironmentTile:
                     if (selectable)
                     {
                         render.material.color = Color.green;

@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using Shared.Model;
 using System.Text.RegularExpressions;
+using System.Text;
 
 public class TileManager : Singleton<TileManager>
 {
@@ -35,23 +36,11 @@ public class TileManager : Singleton<TileManager>
     public List<List<Tile>> TileMap;
 
     // Create Tile, Object percentage
-    private EposTilePercentInfo TilePercentInfo;
+    private List<Tuple<long, long>> TileRateList = new List<Tuple<long, long>>();
 
-    private EposObjectPercentInfo ObjectPercentInfo;
 
-    private EposTileObjectPercentInfo TileObjectPercentInfo;
+    private float MaxTileRates = 0;
 
-    private List<Tuple<string, float>> TilePercentLists = new List<Tuple<string, float>>();
-
-    private List<Tuple<string, float>> ObjectPercentLists = new List<Tuple<string, float>>();
-
-    private List<Tuple<string, float>> TileObjectPercentLists = new List<Tuple<string, float>>();
-
-    private float MaxTilePercentage = 0;
-
-    private float MaxObjectPercentage = 0;
-
-    private float MaxTileObjectPercentage = 0;
 
     Tweener tweener = null;
     public Tweener Tweener => tweener;
@@ -126,85 +115,65 @@ public class TileManager : Singleton<TileManager>
 
     private void LoadTilePercents()
     {
-        int playerLevel = EposManager.Instance.level;
-        if (playerLevel <= 0)
-            playerLevel = 1;
+        int PlayerLevel = EposManager.Instance.level;
+        if (PlayerLevel <= 0)
+            PlayerLevel = 1;
 
-        bool success = EposData.TryGetEposTilePercent(playerLevel, out TilePercentInfo);
+
+        bool success = EposData.TryGetEposTile(PlayerLevel, out Shared.Data.EposTileInfo TileInfo);
         if (success == false)
-        {
             return;
-        }
-            
-        TilePercentLists.Clear();
-        var fields = typeof(EposTilePercentInfo).GetProperties(System.Reflection.BindingFlags.Public |
+
+        var fields = typeof(Shared.Data.EposTileInfo).GetProperties(System.Reflection.BindingFlags.Public |
                                                                 System.Reflection.BindingFlags.NonPublic |
                                                                 System.Reflection.BindingFlags.Instance);
 
+        Dictionary<long, long> TempDict = new Dictionary<long, long>();
+        long key = 0;
+        string keyName = "";
         foreach (var field in fields)
         {
-            if (field.PropertyType == typeof(Single))
-            {
-                float percentage = (float)field.GetValue(TilePercentInfo);
-                TilePercentLists.Add(new Tuple<string, float>(field.Name, percentage));
-                MaxTilePercentage += percentage;
+            string name = field.Name;
+            if (!name.Contains("Tile"))
+                continue;
 
+            if (!name.Contains("Rate"))
+            {
+                string numstr = Regex.Replace(name, @"\D", "");
+                StringBuilder sb = new StringBuilder();
+                sb.Append(Regex.Replace(name, @"\d", ""));
+                sb.Append("Rate");
+                sb.Append(numstr);
+                keyName = sb.ToString();
+                key = (long)field.GetValue(TileInfo);
+                TempDict.Add(key, 0);
+            }
+            else
+            {
+                if (field.Name == keyName)
+                {
+                    long value = (long)field.GetValue(TileInfo);
+                    TempDict[key] = value;
+                }
             }
         }
 
-        EposData.TryGetEposTile(1, out Shared.Data.EposTileInfo info);
-        Debug.Log("-------");
-        Debug.Log(info.ToString());
-        Debug.Log("-------");
-    }
-
-    private void LoadObjectPercents()
-    {
-        int playerLevel = EposManager.Instance.level;
-        if (playerLevel <= 0)
-            playerLevel = 1;
-
-        bool success = EposData.TryGetEposObjectPercent(playerLevel, out ObjectPercentInfo);
-        if (success == false)
+        foreach(var data in TempDict)
         {
-            return;
+            TileRateList.Add(new Tuple<long, long>(data.Key, data.Value));
+            MaxTileRates += data.Value;
         }
 
-        ObjectPercentLists.Clear();
-        var fields = typeof(EposObjectPercentInfo).GetProperties(System.Reflection.BindingFlags.Public |
-                                                                System.Reflection.BindingFlags.NonPublic |
-                                                                System.Reflection.BindingFlags.Instance);
 
-        foreach (var field in fields)
-        {
-            if (field.PropertyType == typeof(Single))
-            {
-                float percentage = (float)field.GetValue(ObjectPercentInfo);
-                ObjectPercentLists.Add(new Tuple<string, float>(field.Name, percentage));
-                MaxObjectPercentage += percentage;
-            }
-        }
-
-        foreach (var item in ObjectPercentLists)
-        {
-            Debug.Log($"{item.Item1}, {item.Item2}");
-        }
     }
 
-    private void LoadTileObjectPercents()
+    private EposTileInfoInfo GetTileInfo()
     {
-        
-    }
-
-    private Tuple<Tile.TileType, int> GetTileType()
-    {
-        Tile.TileType tileType = Tile.TileType.Tier;
-        int tileTier = 0;
-        float rand = UnityEngine.Random.Range(0, MaxTilePercentage);
+        float rand = UnityEngine.Random.Range(0, MaxTileRates);
 
         float sum = 0;
-        string result = "";
-        foreach (var percent in TilePercentLists)
+        long result = 0;
+        foreach (var percent in TileRateList)
         {
             sum += percent.Item2;
             if (sum >= rand)
@@ -214,20 +183,8 @@ public class TileManager : Singleton<TileManager>
             }
         }
 
-        Regex r = new Regex("[0-9]"); 
-        bool checkNumber = r.IsMatch(result);
-        if (checkNumber == true)
-        {
-            tileType = Tile.TileType.Tier;
-            string numberString = Regex.Replace(result, @"\D", "");
-            tileTier = int.Parse(numberString);
-        }
-        else
-        {
-            tileType = (Tile.TileType)Enum.Parse(typeof(Tile.TileType), result);
-        }
-
-        return new Tuple<Tile.TileType, int>(tileType, tileTier);
+        EposData.TryGetEposTileInfo(result, out EposTileInfoInfo Info);
+        return Info;
     }
 
     public IEnumerator CreateTile(int x, int y)
@@ -239,10 +196,8 @@ public class TileManager : Singleton<TileManager>
         //GameObject TileObject = Instantiate(TilePrefab, TileContainer.transform);
         GameObject TileObject = TilePool.Get("Assets/Prefabs/Debug/Tile.prefab");
         Tile TileComponent = TileObject.GetComponent<Tile>();
-        var TileTier = GetTileType();
-        TileComponent.SetTileType(TileTier.Item1);
-        TileComponent.SetTier(TileTier.Item2);
-        
+        var TileInfo = GetTileInfo();
+        TileComponent.SetTileInfo(TileInfo);
         TileComponent.SetScale(TileScale);
         int mid = (int)TileNumber / 2;
         float PosX = (x - mid) * TileInterval;
@@ -461,9 +416,7 @@ public class TileManager : Singleton<TileManager>
         RemoveAllTile();
         LoadLevel();
         LoadTilePercents();
-        LoadObjectPercents();
-        LoadTileObjectPercents();
-        GetTileType();
+        GetTileInfo();
         CreateAllTile();
         TurnManager.Instance.StartTurn();
     }

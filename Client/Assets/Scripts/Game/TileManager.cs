@@ -270,7 +270,13 @@ public class TileManager : Singleton<TileManager>
                 StartCoroutine(CreateTile(i, j));
             }
         }
+        int mid = (int)TileNumber / 2;
+        Debug.Log(mid);
+        Player player = ResourceUtil.Instantiate("Player").GetComponent<Player>();
+        TileMap[mid][mid].SetObject(player);
 
+        ItemObject obj = ResourceUtil.Instantiate("ItemObject").GetComponent<ItemObject>();
+        TileMap[0][0].SetObject(obj);
     }
     public delegate bool CheckHanlder(Tile tile);
     public bool Check(Direction dir, int x, int y, CheckHanlder handler)

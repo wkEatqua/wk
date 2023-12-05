@@ -1,3 +1,4 @@
+using Apis;
 using Org.BouncyCastle.Bcpg;
 using Shared.Data;
 using Shared.Model;
@@ -15,6 +16,9 @@ namespace Epos
             this.data = data;
             ScriptData.TryGetGameText(data.DescText, out EposGameTextInfo info);
             Desc = info.Kor;
+
+
+
         }
 
         public string Name => data.Name;
@@ -24,13 +28,17 @@ namespace Epos
 
     public class RangeWeapon : InvenItem
     {
+        public readonly int Atk;
+        public readonly int Range;
         public RangeWeapon(EposItemInfo data) : base(data)
         {
+            Atk = data.BaseStat;
+            Range = data.Range;
         }
 
         public override void OnCollect()
         {
-            Inventory.Instance.AddItem(this);
+            ResourceUtil.Instantiate("RangeWeaponCanvas");
         }
         public override void Use()
         {

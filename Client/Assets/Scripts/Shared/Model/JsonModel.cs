@@ -269,6 +269,8 @@ namespace Shared.Model
         public long DescText { get; set; }
         public int BaseStat { get; set; }
         public int UseCount { get; set; }
+        public int Range { get; set; }
+
     }
     #endregion
     #endregion

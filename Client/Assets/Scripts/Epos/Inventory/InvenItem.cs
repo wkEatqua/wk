@@ -9,11 +9,12 @@ namespace Epos
     public abstract class InvenItem : Item
     {
         public ItemSlot Slot;
-        int UseCount;
+        int useCount;
+        public int UseCount => useCount;
         public virtual void Use()
         {
-            UseCount--;
-            if (UseCount == 0)
+            useCount--;
+            if (useCount == 0)
             {
                 if(Slot != null)
                 {
@@ -24,7 +25,7 @@ namespace Epos
 
         protected InvenItem(EposItemInfo data) : base(data)
         {
-            UseCount = data.UseCount;
+            useCount = data.UseCount;
         }
 
     }

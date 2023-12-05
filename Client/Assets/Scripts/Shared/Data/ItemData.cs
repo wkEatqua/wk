@@ -12,7 +12,7 @@ namespace Shared.Data
         public long DescText => data.DescText;
         public int BaseStat => data.BaseStat;
         public int UseCount => data.UseCount;
-
+        public int Range => data.Range;
         readonly EposItem data;
         public EposItemInfo(EposItem data)
         {

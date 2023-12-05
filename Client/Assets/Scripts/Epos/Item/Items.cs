@@ -13,7 +13,12 @@ namespace Epos
         public Item(EposItemInfo data)
         {
             this.data = data;
+            ScriptData.TryGetGameText(data.DescText, out EposGameTextInfo info);
+            Desc = info.Kor;
         }
+
+        public string Name => data.Name;
+        public readonly string Desc;
         public abstract void OnCollect();
     }
 

@@ -15,7 +15,8 @@ namespace Epos
         private void Start()
         {
             ItemData.TryGetItemInfo(ItemID, out EposItemInfo itemInfo);
-            item = Activator.CreateInstance(Type.GetType("Epos."+itemInfo.Type.ToString()), itemInfo) as Item;
+            item = Activator.CreateInstance(Type.GetType("Epos." + itemInfo.Type.ToString()), itemInfo) as Item;
+            Debug.Log(item.Desc);
         }
         public virtual void Collect()
         {

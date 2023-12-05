@@ -37,6 +37,12 @@ namespace Shared.Model
     {
         MeleeWeapon,RangeWeapon,HpPotion,Armour,Gold,
     }
+
+    public class EposGameText : JsonModel
+    {
+        public long ID { get; set; }
+        public string Kor { get; set; }
+    }
     #region 사상지평
     [System.Serializable]
     public class ScenarioWorld : JsonModel

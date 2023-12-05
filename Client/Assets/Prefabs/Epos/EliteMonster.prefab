@@ -55,8 +55,8 @@ MonoBehaviour:
     CritProb: 0
     CritDmg: 125
     DmgTake: 100
-    MoveSpeed: 2
-  moveType: 1
+    MoveSpeed: 1
+  moveType: 0
 --- !u!1 &3994403954287449530
 GameObject:
   m_ObjectHideFlags: 0

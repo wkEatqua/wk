@@ -132,7 +132,7 @@ namespace Epos
                 }
                 else
                 {
-                    float dmg = value = curHp;
+                    float dmg = value - curHp;
                     DmgTextShow.ShowDmg(transform.position, Color.green, dmg);
                 }
 

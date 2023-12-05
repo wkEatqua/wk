@@ -46,7 +46,9 @@ namespace Epos
             if (obj != null)
             {
                 Destroy(obj.gameObject);
+                obj = null;
             }
+            selectable = false;
         }
 
         public void SetObject(TileObject obj)

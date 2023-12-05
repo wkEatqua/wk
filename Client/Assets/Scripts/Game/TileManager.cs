@@ -43,9 +43,9 @@ public class TileManager : Singleton<TileManager>
 
 
     Tweener tweener = null;
-    public Tweener Tweener => tweener;
-
+    
     public readonly Queue<(int x, int y)> graceTiles = new();
+    public (int x, int y) playerLastPos = (-1, -1);
 
     private void Init()
     {
@@ -366,6 +366,17 @@ public class TileManager : Singleton<TileManager>
         monster.transform.rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
         TileMap[(int)TileNumber - 1][(int)TileNumber - 1].SetObject(monster);
         monster.GetComponentInChildren<Renderer>().material.color = Color.red;
+
+        ArmourObject armourObj = ResourceUtil.Instantiate("ArmourObj").GetComponent<ArmourObject>();
+        TileMap[0][0].SetObject(armourObj);
+        MeleeWeaponObject wpObj = ResourceUtil.Instantiate("MeleeWeaponObj").GetComponent<MeleeWeaponObject>();
+        TileMap[0][1].SetObject(wpObj);
+        GoldObject goldObject = ResourceUtil.Instantiate("GoldObj").GetComponent<GoldObject>();
+        TileMap[0][2].SetObject(goldObject);
+        HpPotionObject hpObj = ResourceUtil.Instantiate("HpPotionObj").GetComponent<HpPotionObject>();
+        TileMap[0][3].SetObject(hpObj);
+
+
     }
     public delegate bool CheckHanlder(Tile tile);
     public bool Check(Direction dir, int x, int y, CheckHanlder handler)
@@ -479,12 +490,27 @@ public class TileManager : Singleton<TileManager>
 
             directions = directions.Where(dir => !Check(dir, x, y, (tile) =>
             {
-                return tile.Selector.Obj != null && tile.Selector.Obj is Player;
+                if(tile.Selector.Obj != null && tile.Selector.Obj is Player)
+                {
+                    return true;
+                }
+                if(playerLastPos.x == tile.X && playerLastPos.y == tile.Y)
+                {
+                    return true;
+                }
+
+                return false;
             })).ToList();
 
             RemoveTile(x, y);
-
-            yield return PullTiles(x, y, directions[UnityEngine.Random.Range(0, directions.Count)]);
+            if (directions.Count == 0)
+            {
+                yield return StartCoroutine(CreateTile(x, y));
+            }
+            else
+            {
+                yield return PullTiles(x, y, directions[UnityEngine.Random.Range(0, directions.Count)]);
+            }
         }
 
         while (graceTiles.Count > 0)

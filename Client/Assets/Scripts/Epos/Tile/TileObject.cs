@@ -31,7 +31,7 @@ namespace Epos
 
         public void Die()
         {
-            transform.DOMoveZ(transform.position.z + 2, 0.5f).OnComplete(() => { Destroy(gameObject); tile.SetObject(null); });
+            transform.DOMoveZ(transform.position.z + 2, 0.5f).OnComplete(() => { tile.SetObject(null); Destroy(gameObject);  });
         }
     }
 }

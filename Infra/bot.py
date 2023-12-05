@@ -10,8 +10,8 @@ class WkBot(commands.Bot):
         super().__init__(command_prefix="!", intents=intents)
 
     async def setup_hook(self):
-        self.tree.copy_global_to(guild=os.environ["GUILD_ID"])
-        await self.tree.sync(guild=os.environ["GUILD_ID"])
+        self.tree.copy_global_to(guild=discord.Object(id=os.environ["GUILD_ID"]))
+        await self.tree.sync(guild=discord.Object(id=os.environ["GUILD_ID"]))
 
 
 intents = discord.Intents.all()

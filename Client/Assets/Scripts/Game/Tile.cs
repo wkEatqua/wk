@@ -65,6 +65,7 @@ public class Tile : MonoBehaviour
     {
         Type = TileType.Tier;
     }
+  
     public void SetScale(float Scale)
 	{
 		transform.localScale = new Vector3(Scale, 0.1f, Scale);

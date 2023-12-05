@@ -6,7 +6,7 @@ namespace Epos
 {
     public class ArmourObject : ItemObject
     {
-        readonly Armour armour = new (3);
+        readonly Armour armour = new (3,3);
 
         public override void Collect()
         {
@@ -18,10 +18,11 @@ namespace Epos
     public class Armour
     {
         public int durability;
-
-        public Armour(int durability)
+        public int count;
+        public Armour(int durability, int count)
         {
             this.durability = durability;
+            this.count = count;
         }
     }
 }

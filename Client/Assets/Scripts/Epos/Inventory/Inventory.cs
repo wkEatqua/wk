@@ -6,16 +6,16 @@ using UnityEngine.UI;
 
 namespace Epos
 {
-    public class Inventory : MonoBehaviour
+    public class Inventory : Singleton<Inventory>
     {
         List<ItemSlot> slots = new();
 
         public int maxSlot;
 
-        private void Awake()
+        protected override void Awake()
         {
             slots = GetComponentsInChildren<ItemSlot>().ToList();
-
+            maxSlot = Mathf.Clamp(maxSlot, 0, slots.Count);
             ResetSlots();
         }
 
@@ -37,11 +37,23 @@ namespace Epos
         public void AddSlot(int amount)
         {
             maxSlot += amount;
-            if(maxSlot > slots.Count)
+            if (maxSlot > slots.Count)
             {
                 maxSlot = slots.Count;
             }
         }
 
+        public bool AddItem(InvenItem item)
+        {
+            for (int i = 0; i < maxSlot; i++)
+            {
+                if (slots[i].Item == null)
+                {
+                    slots[i].Add(item);
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

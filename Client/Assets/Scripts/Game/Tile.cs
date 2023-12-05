@@ -40,6 +40,7 @@ public class Tile : MonoBehaviour
     public TileSelector Selector => selector;
     public enum TileType
     {
+        Normal,
         Tier,        
         BlankTile,
         EnvironmentTile,

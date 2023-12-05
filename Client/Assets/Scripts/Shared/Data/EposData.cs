@@ -150,6 +150,7 @@ namespace Shared.Data
     {
         public long ID => data.ID;
         public string Tile => data.Tile;
+        public string ItemType => data.ItemType;
         public string Type => data.Type;
         public int Tier => data.Tier;
         public string Modeling => data.Modeling;

@@ -31,7 +31,11 @@ public class TileManager : Singleton<TileManager>
     [SerializeField]
     private GameObject TilePrefab;
 
+    // TilePool
     AddressablePooling TilePool;
+
+    // ObjectPool
+    AddressablePooling ObjectPool;
 
     public List<List<Tile>> TileMap;
 
@@ -58,6 +62,8 @@ public class TileManager : Singleton<TileManager>
         TileMap = new List<List<Tile>>();
 
         TilePool = new AddressablePooling("Tile");
+
+        ObjectPool = new AddressablePooling("Object");
     }
     private void Start()
     {
@@ -192,20 +198,27 @@ public class TileManager : Singleton<TileManager>
         if (TileMap[x][y] != null)
             yield break;
 
-        // Instantiate -> Pooling
-        //GameObject TileObject = Instantiate(TilePrefab, TileContainer.transform);
-        GameObject TileObject = TilePool.Get("Assets/Prefabs/Debug/Tile.prefab");
-        Tile TileComponent = TileObject.GetComponent<Tile>();
+        // Create Tile and Set TileInfo
+        GameObject TilePrefab = TilePool.Get("Assets/Prefabs/Debug/Tile.prefab");
+        Tile TileComponent = TilePrefab.GetComponent<Tile>();
         var TileInfo = GetTileInfo();
         TileComponent.SetTileInfo(TileInfo);
         TileComponent.SetScale(TileScale);
+
+        // Create Object on Tile
+        GameObject ObjectPrefab = ObjectFactory.CreateObject(TileInfo, ObjectPool.Get("DebugObj"));
+        TileComponent.SetObject(ObjectPrefab.GetComponent<TileObject>());
+
+        // Set TilePosition
         int mid = (int)TileNumber / 2;
         float PosX = (x - mid) * TileInterval;
         float PosY = (y - mid) * TileInterval;
         TileComponent.SetPosition(PosX, PosY);
         TileComponent.SetIndex(x, y);
+
+        // Keep TileComponent in memory
         TileMap[x][y] = TileComponent;
-        TileObject.transform.SetParent(TileContainer.transform);
+        TilePrefab.transform.SetParent(TileContainer.transform);
         yield return null;
     }
     public bool CheckIndex(int x, int y)

@@ -284,6 +284,7 @@ namespace Shared.Model
     {
         public long ID { get; set; }
         public string Tile { get; set; }
+        public string ItemType { get; set; }
         public string Type { get; set; }
         public int Tier { get; set; }
         public string Modeling { get; set; }

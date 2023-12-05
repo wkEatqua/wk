@@ -22,16 +22,14 @@ namespace Epos
             button = GetComponent<Button>();
             button.onClick.AddListener(() =>
             {
-                if (item != null) item.Use();
+                item?.Use();
             });
         }
         public void Add(InvenItem item)
         {
             this.item = item;
             if(item != null)
-            {
-                item.transform.SetParent(transform);
-                item.gameObject.SetActive(true);
+            {                
                 item.Slot = this;
             }
         }

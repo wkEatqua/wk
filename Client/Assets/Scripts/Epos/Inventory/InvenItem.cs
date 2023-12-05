@@ -1,17 +1,19 @@
 using Epos;
+using Shared.Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Epos
 {
-    public abstract class InvenItem : MonoBehaviour
+    public abstract class InvenItem : Item
     {
         public ItemSlot Slot;
+        int UseCount;
         public virtual void Use()
         {
-            useCount--;
-            if (useCount == 0)
+            UseCount--;
+            if (UseCount == 0)
             {
                 if(Slot != null)
                 {
@@ -19,7 +21,11 @@ namespace Epos
                 }
             }
         }
-        protected int useCount;
-        public int UseCount => useCount;
+
+        protected InvenItem(EposItemInfo data) : base(data)
+        {
+            UseCount = data.UseCount;
+        }
+
     }
 }

@@ -146,6 +146,7 @@ namespace Shared.Data
         }
     }
 
+    
     public class EposData : Database
 	{
 		public static IDictionary<long, EposLevelInfo> LevelDict = new Dictionary<long, EposLevelInfo>();
@@ -154,7 +155,7 @@ namespace Shared.Data
         public static IDictionary<long, EposTileObjectPercentInfo> TileObjectPercentDict = new Dictionary<long, EposTileObjectPercentInfo>();
         static IDictionary<long, EposLevelExpInfo> MaxExpDict = new Dictionary<long, EposLevelExpInfo>();
         static IDictionary<TileDifficulty, EposTileExpInfo> TileExpDict = new Dictionary<TileDifficulty, EposTileExpInfo>();
-
+        
 		public override void ProcessDataLoad(string path)
 		{
 			LevelDict.Clear();
@@ -194,8 +195,9 @@ namespace Shared.Data
 
                 TileObjectPercentDict = TileObjectPercents.ToDictionary(kv => kv.TileTier, kv => new EposTileObjectPercentInfo(kv));
             }
-		}
 
+		}
+       
 		public static bool TryGetEposLevel(long Level, out EposLevelInfo Info)
 		{
 			return LevelDict.TryGetValue(Level, out Info);

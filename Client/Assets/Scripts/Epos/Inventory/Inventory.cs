@@ -27,6 +27,13 @@ namespace Epos
                 slot.ChangeClickEvent(clickEvent);
             }
         }
+        public void ClickEventsBackToNormal()
+        {
+            foreach (ItemSlot slot in slots)
+            {
+                slot.ChangeClickEvent(s => s.Item?.Use());
+            }
+        }
         void ResetSlots()
         {
             for (int i = 0; i < slots.Count; i++)

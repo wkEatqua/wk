@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 namespace Epos
 {
-    public class TileSelector : MonoBehaviour
+    public class TileSelector : MonoBehaviour,IRaycast
     {
         [HideInInspector] public UnityEvent OnSelected = new();
         [HideInInspector] public UnityEvent OnConfirmed = new();
@@ -31,16 +32,7 @@ namespace Epos
                 }
             });
             OnConfirmed.AddListener(() => TileManager.Instance.Traverse(x => x.Selector.selectable = false));           
-        }
-
-        private void OnMouseDown()
-        {
-            if (selectable)
-            {
-                Debug.Log("Clicked");
-                OnSelected.Invoke();
-            }
-        }
+        }       
 
         private void OnDisable()
         {
@@ -64,6 +56,7 @@ namespace Epos
 
         private void Update()
         {
+            
             switch (tile.Type)
             { 
                 case Tile.TileType.Grace:
@@ -80,6 +73,15 @@ namespace Epos
                         render.material.color = Color.white;
                     }
                     break;
+            }
+        }
+
+        public void OnRayCast()
+        {
+            if (selectable)
+            {
+                Debug.Log("Clicked");
+                OnSelected.Invoke();
             }
         }
     }

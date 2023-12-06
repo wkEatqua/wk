@@ -50,6 +50,7 @@ namespace Epos
             item.Slot = null;
             InvenItem temp = item;
             item = null;
+            itemImage.color = Color.white;
             return temp;
         }
 

@@ -26,7 +26,6 @@ namespace Epos.UI
                 slot.Remove();
                 slot.Add(rightItem);
                 GetComponentInParent<RangeWeaponCanvas>().Return();
-                Debug.Log("확인");
             });
             cancel.onClick.AddListener(() =>
             {

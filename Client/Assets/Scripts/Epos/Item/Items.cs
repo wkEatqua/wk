@@ -48,6 +48,7 @@ namespace Epos
         public override void Use()
         {
             base.Use();
+            Debug.Log("남은 사용 횟수 : " + UseCount);
         }
     }
     public class GoldItem : Item

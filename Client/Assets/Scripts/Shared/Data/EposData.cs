@@ -183,6 +183,7 @@ namespace Shared.Data
         public EposTrophyInfo(EposTrophy data) { this.data = data; }
     }
 
+    
     public class EposData : Database
 	{
 		public static IDictionary<long, EposLevelInfo> LevelDict = new Dictionary<long, EposLevelInfo>();
@@ -198,7 +199,7 @@ namespace Shared.Data
 
         static IDictionary<long, EposLevelExpInfo> MaxExpDict = new Dictionary<long, EposLevelExpInfo>();
         static IDictionary<TileDifficulty, EposTileExpInfo> TileExpDict = new Dictionary<TileDifficulty, EposTileExpInfo>();
-
+        
 		public override void ProcessDataLoad(string path)
 		{
 			LevelDict.Clear();

@@ -32,8 +32,11 @@ namespace Shared.Model
     {
         None, Easy, Normal, Danger, Hard, Nightmare, Disaster
     }
-    #endregion
 
+    public enum ItemType
+    {
+        MeleeWeapon,RangeWeapon,HpPotion,Armour,Gold,
+    }
     #region 사상지평
     [System.Serializable]
     public class ScenarioWorld : JsonModel
@@ -311,6 +314,19 @@ namespace Shared.Model
         public string Type4 { get; set; }
         public long Rate4 { get; set; }
     }
+
+    #region 아이템 관련
+
+    public class EposItem : JsonModel
+    {
+        public long ID { get; set; }
+        public ItemType Type { get; set; }
+        public string Name { get; set; }
+        public long DescText { get; set; }
+        public int BaseStat { get; set; }
+        public int UseCount { get; set; }
+    }
+    #endregion
     #endregion
 
 }

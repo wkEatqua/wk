@@ -206,8 +206,12 @@ public class TileManager : Singleton<TileManager>
         TileComponent.SetScale(TileScale);
 
         // Create Object on Tile
-        GameObject ObjectPrefab = ObjectFactory.CreateObject(TileInfo, ObjectPool.Get("DebugObj"));
-        TileComponent.SetObject(ObjectPrefab.GetComponent<TileObject>());
+        var TempObject = ObjectPool.Get("DebugObj");
+        TileObject TileObject = ObjectFactory.CreateObject(TileInfo, TempObject);
+        if (TileObject == null)
+            ObjectPool.Return(TempObject);
+        else
+            TileComponent.SetObject(TileObject);
 
         // Set TilePosition
         int mid = (int)TileNumber / 2;

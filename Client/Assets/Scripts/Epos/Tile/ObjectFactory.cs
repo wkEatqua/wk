@@ -10,18 +10,19 @@ namespace Epos
     public enum ItemType
     {
         Monster,
-        MeleeWepon,
+        MeleeWeapon,
         Armour,
         Gold,
         Card,
         Environment,
-        HP
+        HP,
+        BlankTile
     }
     public class ObjectFactory : MonoBehaviour
     {
         private static bool initialized = false;
 
-        public static GameObject CreateObject(EposTileInfoInfo tileInfo, GameObject gameObject)
+        public static TileObject CreateObject(EposTileInfoInfo tileInfo, GameObject gameObject)
         {
             if (tileInfo == null || gameObject == null)
             {
@@ -29,10 +30,45 @@ namespace Epos
                 return null;
             }
 
+            long ObjectID = GetObjectID(tileInfo);
+            EposData.TryGetEposObject(ObjectID, out EposObjectInfo ObjectInfo);
+            // Check Object Info
+            ItemType type = (ItemType)Enum.Parse(typeof(ItemType), ObjectInfo.ItemType);
+            switch(type)
+            {
+                case ItemType.MeleeWeapon:
+                    gameObject.AddComponent<MeleeWeaponObject>();
+                    break;
+                case ItemType.Armour:
+                    gameObject.AddComponent<ArmourObject>();
+                    break;
+                case ItemType.Gold:
+                    gameObject.AddComponent<GoldObject>();
+                    break;
+                case ItemType.Card:
+                case ItemType.Environment:
+                case ItemType.BlankTile:
+
+                    break;
+                case ItemType.HP:
+                    gameObject.AddComponent<HpPotionObject>();
+                    break;
+            }
+
+            var objectComponent = gameObject.GetComponent<TileObject>();
+            if (objectComponent != null)
+            {
+                objectComponent.SetObjectInfo(ObjectInfo);
+            }
+                
+            return objectComponent;
+        }
+
+        private static long GetObjectID(EposTileInfoInfo tileInfo)
+        {
             Tile.TileType tileType = (Tile.TileType)Enum.Parse(typeof(Tile.TileType), tileInfo.Tile);
             long ObjectID = 0;
-            Debug.Log(tileInfo.GroupID);
-            switch(tileType)
+            switch (tileType)
             {
                 case Tile.TileType.Tier:
                     {
@@ -60,36 +96,7 @@ namespace Epos
                     break;
             }
 
-            EposData.TryGetEposObject(ObjectID, out EposObjectInfo ObjectInfo);
-            // Check Object Info
-            ItemType type = (ItemType)Enum.Parse(typeof(ItemType), ObjectInfo.ItemType);
-            switch(type)
-            {
-                case ItemType.MeleeWepon:
-                    gameObject.AddComponent<MeleeWeaponObject>();
-                    break;
-                case ItemType.Armour:
-                    gameObject.AddComponent<ArmourObject>();
-                    break;
-                case ItemType.Gold:
-                    gameObject.AddComponent<GoldObject>();
-                    break;
-                case ItemType.Card:
-                    //gameObject.AddComponent<CardObject>();
-                    break;
-                case ItemType.Environment:
-                    //gameObject.AddComponent<EnvironmentObject>();
-                    break;
-                case ItemType.HP:
-                    gameObject.AddComponent<HpPotionObject>();
-                    break;
-            }
-
-            var objectComponent = gameObject.GetComponent<TileObject>();
-            if (objectComponent != null)
-                objectComponent.SetObjectInfo(ObjectInfo);
-
-            return gameObject;
+            return ObjectID;
         }
         private static T GetObjectID<T>(List<T> Infos)
         {

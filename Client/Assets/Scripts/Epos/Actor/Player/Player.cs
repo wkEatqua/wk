@@ -11,6 +11,8 @@ namespace Epos
         List<MeleeWeapon> meleeWeapons = new();
         List<Armour> armours = new();
 
+        public List<MeleeWeapon> MeleeWeapons => meleeWeapons;
+        public List<Armour> Armours => armours;
         public override int Atk
         {
             get
@@ -42,6 +44,7 @@ namespace Epos
             foreach (Armour armour in armours)
             {
                 int dur = armour.durability;
+                armour.count--;
                 if (dur >= dmg)
                 {
                     armour.durability -= dmg;
@@ -54,7 +57,7 @@ namespace Epos
                 }
             }
 
-            armours = armours.Where(x => x.durability > 0).ToList();
+            armours = armours.Where(x => x.durability > 0 && x.count > 0).ToList();
 
             if (dmg < 0) dmg = 0;
 

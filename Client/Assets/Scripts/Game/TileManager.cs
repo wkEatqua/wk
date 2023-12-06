@@ -271,26 +271,6 @@ public class TileManager : Singleton<TileManager>
             }
         }
 
-        int mid = (int)TileNumber / 2;
-        Player player = ResourceUtil.Instantiate("Player").GetComponent<Player>();
-        player.transform.rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
-        TileMap[mid][mid].SetObject(player);
-
-        EliteMonster monster = ResourceUtil.Instantiate("EliteMonster").GetComponent<EliteMonster>();
-        monster.transform.rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
-        TileMap[(int)TileNumber - 1][(int)TileNumber - 1].SetObject(monster);
-        monster.GetComponentInChildren<Renderer>().material.color = Color.red;
-
-        ArmourObject armourObj = ResourceUtil.Instantiate("ArmourObj").GetComponent<ArmourObject>();
-        TileMap[0][0].SetObject(armourObj);
-        MeleeWeaponObject wpObj = ResourceUtil.Instantiate("MeleeWeaponObj").GetComponent<MeleeWeaponObject>();
-        TileMap[0][1].SetObject(wpObj);
-        GoldObject goldObject = ResourceUtil.Instantiate("GoldObj").GetComponent<GoldObject>();
-        TileMap[0][2].SetObject(goldObject);
-        HpPotionObject hpObj = ResourceUtil.Instantiate("HpPotionObj").GetComponent<HpPotionObject>();
-        TileMap[0][3].SetObject(hpObj);
-
-
     }
     public delegate bool CheckHanlder(Tile tile);
     public bool Check(Direction dir, int x, int y, CheckHanlder handler)

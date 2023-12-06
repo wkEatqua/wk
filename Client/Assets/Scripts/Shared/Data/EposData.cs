@@ -8,6 +8,21 @@ using Shared.Model;
 
 namespace Shared.Data
 {
+    public class EposInfo
+    {
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            var fields = GetType().GetProperties();
+            foreach (var field in fields)
+            {
+                sb.AppendLine($"{field.Name}, {field.GetValue(this)}");
+            }
+
+            return sb.ToString();
+        }
+    }
+
 	public class EposLevelInfo
 	{
 		public long Level => data.Level;
@@ -49,110 +64,139 @@ namespace Shared.Data
             this.data = data;
         }
     }
-	
-    public class EposTilePercentInfo
+
+    public class EposTileInfo : EposInfo
     {
-        public long PlayerLevel => data.PlayerLevel;
-        public float Level1Tile => data.Level1Tile;
-        public float Level2Tile => data.Level2Tile;
-        public float Level3Tile => data.Level3Tile;
-        public float Level4Tile => data.Level4Tile;
-        public float Level5Tile => data.Level5Tile;
-        public float Level6Tile => data.Level6Tile;
-        public float EmptyTile => data.EmptyTile;
-        public float UnmovableTile => data.UnmovableTile;
-        public float ObjectTile => data.ObjectTile;
-        
-        readonly EposTilePercent data;
+        public long ID => data.ID;
+        public long Lv => data.Lv;
+        public long Tile1 => data.Tile1;
+        public long TileRate1 => data.TileRate1;
+        public long Tile2 => data.Tile2;
+        public long TileRate2 => data.TileRate2;
+        public long Tile3 => data.Tile3;
+        public long TileRate3 => data.TileRate3;
+        public long Tile4 => data.Tile4;
+        public long TileRate4 => data.TileRate4;
+        public long Tile5 => data.Tile5;
+        public long TileRate5 => data.TileRate5;
+        public long Tile6 => data.Tile6;
+        public long TileRate6 => data.TileRate6;
+        public long Tile7 => data.Tile7;
+        public long TileRate7 => data.TileRate7;
+        public long Tile8 => data.Tile8;
+        public long TileRate8 => data.TileRate8;
+        public long Tile9 => data.Tile9;
+        public long TileRate9 => data.TileRate9;
 
-        public EposTilePercentInfo(EposTilePercent data) { this.data = data; }
+        readonly EposTile data;
+        public EposTileInfo(EposTile data) { this.data = data; }
+    }
+    public class EposTileInfoInfo : EposInfo
+    {
+        public long GroupID => data.GroupID;
+        public string Tile => data.Tile;
+        public int Tier => data.Tier;
+        public string TileModel => data.TileModel;
+        public string Tilepattern => data.Tilepattern;
+        public int EXP => data.EXP;
 
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"PlayerLevel : {PlayerLevel}");
-            sb.AppendLine($"Level1Tile : {Level1Tile}");
-            sb.AppendLine($"Level2Tile : {Level2Tile}");
-            sb.AppendLine($"Level3Tile : {Level3Tile}");
-            sb.AppendLine($"Level4Tile : {Level4Tile}");
-            sb.AppendLine($"Level5Tile : {Level5Tile}");
-            sb.AppendLine($"Level6Tile : {Level6Tile}");
-            sb.AppendLine($"EmptyTile : {EmptyTile}");
-            sb.AppendLine($"UnmovableTile : {UnmovableTile}");
-            sb.AppendLine($"ObjectTile : {ObjectTile}");
-            return sb.ToString();
-        }
+        readonly Shared.Model.EposTileInfo data;
+        public EposTileInfoInfo(Shared.Model.EposTileInfo data) { this.data = data; } 
     }
 
-    public class EposObjectPercentInfo
+    public class EposTierTileInfo : EposInfo
     {
-        public long PlayerLevel => data.PlayerLevel;
-        public float SmallHPRecover => data.SmallHPRecover;
-        public float LargeHPRecover => data.LargeHPRecover;
-        public float Event => data.Event;
+        public long GroupID => data.GroupID;
+        public string Tile => data.Tile;
+        public long Object => data.Object;
+        public long ObjectRate => data.ObjectRate;
 
-        readonly EposObjectPercent data;
-        public EposObjectPercentInfo(EposObjectPercent data) { this.data = data; }
+        readonly EposTierTile data;
+        public EposTierTileInfo(EposTierTile data) { this.data = data; }
+    }
+    
+    public class EposInteractionTileInfo : EposInfo
+    {
+        public long GroupID => data.GroupID;
+        public string Tile => data.Tile;
+        public long Object => data.Object;
+        public long ObjectRate => data.ObjectRate;
 
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"PlayerLevel : {PlayerLevel}");
-            sb.AppendLine($"SmallHPRecover : {SmallHPRecover}");
-            sb.AppendLine($"LargeHPRecover : {LargeHPRecover}");
-            sb.AppendLine($"Event : {Event}");
-            return sb.ToString();
-        }
+        readonly EposInteractionTile data;
+        public EposInteractionTileInfo(EposInteractionTile data) { this.data = data; }
     }
 
-    public class EposTileObjectPercentInfo
+    public class EposEnvironmentTileInfo : EposInfo
     {
-        public long TileTier => data.TileTier;
-        public float SmallHPRecover => data.SmallHPRecover;
-        public float LargeHPRecover => data.LargeHPRecover;
-        public float Level1Monster => data.Level1Monster;
-        public float Level2Monster => data.Level2Monster;
-        public float Level3Monster => data.Level3Monster;
-        public float Level4Monster => data.Level4Monster;
-        public float Level5Monster => data.Level5Monster;
-        public float Level6Monster => data.Level6Monster;
-        public float Weapon => data.Weapon;
-        public float Armor => data.Armor;
-        public float SmallGold => data.SmallGold;
-        public float LargeGold => data.LargeGold;
-        public float Card => data.Card;
+        public long GroupID => data.GroupID;
+        public string Tile => data.Tile;
+        public long Object => data.Object;
+        public long ObjectRate => data.ObjectRate;
 
-        readonly EposTileObjectPercent data;
-        public EposTileObjectPercentInfo(EposTileObjectPercent data) { this.data = data; }
+        readonly EposEnvironmentTile data;
+        public EposEnvironmentTileInfo(EposEnvironmentTile data) { this.data = data; }
+    }
 
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"TileTier : {TileTier}");
-            sb.AppendLine($"SmallHPRecover : {SmallHPRecover}");
-            sb.AppendLine($"LargeHPRecover : {LargeHPRecover}");
-            sb.AppendLine($"Level1Monster : {Level1Monster}");
-            sb.AppendLine($"Level2Monster : {Level2Monster}");
-            sb.AppendLine($"Level3Monster : {Level3Monster}");
-            sb.AppendLine($"Level4Monster : {Level4Monster}");
-            sb.AppendLine($"Level5Monster : {Level5Monster}");
-            sb.AppendLine($"Level6Monster : {Level6Monster}");
-            sb.AppendLine($"Weapon : {Weapon}");
-            sb.AppendLine($"Armor : {Armor}");
-            sb.AppendLine($"SmallGold : {SmallGold}");
-            sb.AppendLine($"LargeGold : {LargeGold}");
-            sb.AppendLine($"Card : {Card}");
-            return sb.ToString();
-        }
+    public class EposBlankTileInfo : EposInfo
+    {
+        public long ID => data.ID;
+        public string Tile => data.Tile;
+        public long Object => data.Object;
+        public long ObjectRate => data.ObjectRate;
+        readonly EposBlankTile data;
+        public EposBlankTileInfo(EposBlankTile data) { this.data = data; }
+    }
+    public class EposObjectInfo : EposInfo
+    {
+        public long ID => data.ID;
+        public string Tile => data.Tile;
+        public string ItemType => data.ItemType;
+        public string Type => data.Type;
+        public int Tier => data.Tier;
+        public string Modeling => data.Modeling;
+        public long ProduceInfo => data.ProduceInfo;
+        public string RewardType => data.RewardType;
+        public long Reward => data.Reward;
+        public long Trophy => data.Trophy;
+
+        readonly EposObject data;
+        public EposObjectInfo(EposObject data) { this.data = data; }
+    }
+
+    public class EposTrophyInfo : EposInfo
+    {
+        public long ID => data.ID;
+        public long TrophyID1 => data.TrophyID1;
+        public string Type1 => data.Type1;
+        public long Rate1 => data.Rate1;
+        public long TrophyID2 => data.TrophyID2;
+        public string Type2 => data.Type2;
+        public long Rate2 => data.Rate2;
+        public long TrophyID3 => data.TrophyID3;
+        public string Type3 => data.Type3;
+        public long Rate3 => data.Rate3;
+        public long TrophyID4 => data.TrophyID4;
+        public string Type4 => data.Type4;
+        public long Rate4 => data.Rate4;
+
+        readonly EposTrophy data;
+        public EposTrophyInfo(EposTrophy data) { this.data = data; }
     }
 
     
     public class EposData : Database
 	{
 		public static IDictionary<long, EposLevelInfo> LevelDict = new Dictionary<long, EposLevelInfo>();
-        public static IDictionary<long, EposTilePercentInfo> TilePercentDict = new Dictionary<long, EposTilePercentInfo>();
-        public static IDictionary<long, EposObjectPercentInfo> ObjectPercentDict = new Dictionary<long, EposObjectPercentInfo>();
-        public static IDictionary<long, EposTileObjectPercentInfo> TileObjectPercentDict = new Dictionary<long, EposTileObjectPercentInfo>();
+        public static IDictionary<long, EposTileInfo> TileDict = new Dictionary<long, EposTileInfo>();
+        public static IDictionary<long, EposTileInfoInfo> TileInfoDict = new Dictionary<long, EposTileInfoInfo>();
+        public static readonly IDictionary<long, List<EposTierTileInfo>> TierTileDict = new Dictionary<long, List<EposTierTileInfo>>();
+        public static readonly IDictionary<long, List<EposInteractionTileInfo>> InteractionTileDict = new Dictionary<long, List<EposInteractionTileInfo>>();
+        public static readonly IDictionary<long, List<EposEnvironmentTileInfo>> EnvironmentTileDict = new Dictionary<long, List<EposEnvironmentTileInfo>>();
+        public static readonly IDictionary<long, List<EposBlankTileInfo>> BlankTileDict = new Dictionary<long, List<EposBlankTileInfo>>();
+        public static IDictionary<long, EposObjectInfo> ObjectDict = new Dictionary<long, EposObjectInfo>();
+        public static IDictionary<long, EposTrophyInfo> TrophyDict = new Dictionary<long, EposTrophyInfo>();
+
+
         static IDictionary<long, EposLevelExpInfo> MaxExpDict = new Dictionary<long, EposLevelExpInfo>();
         static IDictionary<TileDifficulty, EposTileExpInfo> TileExpDict = new Dictionary<TileDifficulty, EposTileExpInfo>();
         
@@ -175,48 +219,107 @@ namespace Shared.Data
                 TileExpDict = new Data<EposTileExp>().GetData(path).ToDictionary(kv => kv.Difficulty, kv => new EposTileExpInfo(kv));
             }
 
-            TilePercentDict.Clear();
+            TileDict.Clear();
             {
-                var Percents = new Data<EposTilePercent>().GetData(path);
+                var Tiles = new Data<EposTile>().GetData(path);
 
-                TilePercentDict = Percents.ToDictionary(kv => kv.PlayerLevel, kv => new EposTilePercentInfo(kv));
+                TileDict = Tiles.ToDictionary(kv => kv.Lv, kv => new EposTileInfo(kv));
             }
 
-            ObjectPercentDict.Clear();
+            TileInfoDict.Clear();
             {
-                var ObjectPercents = new Data<EposObjectPercent>().GetData(path);
+                var TileInfos = new Data<Model.EposTileInfo>().GetData(path);
 
-                ObjectPercentDict = ObjectPercents.ToDictionary(kv => kv.PlayerLevel, kv => new EposObjectPercentInfo(kv));
+                TileInfoDict = TileInfos.ToDictionary(kv => kv.GroupID, kv => new EposTileInfoInfo(kv));
             }
 
-            TileObjectPercentDict.Clear();
+            TierTileDict.Clear();
             {
-                var TileObjectPercents = new Data<EposTileObjectPercent>().GetData(path);
+                var TierTiles = new Data<EposTierTile>().GetData(path);
 
-                TileObjectPercentDict = TileObjectPercents.ToDictionary(kv => kv.TileTier, kv => new EposTileObjectPercentInfo(kv));
+                foreach(var TierTile in TierTiles)
+                {
+                    if (!TierTileDict.ContainsKey(TierTile.GroupID))
+                    {
+                        TierTileDict.Add(TierTile.GroupID, new());
+                    }
+
+                    TierTileDict[TierTile.GroupID] ??= new();
+
+                    TierTileDict[TierTile.GroupID].Add(new EposTierTileInfo(TierTile));
+                }
             }
 
-		}
-       
+            InteractionTileDict.Clear();
+            {
+                var InteractionTiles = new Data<EposInteractionTile>().GetData(path);
+
+                foreach(var InteractionTile in InteractionTiles)
+                {
+                    if (!InteractionTileDict.ContainsKey(InteractionTile.GroupID))
+                    {
+                        InteractionTileDict.Add(InteractionTile.GroupID, new());
+                    }
+
+                    InteractionTileDict[InteractionTile.GroupID] ??= new();
+
+                    InteractionTileDict[InteractionTile.GroupID].Add(new EposInteractionTileInfo(InteractionTile));
+                }
+            }
+
+            EnvironmentTileDict.Clear();
+            {
+                var EnvironmentTiles = new Data<EposEnvironmentTile>().GetData(path);
+
+                foreach (var EnvironmentTile in EnvironmentTiles)
+                {
+                    if (!EnvironmentTileDict.ContainsKey(EnvironmentTile.GroupID))
+                    {
+                        EnvironmentTileDict.Add(EnvironmentTile.GroupID, new());
+                    }
+
+                    EnvironmentTileDict[EnvironmentTile.GroupID] ??= new();
+
+                    EnvironmentTileDict[EnvironmentTile.GroupID].Add(new EposEnvironmentTileInfo(EnvironmentTile));
+                }
+            }
+
+            BlankTileDict.Clear();
+            {
+                var BlankTiles = new Data<EposBlankTile>().GetData(path);
+
+                foreach (var BlankTile in BlankTiles)
+                {
+                    if (!BlankTileDict.ContainsKey(BlankTile.ID))
+                    {
+                        BlankTileDict.Add(BlankTile.ID, new());
+                    }
+
+                    BlankTileDict[BlankTile.ID] ??= new();
+
+                    BlankTileDict[BlankTile.ID].Add(new EposBlankTileInfo(BlankTile));
+                }
+            }
+
+            ObjectDict.Clear();
+            {
+                var Objects = new Data<EposObject>().GetData(path);
+
+                ObjectDict = Objects.ToDictionary(kv => kv.ID, kv => new EposObjectInfo(kv));
+            }
+
+            TrophyDict.Clear();
+            {
+                var Trophys = new Data<EposTrophy>().GetData(path);
+
+                TrophyDict = Trophys.ToDictionary(kv => kv.ID, kv => new EposTrophyInfo(kv));
+            }
+        }
+
 		public static bool TryGetEposLevel(long Level, out EposLevelInfo Info)
 		{
 			return LevelDict.TryGetValue(Level, out Info);
 		}
-
-        public static bool TryGetEposTilePercent(long PlayerLevel, out EposTilePercentInfo Info)
-        {
-            return TilePercentDict.TryGetValue(PlayerLevel, out Info);
-        }
-
-        public static bool TryGetEposObjectPercent(long PlayerLevel, out EposObjectPercentInfo Info)
-        {
-            return ObjectPercentDict.TryGetValue(PlayerLevel, out Info);
-        }
-        public static bool TryGetEposTileObjectPercent(long TileTier, out EposTileObjectPercentInfo Info)
-        {
-            return TileObjectPercentDict.TryGetValue(TileTier, out Info);
-        }
-
         public static bool TryGetEposMaxExp(long level,out EposLevelExpInfo info)
         {
             return MaxExpDict.TryGetValue(level, out info);
@@ -225,5 +328,44 @@ namespace Shared.Data
         {
             return TileExpDict.TryGetValue(difficulty, out info);
         }
-	}
+        public static bool TryGetEposTile(long Lv, out EposTileInfo Info)
+        {
+            return TileDict.TryGetValue(Lv, out Info);
+        }
+
+        public static bool TryGetEposTileInfo(long GroupID, out EposTileInfoInfo Info)
+        {
+            return TileInfoDict.TryGetValue(GroupID, out Info);
+        }
+
+        public static bool TryGetEposTierTile(long GroupID, out List<EposTierTileInfo> Info)
+        {
+            return TierTileDict.TryGetValue(GroupID, out Info);
+        }
+
+        public static bool TryGetEposInteractionTile(long GroupID, out List<EposInteractionTileInfo> Info)
+        {
+            return InteractionTileDict.TryGetValue(GroupID, out Info);
+        }
+
+        public static bool TryGetEposEnvironmentTile(long GroupID, out List<EposEnvironmentTileInfo> Info)
+        {
+            return EnvironmentTileDict.TryGetValue(GroupID, out Info);
+        }
+
+        public static bool TryGetEposBlankTile(long GroupID, out List<EposBlankTileInfo> Info)
+        {
+            return BlankTileDict.TryGetValue(GroupID, out Info);
+        }
+
+        public static bool TryGetEposObject(long ID, out EposObjectInfo Info)
+        {
+            return ObjectDict.TryGetValue(ID, out Info);
+        }
+
+        public static bool TryGetEposTrophy(long ID, out EposTrophyInfo Info)
+        {
+            return TrophyDict.TryGetValue(ID, out Info);
+        }
+    }
 }

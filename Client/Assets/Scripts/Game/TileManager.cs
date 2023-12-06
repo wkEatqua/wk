@@ -7,6 +7,9 @@ using DG.Tweening;
 using Apis;
 using System;
 using System.Linq;
+using Shared.Model;
+using System.Text.RegularExpressions;
+using System.Text;
 
 public class TileManager : Singleton<TileManager>
 {
@@ -28,9 +31,19 @@ public class TileManager : Singleton<TileManager>
     [SerializeField]
     private GameObject TilePrefab;
 
+    // TilePool
     AddressablePooling TilePool;
 
+    // ObjectPool
+    AddressablePooling ObjectPool;
+
     public List<List<Tile>> TileMap;
+
+    // Create Tile, Object percentage
+    private List<Tuple<long, long>> TileRateList = new List<Tuple<long, long>>();
+
+
+    private float MaxTileRates = 0;
 
 
     Tweener tweener = null;
@@ -49,10 +62,13 @@ public class TileManager : Singleton<TileManager>
         TileMap = new List<List<Tile>>();
 
         TilePool = new AddressablePooling("Tile");
+
+        ObjectPool = new AddressablePooling("Object");
     }
     private void Start()
     {
         Init();
+
         TurnManager.Instance.OnPlayerTurnStart += MakeInjectedSelectable;
         TurnManager.Instance.OnPlayerTurnEnd += ResetTiles;
         TurnManager.Instance.OnEnemyTurnStart += RemoveAndCreateGrace;
@@ -103,23 +119,110 @@ public class TileManager : Singleton<TileManager>
         TileScale = info.TileScale;
     }
 
+    private void LoadTilePercents()
+    {
+        int PlayerLevel = EposManager.Instance.level;
+        if (PlayerLevel <= 0)
+            PlayerLevel = 1;
+
+
+        bool success = EposData.TryGetEposTile(PlayerLevel, out Shared.Data.EposTileInfo TileInfo);
+        if (success == false)
+            return;
+
+        var fields = typeof(Shared.Data.EposTileInfo).GetProperties(System.Reflection.BindingFlags.Public |
+                                                                System.Reflection.BindingFlags.NonPublic |
+                                                                System.Reflection.BindingFlags.Instance);
+
+        Dictionary<long, long> TempDict = new Dictionary<long, long>();
+        long key = 0;
+        string keyName = "";
+        foreach (var field in fields)
+        {
+            string name = field.Name;
+            if (!name.Contains("Tile"))
+                continue;
+
+            if (!name.Contains("Rate"))
+            {
+                string numstr = Regex.Replace(name, @"\D", "");
+                StringBuilder sb = new StringBuilder();
+                sb.Append(Regex.Replace(name, @"\d", ""));
+                sb.Append("Rate");
+                sb.Append(numstr);
+                keyName = sb.ToString();
+                key = (long)field.GetValue(TileInfo);
+                TempDict.Add(key, 0);
+            }
+            else
+            {
+                if (field.Name == keyName)
+                {
+                    long value = (long)field.GetValue(TileInfo);
+                    TempDict[key] = value;
+                }
+            }
+        }
+
+        foreach(var data in TempDict)
+        {
+            TileRateList.Add(new Tuple<long, long>(data.Key, data.Value));
+            MaxTileRates += data.Value;
+        }
+
+
+    }
+
+    private EposTileInfoInfo GetTileInfo()
+    {
+        float rand = UnityEngine.Random.Range(0, MaxTileRates);
+
+        float sum = 0;
+        long result = 0;
+        foreach (var percent in TileRateList)
+        {
+            sum += percent.Item2;
+            if (sum >= rand)
+            {
+                result = percent.Item1;
+                break;
+            }
+        }
+
+        EposData.TryGetEposTileInfo(result, out EposTileInfoInfo Info);
+        return Info;
+    }
+
     public IEnumerator CreateTile(int x, int y)
     {
         if (TileMap[x][y] != null)
             yield break;
 
-        // Instantiate -> Pooling
-        //GameObject TileObject = Instantiate(TilePrefab, TileContainer.transform);
-        GameObject TileObject = TilePool.Get("Assets/Prefabs/Debug/Tile.prefab");
-        Tile TileComponent = TileObject.GetComponent<Tile>();
+        // Create Tile and Set TileInfo
+        GameObject TilePrefab = TilePool.Get("Assets/Prefabs/Debug/Tile.prefab");
+        Tile TileComponent = TilePrefab.GetComponent<Tile>();
+        var TileInfo = GetTileInfo();
+        TileComponent.SetTileInfo(TileInfo);
         TileComponent.SetScale(TileScale);
+
+        // Create Object on Tile
+        var TempObject = ObjectPool.Get("DebugObj");
+        TileObject TileObject = ObjectFactory.CreateObject(TileInfo, TempObject);
+        if (TileObject == null)
+            ObjectPool.Return(TempObject);
+        else
+            TileComponent.SetObject(TileObject);
+
+        // Set TilePosition
         int mid = (int)TileNumber / 2;
         float PosX = (x - mid) * TileInterval;
         float PosY = (y - mid) * TileInterval;
         TileComponent.SetPosition(PosX, PosY);
         TileComponent.SetIndex(x, y);
+
+        // Keep TileComponent in memory
         TileMap[x][y] = TileComponent;
-        TileObject.transform.SetParent(TileContainer.transform);
+        TilePrefab.transform.SetParent(TileContainer.transform);
         yield return null;
     }
     public bool CheckIndex(int x, int y)
@@ -326,6 +429,8 @@ public class TileManager : Singleton<TileManager>
         this.Level = Level;
         RemoveAllTile();
         LoadLevel();
+        LoadTilePercents();
+        GetTileInfo();
         CreateAllTile();
         TurnManager.Instance.StartTurn();
     }

@@ -37,21 +37,14 @@ namespace Epos
             switch(type)
             {
                 case ItemType.MeleeWeapon:
-                    gameObject.AddComponent<MeleeWeaponObject>();
-                    break;
                 case ItemType.Armour:
-                    gameObject.AddComponent<ArmourObject>();
-                    break;
                 case ItemType.Gold:
-                    gameObject.AddComponent<GoldObject>();
+                case ItemType.HP:
+                    gameObject.AddComponent<ItemObject>();
                     break;
                 case ItemType.Card:
                 case ItemType.Environment:
                 case ItemType.BlankTile:
-
-                    break;
-                case ItemType.HP:
-                    gameObject.AddComponent<HpPotionObject>();
                     break;
             }
 

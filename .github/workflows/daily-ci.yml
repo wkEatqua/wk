@@ -73,7 +73,9 @@ jobs:
       - name: 빌드 타입 수정
         id: buildvar
         run: |
-          echo "buildMethod=$(${{ github.event.inputs.scene == 'all' }} && echo "" || echo "Assets.Editor.Builder.Build")" >> $GITHUB_OUTPUT
+          # https://stackoverflow.com/a/73495922/3355656
+          # workflow_dispatch가 아닌 경우 ||로 기본값을 설정해주어야 함
+          echo "buildMethod=$(${{ (github.event.inputs.scene || 'all') == 'all' }} && echo "" || echo "Assets.Editor.Builder.Build")" >> $GITHUB_OUTPUT
 
       - name: 유니티 빌드
         # log 파일 작성을 위해 수정한 버전입니다.
@@ -87,7 +89,7 @@ jobs:
           unityVersion: 2022.3.8f1
           allowDirtyBuild: true
           buildMethod: ${{ steps.buildvar.outputs.buildMethod }}
-          customParameters: -buildMode ${{ github.event.inputs.build }}
+          customParameters: -buildMode ${{ github.event.inputs.build || 'release' }}
 
       - name: 빌드 로그 출력
         if: always()

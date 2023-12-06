@@ -8,7 +8,7 @@ namespace Shared.Model
 
     }
 
-    #region Enum
+
     public enum StarFlagType
     {
         Progress,
@@ -43,9 +43,6 @@ namespace Shared.Model
         public long ID { get; set; }
         public string Kor { get; set; }
     }
-
-    #endregion
-
     #region 사상지평
     [System.Serializable]
     public class ScenarioWorld : JsonModel
@@ -220,108 +217,46 @@ namespace Shared.Model
     }
 
     [System.Serializable]
-    public class EposTile : JsonModel
+    public class EposTilePercent : JsonModel
     {
-        public long ID { get; set; }
-        public long Lv { get; set; }
-        public long Tile1 { get; set; }
-        public long TileRate1 { get; set; }
-        public long Tile2 { get; set; }
-        public long TileRate2 { get; set; }
-        public long Tile3 { get; set; }
-        public long TileRate3 { get; set; }
-        public long Tile4 { get; set; }
-        public long TileRate4 { get; set; }
-        public long Tile5 { get; set; }
-        public long TileRate5 { get; set; }
-        public long Tile6 { get; set; }
-        public long TileRate6 { get; set; }
-        public long Tile7 { get; set; }
-        public long TileRate7 { get; set; }
-        public long Tile8 { get; set; }
-        public long TileRate8 { get; set; }
-        public long Tile9 { get; set; }
-        public long TileRate9 { get; set; }
+        public long PlayerLevel { get; set; }
+        public float Level1Tile { get; set; }
+        public float Level2Tile { get; set; }
+        public float Level3Tile { get; set; }
+        public float Level4Tile { get; set; }
+        public float Level5Tile { get; set; }
+        public float Level6Tile { get; set; }
+        public float EmptyTile { get; set; }
+        public float UnmovableTile { get; set; }
+        public float ObjectTile { get; set; }
     }
 
     [System.Serializable]
-    public class EposTileInfo : JsonModel
+    public class EposObjectPercent : JsonModel
     {
-        public long GroupID { get; set; }
-        public string Tile { get; set; }
-        public int Tier { get; set; }
-        public string TileModel { get; set; }
-        public string Tilepattern { get; set; }
-        public int EXP { get; set; }
+        public long PlayerLevel { get; set; }
+        public float SmallHPRecover { get; set; }
+        public float LargeHPRecover { get; set; }
+        public float Event { get; set; }
     }
 
-    [System.Serializable]
-    public class EposTierTile : JsonModel
+    public class EposTileObjectPercent : JsonModel
     {
-        public long GroupID { get; set; }
-        public string Tile { get; set; }
-        public long Object { get; set; }
-        public long ObjectRate { get; set; }
-    }
-
-    [System.Serializable]
-    public class EposInteractionTile : JsonModel
-    {
-        public long GroupID { get; set; }
-        public string Tile { get; set; }
-        public long Object { get; set; }
-        public long ObjectRate { get; set; }
-    }
-
-    [System.Serializable]
-    public class EposEnvironmentTile : JsonModel
-    {
-        public long GroupID { get; set; }
-        public string Tile { get; set; }
-        public long Object { get; set; }
-        public long ObjectRate { get; set; }
-    }
-
-    [System.Serializable]
-    public class EposBlankTile : JsonModel
-    {
-        public long ID { get; set; }
-        public string Tile { get; set; }
-        public long Object { get; set; }
-        public long ObjectRate { get; set; }
-    }
-
-    [System.Serializable]
-    public class EposObject : JsonModel
-    {
-        public long ID { get; set; }
-        public string Tile { get; set; }
-        public string ItemType { get; set; }
-        public string Type { get; set; }
-        public int Tier { get; set; }
-        public string Modeling { get; set; }
-        public long ProduceInfo { get; set; }
-        public string RewardType { get; set; }
-        public long Reward { get; set; }
-        public long Trophy { get; set; }
-    }
-
-    [System.Serializable]
-    public class EposTrophy : JsonModel
-    {
-        public long ID { get; set; }
-        public long TrophyID1 { get; set; }
-        public string Type1 { get; set; }
-        public long Rate1 { get; set; }
-        public long TrophyID2 { get; set; }
-        public string Type2 { get; set; }
-        public long Rate2 { get; set; }
-        public long TrophyID3 { get; set; }
-        public string Type3 { get; set; }
-        public long Rate3 { get; set; }
-        public long TrophyID4 { get; set; }
-        public string Type4 { get; set; }
-        public long Rate4 { get; set; }
+        public long TileTier { get; set; }
+        public float SmallHPRecover { get; set; }
+        public float LargeHPRecover { get; set; }
+        public float Level1Monster { get; set; }
+        public float Level2Monster { get; set; }
+        public float Level3Monster { get; set; }
+        public float Level4Monster { get; set; }
+        public float Level5Monster { get; set; }
+        public float Level6Monster { get; set; }
+        public float Weapon { get; set; }
+        public float Armor { get; set; }
+        public float SmallGold { get; set; }
+        public float MediumGold { get; set; }
+        public float LargeGold { get; set; }
+        public float Card { get; set; }
     }
 
     #region 아이템 관련
@@ -338,6 +273,6 @@ namespace Shared.Model
 
     }
     #endregion
+    #endregion
 
 }
-#endregion

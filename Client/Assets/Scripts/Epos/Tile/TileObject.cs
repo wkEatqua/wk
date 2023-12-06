@@ -1,6 +1,5 @@
 using DG.Tweening;
 using System.Collections;
-using Shared.Data;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,13 +9,6 @@ namespace Epos
     public abstract class TileObject : MonoBehaviour
     {       
         [HideInInspector] public Tile tile;
-
-        protected EposObjectInfo objectInfo;
-
-        public void SetObjectInfo(EposObjectInfo Info)
-        {
-            objectInfo = Info;
-        }
 
         public virtual IEnumerator MoveTo(int x,int y)
         {

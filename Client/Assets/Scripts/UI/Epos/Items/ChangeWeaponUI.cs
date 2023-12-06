@@ -11,7 +11,7 @@ namespace Epos.UI
         RangeWeapon rightItem;
         public Button accept;
         public Button cancel;
-        public GameObject CancelUI;
+        public CancelUI cancelUI;
 
         public void Init(InvenItem leftItem, RangeWeapon rightItem)
         {
@@ -25,11 +25,14 @@ namespace Epos.UI
                 ItemSlot slot = leftItem.Slot;
                 slot.Remove();
                 slot.Add(rightItem);
+                GetComponentInParent<RangeWeaponCanvas>().Return();
+                Debug.Log("확인");
             });
             cancel.onClick.AddListener(() =>
             {
                 gameObject.SetActive(false);
-                CancelUI.SetActive(true);
+                cancelUI.gameObject.SetActive(true);
+                cancelUI.Init();
             });
         }
     }

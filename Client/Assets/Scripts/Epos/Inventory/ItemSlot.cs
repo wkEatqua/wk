@@ -42,6 +42,7 @@ namespace Epos
             if(item != null)
             {                
                 item.Slot = this;
+                itemImage.color = Color.green;
             }
         }
         public InvenItem Remove()

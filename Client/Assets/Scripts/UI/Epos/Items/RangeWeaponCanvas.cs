@@ -17,7 +17,8 @@ namespace Epos.UI
         public Button RemoveButton;
 
         public GameObject Emphasize;
-
+        public GameObject ChangeUI;
+        public GameObject CancelUI;
         public void Init(ItemObject obj)
         {
             RangeWeapon weapon = obj.item as RangeWeapon;
@@ -26,11 +27,14 @@ namespace Epos.UI
             AddButton.onClick.RemoveAllListeners();
             RemoveButton.onClick.RemoveAllListeners();
             Emphasize.SetActive(false);
+            CancelUI.SetActive(false);
+            ChangeUI.SetActive(false);
+
             AddButton.onClick.AddListener(() =>
             {
                 if (Inventory.Instance.AddItem(weapon))
                 {
-                    
+                    Return();
                 }
                 else
                 {
@@ -38,14 +42,21 @@ namespace Epos.UI
                     Inventory.Instance.ChangeClickEvents(slot =>
                     {
                         Emphasize.SetActive(false);
-
+                        ChangeUI.SetActive(true);
+                        ChangeUI.GetComponent<ChangeWeaponUI>().Init(slot.Item, weapon);
                     });
                 }
             });
             RemoveButton.onClick.AddListener(() =>
             {
-                obj.Die();
+                Return();
             });
         }
+        public void Return()
+        {
+            RangeWeapon.pool.Return(gameObject);
+
+        }
+      
     }
 }

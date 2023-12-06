@@ -40,7 +40,6 @@ public class Tile : MonoBehaviour
     public TileSelector Selector => selector;
     public enum TileType
     {
-        Normal,
         Tier,        
         BlankTile,
         EnvironmentTile,
@@ -104,5 +103,9 @@ public class Tile : MonoBehaviour
     public void SetObject(TileObject obj)
     {
         selector.SetObject(obj);
-    }     
+    }
+    private void OnDisable()
+    {
+        SetTileType(TileType.Tier);
+    }
 }

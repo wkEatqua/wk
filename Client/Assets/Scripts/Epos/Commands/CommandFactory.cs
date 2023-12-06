@@ -11,8 +11,9 @@ namespace Epos
         {
             Player player = Object.FindAnyObjectByType<Player>();
 
-            if ((tileObject == null || tileObject is ItemObject) && tile.Type == Tile.TileType.Normal)
+            if ((tileObject == null || tileObject is ItemObject) && tile.Type != Tile.TileType.Grace)
             {
+                Debug.Log("Move");
                 return new MoveCommand(player, tile);
             }
             else if(tileObject is Monster monster)

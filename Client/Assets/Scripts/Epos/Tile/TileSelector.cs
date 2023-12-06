@@ -37,6 +37,7 @@ namespace Epos
         {
             if (selectable)
             {
+                Debug.Log("Clicked");
                 OnSelected.Invoke();
             }
         }
@@ -64,9 +65,12 @@ namespace Epos
         private void Update()
         {
             switch (tile.Type)
-            {
-                case Tile.TileType.Tier:
-                case Tile.TileType.EnvironmentTile:
+            { 
+                case Tile.TileType.Grace:
+                    render.material.color = Color.black;
+                    selectable = false;
+                    break;
+                default:
                     if (selectable)
                     {
                         render.material.color = Color.green;
@@ -75,10 +79,6 @@ namespace Epos
                     {
                         render.material.color = Color.white;
                     }
-                    break;
-                case Tile.TileType.Grace:
-                    render.material.color = Color.black;
-                    selectable = false;
                     break;
             }
         }

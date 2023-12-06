@@ -1,1 +1,300 @@
-﻿[{"ID":1030001,"Tile":"Tier","ItemType":"Monster","Type":"static ","Tier":6,"Modeling":"6TierMonsterModel","ProduceInfo":1060001,"RewardType":"0","Trophy":1040010},{"ID":1030002,"Tile":"Tier","ItemType":"Monster","Type":"static ","Tier":5,"Modeling":"5TierMonsterModel","ProduceInfo":1060002,"RewardType":"0","Trophy":1040003},{"ID":1030003,"Tile":"Tier","ItemType":"Monster","Type":"static ","Tier":4,"Modeling":"4TierMonsterModel","ProduceInfo":1060003,"RewardType":"0","Trophy":1040006},{"ID":1030004,"Tile":"Tier","ItemType":"Monster","Type":"static ","Tier":3,"Modeling":"3TierMonsterModel","ProduceInfo":1060004,"RewardType":"0","Trophy":1040010},{"ID":1030005,"Tile":"Tier","ItemType":"Monster","Type":"static ","Tier":2,"Modeling":"2TierMonsterModel","ProduceInfo":1060005,"RewardType":"0","Trophy":1040003},{"ID":1030006,"Tile":"Tier","ItemType":"Monster","Type":"static ","Tier":1,"Modeling":"1TierMonsterModel","ProduceInfo":1060006,"RewardType":"0","Trophy":1040006},{"ID":1030007,"Tile":"Tier","ItemType":"MeleeWeapon","Type":"Moveable","Tier":6,"Modeling":"SwordModel","ProduceInfo":1070001,"RewardType":"Item","Reward":1},{"ID":1030008,"Tile":"Tier","ItemType":"MeleeWeapon","Type":"Moveable","Tier":5,"Modeling":"SwordModel","ProduceInfo":1070002,"RewardType":"Item","Reward":1},{"ID":1030009,"Tile":"Tier","ItemType":"MeleeWeapon","Type":"Moveable","Tier":4,"Modeling":"SwordModel","ProduceInfo":1070003,"RewardType":"Item","Reward":1},{"ID":1030010,"Tile":"Tier","ItemType":"MeleeWeapon","Type":"Moveable","Tier":3,"Modeling":"SwordModel","ProduceInfo":1070004,"RewardType":"Item","Reward":1},{"ID":1030011,"Tile":"Tier","ItemType":"MeleeWeapon","Type":"Moveable","Tier":2,"Modeling":"SwordModel","ProduceInfo":1070005,"RewardType":"Item","Reward":1},{"ID":1030012,"Tile":"Tier","ItemType":"MeleeWeapon","Type":"Moveable","Tier":1,"Modeling":"SwordModel","ProduceInfo":1070006,"RewardType":"Item","Reward":1},{"ID":1030013,"Tile":"Tier","ItemType":"Armour","Type":"Moveable","Tier":6,"Modeling":"ArmorModel","ProduceInfo":1070007,"RewardType":"Item","Reward":1},{"ID":1030014,"Tile":"Tier","ItemType":"Armour","Type":"Moveable","Tier":5,"Modeling":"ArmorModel","ProduceInfo":1070008,"RewardType":"Item","Reward":1},{"ID":1030015,"Tile":"Tier","ItemType":"Armour","Type":"Moveable","Tier":4,"Modeling":"ArmorModel","ProduceInfo":1070009,"RewardType":"Item","Reward":1},{"ID":1030016,"Tile":"Tier","ItemType":"Armour","Type":"Moveable","Tier":3,"Modeling":"ArmorModel","ProduceInfo":1070010,"RewardType":"Item","Reward":1},{"ID":1030017,"Tile":"Tier","ItemType":"Armour","Type":"Moveable","Tier":2,"Modeling":"ArmorModel","ProduceInfo":1070011,"RewardType":"Item","Reward":1},{"ID":1030018,"Tile":"Tier","ItemType":"Armour","Type":"Moveable","Tier":1,"Modeling":"ArmorModel","ProduceInfo":1070012,"RewardType":"Item","Reward":1},{"ID":1030019,"Tile":"Tier","ItemType":"Gold","Type":"Moveable","Tier":3,"Modeling":"SmallGoldModel","RewardType":"Score","Reward":100},{"ID":1030020,"Tile":"Tier","ItemType":"Gold","Type":"Moveable","Tier":2,"Modeling":"BigGoldModel","RewardType":"Score","Reward":300},{"ID":1030021,"Tile":"Tier","ItemType":"Card","Type":"Moveable","Tier":6,"Modeling":"CardEventModel","RewardType":"Event","Reward":1},{"ID":1030022,"Tile":"Tier","ItemType":"Card","Type":"Moveable","Tier":3,"Modeling":"CardEventModel","RewardType":"Event","Reward":1},{"ID":1030023,"Tile":"Tier","ItemType":"Card","Type":"Moveable","Tier":1,"Modeling":"CardEventModel","RewardType":"Event","Reward":1},{"ID":1030024,"Tile":"BlankTile","ItemType":"BlankTile","Type":"Moveable","Modeling":"0","RewardType":"0"},{"ID":1030025,"Tile":"EnvironmentTile","ItemType":"Environment","Type":"static ","Modeling":"EnvironmentModel1","RewardType":"0"},{"ID":1030026,"Tile":"EnvironmentTile","ItemType":"Environment","Type":"static ","Modeling":"EnvironmentModel2","RewardType":"0"},{"ID":1030027,"Tile":"EnvironmentTile","ItemType":"Environment","Type":"static ","Modeling":"EnvironmentModel3","RewardType":"0"},{"ID":1030028,"Tile":"InteractionTile","ItemType":"HP","Type":"static ","Modeling":"HealingFacor1","RewardType":"Heal","Reward":30},{"ID":1030029,"Tile":"InteractionTile","ItemType":"HP","Type":"static ","Modeling":"HealingFacor2","RewardType":"Heal","Reward":60}]
+[
+  {
+    "ID": 1030001,
+    "Tile": "Tier",
+    "ItemType": "Monster",
+    "Type": "static ",
+    "Tier": 6,
+    "Modeling": "6TierMonsterModel",
+    "ProduceInfo": 1060001,
+    "RewardType": "0",
+    "Trophy": 1040010
+  },
+  {
+    "ID": 1030002,
+    "Tile": "Tier",
+    "ItemType": "Monster",
+    "Type": "static ",
+    "Tier": 5,
+    "Modeling": "5TierMonsterModel",
+    "ProduceInfo": 1060002,
+    "RewardType": "0",
+    "Trophy": 1040003
+  },
+  {
+    "ID": 1030003,
+    "Tile": "Tier",
+    "ItemType": "Monster",
+    "Type": "static ",
+    "Tier": 4,
+    "Modeling": "4TierMonsterModel",
+    "ProduceInfo": 1060003,
+    "RewardType": "0",
+    "Trophy": 1040006
+  },
+  {
+    "ID": 1030004,
+    "Tile": "Tier",
+    "ItemType": "Monster",
+    "Type": "static ",
+    "Tier": 3,
+    "Modeling": "3TierMonsterModel",
+    "ProduceInfo": 1060004,
+    "RewardType": "0",
+    "Trophy": 1040010
+  },
+  {
+    "ID": 1030005,
+    "Tile": "Tier",
+    "ItemType": "Monster",
+    "Type": "static ",
+    "Tier": 2,
+    "Modeling": "2TierMonsterModel",
+    "ProduceInfo": 1060005,
+    "RewardType": "0",
+    "Trophy": 1040003
+  },
+  {
+    "ID": 1030006,
+    "Tile": "Tier",
+    "ItemType": "Monster",
+    "Type": "static ",
+    "Tier": 1,
+    "Modeling": "1TierMonsterModel",
+    "ProduceInfo": 1060006,
+    "RewardType": "0",
+    "Trophy": 1040006
+  },
+  {
+    "ID": 1030007,
+    "Tile": "Tier",
+    "ItemType": "Item",
+    "Type": "Moveable",
+    "Tier": 6,
+    "Modeling": "SwordModel",
+    "ProduceInfo": 1070001,
+    "RewardType": "Item",
+    "Reward": 1
+  },
+  {
+    "ID": 1030008,
+    "Tile": "Tier",
+    "ItemType": "Item",
+    "Type": "Moveable",
+    "Tier": 5,
+    "Modeling": "SwordModel",
+    "ProduceInfo": 1070002,
+    "RewardType": "Item",
+    "Reward": 1
+  },
+  {
+    "ID": 1030009,
+    "Tile": "Tier",
+    "ItemType": "Item",
+    "Type": "Moveable",
+    "Tier": 4,
+    "Modeling": "SwordModel",
+    "ProduceInfo": 1070003,
+    "RewardType": "Item",
+    "Reward": 1
+  },
+  {
+    "ID": 1030010,
+    "Tile": "Tier",
+    "ItemType": "Item",
+    "Type": "Moveable",
+    "Tier": 3,
+    "Modeling": "SwordModel",
+    "ProduceInfo": 1070004,
+    "RewardType": "Item",
+    "Reward": 1
+  },
+  {
+    "ID": 1030011,
+    "Tile": "Tier",
+    "ItemType": "Item",
+    "Type": "Moveable",
+    "Tier": 2,
+    "Modeling": "SwordModel",
+    "ProduceInfo": 1070005,
+    "RewardType": "Item",
+    "Reward": 1
+  },
+  {
+    "ID": 1030012,
+    "Tile": "Tier",
+    "ItemType": "Item",
+    "Type": "Moveable",
+    "Tier": 1,
+    "Modeling": "SwordModel",
+    "ProduceInfo": 1070006,
+    "RewardType": "Item",
+    "Reward": 1
+  },
+  {
+    "ID": 1030013,
+    "Tile": "Tier",
+    "ItemType": "Item",
+    "Type": "Moveable",
+    "Tier": 6,
+    "Modeling": "ArmorModel",
+    "ProduceInfo": 1070007,
+    "RewardType": "Item",
+    "Reward": 1
+  },
+  {
+    "ID": 1030014,
+    "Tile": "Tier",
+    "ItemType": "Item",
+    "Type": "Moveable",
+    "Tier": 5,
+    "Modeling": "ArmorModel",
+    "ProduceInfo": 1070008,
+    "RewardType": "Item",
+    "Reward": 1
+  },
+  {
+    "ID": 1030015,
+    "Tile": "Tier",
+    "ItemType": "Item",
+    "Type": "Moveable",
+    "Tier": 4,
+    "Modeling": "ArmorModel",
+    "ProduceInfo": 1070009,
+    "RewardType": "Item",
+    "Reward": 1
+  },
+  {
+    "ID": 1030016,
+    "Tile": "Tier",
+    "ItemType": "Item",
+    "Type": "Moveable",
+    "Tier": 3,
+    "Modeling": "ArmorModel",
+    "ProduceInfo": 1070010,
+    "RewardType": "Item",
+    "Reward": 1
+  },
+  {
+    "ID": 1030017,
+    "Tile": "Tier",
+    "ItemType": "Item",
+    "Type": "Moveable",
+    "Tier": 2,
+    "Modeling": "ArmorModel",
+    "ProduceInfo": 1070011,
+    "RewardType": "Item",
+    "Reward": 1
+  },
+  {
+    "ID": 1030018,
+    "Tile": "Tier",
+    "ItemType": "Item",
+    "Type": "Moveable",
+    "Tier": 1,
+    "Modeling": "ArmorModel",
+    "ProduceInfo": 1070012,
+    "RewardType": "Item",
+    "Reward": 1
+  },
+  {
+    "ID": 1030019,
+    "Tile": "Tier",
+    "ItemType": "Gold",
+    "Type": "Moveable",
+    "Tier": 3,
+    "Modeling": "SmallGoldModel",
+    "RewardType": "Score",
+    "Reward": 100
+  },
+  {
+    "ID": 1030020,
+    "Tile": "Tier",
+    "ItemType": "Gold",
+    "Type": "Moveable",
+    "Tier": 2,
+    "Modeling": "BigGoldModel",
+    "RewardType": "Score",
+    "Reward": 300
+  },
+  {
+    "ID": 1030021,
+    "Tile": "Tier",
+    "ItemType": "Card",
+    "Type": "Moveable",
+    "Tier": 6,
+    "Modeling": "CardEventModel",
+    "RewardType": "Event",
+    "Reward": 1
+  },
+  {
+    "ID": 1030022,
+    "Tile": "Tier",
+    "ItemType": "Card",
+    "Type": "Moveable",
+    "Tier": 3,
+    "Modeling": "CardEventModel",
+    "RewardType": "Event",
+    "Reward": 1
+  },
+  {
+    "ID": 1030023,
+    "Tile": "Tier",
+    "ItemType": "Card",
+    "Type": "Moveable",
+    "Tier": 1,
+    "Modeling": "CardEventModel",
+    "RewardType": "Event",
+    "Reward": 1
+  },
+  {
+    "ID": 1030024,
+    "Tile": "BlankTile",
+    "ItemType": "BlankTile",
+    "Type": "Moveable",
+    "Modeling": "0",
+    "RewardType": "0"
+  },
+  {
+    "ID": 1030025,
+    "Tile": "EnvironmentTile",
+    "ItemType": "Environment",
+    "Type": "static ",
+    "Modeling": "EnvironmentModel1",
+    "RewardType": "0"
+  },
+  {
+    "ID": 1030026,
+    "Tile": "EnvironmentTile",
+    "ItemType": "Environment",
+    "Type": "static ",
+    "Modeling": "EnvironmentModel2",
+    "RewardType": "0"
+  },
+  {
+    "ID": 1030027,
+    "Tile": "EnvironmentTile",
+    "ItemType": "Environment",
+    "Type": "static ",
+    "Modeling": "EnvironmentModel3",
+    "RewardType": "0"
+  },
+  {
+    "ID": 1030028,
+    "Tile": "InteractionTile",
+    "ItemType": "Interaction",
+    "Type": "static ",
+    "Modeling": "HealingFacor1",
+    "RewardType": "Heal",
+    "Reward": 30
+  },
+  {
+    "ID": 1030029,
+    "Tile": "InteractionTile",
+    "ItemType": "Interaction",
+    "Type": "static ",
+    "Modeling": "HealingFacor2",
+    "RewardType": "Heal",
+    "Reward": 60
+  }
+]

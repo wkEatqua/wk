@@ -16,7 +16,47 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: bb4b38ee323a21d4d842cb535e5414ba
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: f4fa6563f85f35540bd56cfbb85b78f5
+    m_Address: Assets/Prefabs/Debug/DebugTile.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e96ab3473fe74f418864685091327ca
+    m_Address: ItemObject
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 19d7d5a2b9ca07e4c80e74991a0db6d6
+    m_Address: Assets/Prefabs/Debug/Tile.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68344bce1663cd74e83b23f4556a0e63
+    m_Address: DebugObj
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1ebff531946c34f4e93b6458162e0f35
+    m_Address: Player
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec6e3f50a2bcf954ebc302b531703560
+    m_Address: DmgText
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba3e58a8773e034419fa4db25195e1b4
+    m_Address: EliteMonster
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f0f792632a8041747933e34458c02b12
+    m_Address: RangeWeaponCanvas
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4c8c4683d3621694c8b9b341c33558dc, type: 2}
   m_SchemaSet:

@@ -374,7 +374,7 @@ public class TileManager : Singleton<TileManager>
             }
         }
         int mid = (int)TileNumber / 2;
-        Debug.Log(mid);
+
         Player player = ResourceUtil.Instantiate("Player").GetComponent<Player>();
         TileMap[mid][mid].SetObject(player);
 
@@ -525,5 +525,14 @@ public class TileManager : Singleton<TileManager>
                 TileMap[x][y].Type = Tile.TileType.Grace;
             }
         }
+    }
+
+    public void Return(GameObject obj)
+    {
+        ObjectPool.Return(obj);
+    }
+    public void Return(Tile tile)
+    {
+        TilePool.Return(tile.gameObject);
     }
 }

@@ -337,6 +337,25 @@ namespace Shared.Model
         public int Range { get; set; }
 
     }
+    public class EposItemRate : JsonModel
+    {
+        public long ID { get; set; }
+        public long ObjectID { get; set; }
+        public int Tier { get; set; }
+        public long Item1 { get; set; }
+        public int ItemRate1 { get; set; }
+        public long Item2 { get; set; }
+        public int ItemRate2 { get; set; }
+
+        public long Item3 { get; set; }
+        public int ItemRate3 { get; set; }
+
+        public long Item4 { get; set; }
+        public int ItemRate4 { get; set; }
+
+        public long Item5 { get; set; }
+        public int ItemRate5 { get; set; }
+    }
     #endregion
 
 }

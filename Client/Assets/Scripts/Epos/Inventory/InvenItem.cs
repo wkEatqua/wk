@@ -23,7 +23,7 @@ namespace Epos
             }
         }
 
-        protected InvenItem(EposItemInfo data) : base(data)
+        protected InvenItem(EposItemInfo data,ItemObject itemObj) : base(data,itemObj)
         {
             useCount = data.UseCount;
         }

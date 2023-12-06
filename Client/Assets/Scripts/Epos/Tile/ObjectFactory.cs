@@ -10,12 +10,11 @@ namespace Epos
     public enum ItemType
     {
         Monster,
-        MeleeWeapon,
-        Armour,
-        Gold,
+        Item,
         Card,
+        Gold,
         Environment,
-        HP,
+        Interaction,
         BlankTile
     }
     public class ObjectFactory : MonoBehaviour
@@ -36,15 +35,19 @@ namespace Epos
             ItemType type = (ItemType)Enum.Parse(typeof(ItemType), ObjectInfo.ItemType);
             switch(type)
             {
-                case ItemType.MeleeWeapon:
-                case ItemType.Armour:
-                case ItemType.Gold:
-                case ItemType.HP:
-                    gameObject.AddComponent<ItemObject>();
+                case ItemType.Item:
+                    long itemID = GetItemID(ObjectInfo.ProduceInfo);
+                    if (itemID == 0) break;
+                    gameObject.SetActive(false);
+                    ItemObject item = gameObject.AddComponent<ItemObject>();
+                    item.ItemID = itemID;
+                    gameObject.SetActive(true);
                     break;
                 case ItemType.Card:
+                case ItemType.Gold:
                 case ItemType.Environment:
                 case ItemType.BlankTile:
+                case ItemType.Interaction:
                     break;
             }
 
@@ -57,6 +60,41 @@ namespace Epos
             return objectComponent;
         }
 
+        static long GetItemID(long itemRateID)
+        {
+            ItemData.TryGetItemRateInfo(itemRateID,out var ItemRateInfo);
+            
+            Dictionary<long, long> itemDict = new();
+
+
+            if (ItemRateInfo == null)
+            {
+                Debug.Log(itemRateID);
+
+                return 0;
+            }
+            itemDict.TryAdd(ItemRateInfo.Item1, ItemRateInfo.ItemRate1);
+            itemDict.TryAdd(ItemRateInfo.Item2, ItemRateInfo.ItemRate2);
+            itemDict.TryAdd(ItemRateInfo.Item3, ItemRateInfo.ItemRate3);
+            itemDict.TryAdd(ItemRateInfo.Item4, ItemRateInfo.ItemRate4);
+            itemDict.TryAdd(ItemRateInfo.Item5, ItemRateInfo.ItemRate5);
+
+            int rand = UnityEngine.Random.Range(0, 10001);
+            long value = 0;
+            long itemId = 0;
+            foreach (var x in itemDict.Keys)
+            {
+                if (x == 0) continue;
+
+                value += itemDict[x];
+                if (rand <= value)
+                {
+                    itemId = x;
+                    break;
+                }
+            }
+            return itemId;
+        }
         private static long GetObjectID(EposTileInfoInfo tileInfo)
         {
             Tile.TileType tileType = (Tile.TileType)Enum.Parse(typeof(Tile.TileType), tileInfo.Tile);

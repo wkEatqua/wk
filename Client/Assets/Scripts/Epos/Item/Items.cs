@@ -1,4 +1,5 @@
 using Apis;
+using Epos.UI;
 using Org.BouncyCastle.Bcpg;
 using Shared.Data;
 using Shared.Model;
@@ -11,14 +12,14 @@ namespace Epos
     public abstract class Item
     {
         protected readonly EposItemInfo data;
-        public Item(EposItemInfo data)
+        public readonly ItemObject tileObj;
+        public Item(EposItemInfo data,ItemObject tileObj)
         {
             this.data = data;
             ScriptData.TryGetGameText(data.DescText, out EposGameTextInfo info);
             Desc = info.Kor;
 
-
-
+            this.tileObj = tileObj;
         }
 
         public string Name => data.Name;
@@ -30,15 +31,19 @@ namespace Epos
     {
         public readonly int Atk;
         public readonly int Range;
-        public RangeWeapon(EposItemInfo data) : base(data)
+        public static AddressablePooling pool;
+        public RangeWeapon(EposItemInfo data,ItemObject itemObj) : base(data, itemObj)
         {
+            pool ??= new("RangeWeaponUI");
             Atk = data.BaseStat;
             Range = data.Range;
         }
 
         public override void OnCollect()
         {
-            ResourceUtil.Instantiate("RangeWeaponCanvas");
+            GameObject obj = pool.Get("RangeWeaponCanvas");
+            RangeWeaponCanvas canvas = obj.GetComponent<RangeWeaponCanvas>();
+            canvas.Init(tileObj);
         }
         public override void Use()
         {
@@ -47,7 +52,7 @@ namespace Epos
     }
     public class GoldItem : Item
     {
-        public GoldItem(EposItemInfo data) : base(data)
+        public GoldItem(EposItemInfo data,ItemObject itemObj) : base(data, itemObj)
         {
         }
 
@@ -59,7 +64,7 @@ namespace Epos
 
     public class HpPotion : Item
     {
-        public HpPotion(EposItemInfo data) : base(data)
+        public HpPotion(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
         {
         }
 
@@ -73,7 +78,7 @@ namespace Epos
     {
         public int durability;
 
-        public MeleeWeapon(EposItemInfo data) : base(data)
+        public MeleeWeapon(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
         {
             durability = data.BaseStat;
         }
@@ -89,7 +94,7 @@ namespace Epos
         public int durability;
         public int count;
 
-        public Armour(EposItemInfo data) : base(data)
+        public Armour(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
         {
             durability = data.BaseStat;
             count = data.UseCount;

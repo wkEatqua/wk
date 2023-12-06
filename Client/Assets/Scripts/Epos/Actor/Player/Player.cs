@@ -110,8 +110,6 @@ namespace Epos
         }
         private void Update()
         {
-            Debug.Log(Atk);
-            Debug.Log(Def);
         }
     }
 }

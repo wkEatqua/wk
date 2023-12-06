@@ -37,6 +37,7 @@ namespace Shared.Model
     {
         MeleeWeapon,RangeWeapon,HpPotion,Armour,Gold,
     }
+    #endregion
     #region 사상지평
     [System.Serializable]
     public class ScenarioWorld : JsonModel
@@ -327,6 +328,6 @@ namespace Shared.Model
         public int UseCount { get; set; }
     }
     #endregion
-    #endregion
 
 }
+#endregion

@@ -42,6 +42,31 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: effc274cb3ab0234796fa2266016fe3e
+    m_Address: ArmourObj
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 71a07529f7d476a4abba0ea1115389d5
+    m_Address: GoldObj
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1cfab3d0f9be057409bd73cf6fb6279b
+    m_Address: HpPotionObj
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5c516f4386744fc42b358d6d360867d7
+    m_Address: MeleeWeaponObj
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68344bce1663cd74e83b23f4556a0e63
+    m_Address: DebugObj
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4c8c4683d3621694c8b9b341c33558dc, type: 2}
   m_SchemaSet:

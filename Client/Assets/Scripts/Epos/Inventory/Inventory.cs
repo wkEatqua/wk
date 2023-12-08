@@ -31,7 +31,7 @@ namespace Epos
         {
             foreach (ItemSlot slot in slots)
             {
-                slot.ChangeClickEvent(s => s.Item?.Use());
+                slot.ChangeClickEvent(s => s.Item?.OnClick());
             }
         }
         void ResetSlots()

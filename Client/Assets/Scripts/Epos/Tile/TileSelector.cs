@@ -17,11 +17,21 @@ namespace Epos
         public bool selectable;
         ICommand command;
 
+        public UnityEvent OnClicked = new();
+
         private void Awake()
         {
             tile = GetComponent<Tile>();
             selectable = false;
             render = GetComponent<Renderer>();
+            OnClicked.AddListener(() =>
+            {
+                if (selectable)
+                {
+                    Debug.Log("Clicked");
+                    OnSelected.Invoke();
+                }
+            });
             OnSelected.AddListener(() =>
             {
                 command = CommandFactory.CreateCommand(tile, obj);
@@ -78,11 +88,7 @@ namespace Epos
 
         public void OnRayCast()
         {
-            if (selectable)
-            {
-                Debug.Log("Clicked");
-                OnSelected.Invoke();
-            }
+            OnClicked.Invoke();           
         }
     }
 }

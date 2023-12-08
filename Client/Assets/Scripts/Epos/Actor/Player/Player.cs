@@ -12,32 +12,14 @@ namespace Epos
         List<Armour> armours = new();
 
         public List<MeleeWeapon> MeleeWeapons => meleeWeapons;
-        public List<Armour> Armours => armours;
-        public override int Atk
-        {
-            get
-            {
-                int value = base.Atk;
-
-                meleeWeapons.ForEach(x => value += x.durability);
-
-                return value;
-            }
-        }
-
-        public override int Def
-        {
-            get
-            {
-                int value = base.Def;
-                armours.ForEach(x => value += x.durability);
-
-                return value;
-            }
-        }
+        public List<Armour> Armours => armours;              
+    
         public override int OnHit(int dmg)
-        {           
-            dmg -= Def;
+        {
+            int value = Def;
+            armours.ForEach(x => value += x.durability);
+
+            dmg -= value;
 
             if (dmg < 0) dmg = 0;
 
@@ -69,8 +51,15 @@ namespace Epos
         {
             int hp = target.CurHp;
 
-            int dmg = base.Attack(target);
+            int dmg = Atk;
+            float rand = Random.Range(0, 100);
+            meleeWeapons.ForEach(x => dmg += x.durability);
 
+            if (rand <= CritProb)
+            {
+                dmg = (int)(dmg * CritProb / 100f);
+            }
+            dmg = target.OnHit(dmg);
             int durabilityMinus = Mathf.Min(dmg, hp);
             foreach (MeleeWeapon wp in meleeWeapons)
             {
@@ -88,13 +77,13 @@ namespace Epos
             }
             meleeWeapons = meleeWeapons.Where(wp => wp.durability > 0).ToList();
 
-            if(target != null && target.gameObject.activeSelf && target.CurHp > 0)
-            {
-                OnHit(target.CurHp);
-            }
             return dmg;
         }
 
+        public int RangeAttack(Actor target)
+        {
+            return base.Attack(target);
+        }
         public void Equip(MeleeWeapon wp)
         {
             meleeWeapons.Add(wp);

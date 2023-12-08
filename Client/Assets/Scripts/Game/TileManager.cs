@@ -47,7 +47,7 @@ public class TileManager : Singleton<TileManager>
 
 
     Tweener tweener = null;
-    
+
     public readonly Queue<(int x, int y)> graceTiles = new();
     public (int x, int y) playerLastPos = (-1, -1);
 
@@ -83,7 +83,7 @@ public class TileManager : Singleton<TileManager>
     {
         if (TileMap[x][y] == null)
             return;
-        
+
         TilePool.Return(TileMap[x][y].gameObject);
         TileMap[x][y] = null;
     }
@@ -164,7 +164,7 @@ public class TileManager : Singleton<TileManager>
             }
         }
 
-        foreach(var data in TempDict)
+        foreach (var data in TempDict)
         {
             TileRateList.Add(new Tuple<long, long>(data.Key, data.Value));
             MaxTileRates += data.Value;
@@ -377,9 +377,6 @@ public class TileManager : Singleton<TileManager>
 
         Player player = ResourceUtil.Instantiate("Player").GetComponent<Player>();
         TileMap[mid][mid].SetObject(player);
-
-        ItemObject obj = ResourceUtil.Instantiate("ItemObject").GetComponent<ItemObject>();
-        TileMap[0][0].SetObject(obj);
     }
     public delegate bool CheckHanlder(Tile tile);
     public bool Check(Direction dir, int x, int y, CheckHanlder handler)
@@ -438,11 +435,11 @@ public class TileManager : Singleton<TileManager>
     void MakeSelectable(int x, int y)
     {
         if (x >= 0 && x < TileMap.Count && y >= 0 && y < TileMap.Count)
-        {          
+        {
             TileMap[x][y].Selector.selectable = true;
         }
     }
-    IEnumerator MakeInjectedSelectable()
+    public IEnumerator MakeInjectedSelectable()
     {
         Player player = FindObjectOfType<Player>();
 
@@ -493,11 +490,11 @@ public class TileManager : Singleton<TileManager>
 
             directions = directions.Where(dir => !Check(dir, x, y, (tile) =>
             {
-                if(tile.Selector.Obj != null && tile.Selector.Obj is Player)
+                if (tile.Selector.Obj != null && tile.Selector.Obj is Player)
                 {
                     return true;
                 }
-                if(playerLastPos.x == tile.X && playerLastPos.y == tile.Y)
+                if (playerLastPos.x == tile.X && playerLastPos.y == tile.Y)
                 {
                     return true;
                 }

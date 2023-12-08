@@ -26,7 +26,33 @@ namespace Epos
         public readonly string Desc;
         public abstract void OnCollect();
     }
+    public abstract class InvenItem : Item
+    {
+        public ItemSlot Slot;
+        int useCount;
+        public int UseCount => useCount;
+        public virtual void OnClick()
+        {
+            
+        }
 
+        public virtual void Use()
+        {
+            useCount--;
+            if (useCount == 0)
+            {
+                if (Slot != null)
+                {
+                    Slot.Remove();
+                }
+            }
+        }
+        protected InvenItem(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
+        {
+            useCount = data.UseCount;
+        }
+
+    }
     public class RangeWeapon : InvenItem
     {
         public readonly int Atk;
@@ -45,10 +71,27 @@ namespace Epos
             RangeWeaponCanvas canvas = obj.GetComponent<RangeWeaponCanvas>();
             canvas.Init(tileObj);
         }
+        public override void OnClick()
+        {
+            base.OnClick();
+        }
         public override void Use()
         {
             base.Use();
-            Debug.Log("남은 사용 횟수 : " + UseCount);
+            Player player = EposManager.Instance.Player;
+            player.DoRange(Range, tile => tile.Selector.OnClicked.AddListener(() =>
+            {
+                tile.Selector.selectable = false;
+                if(tile.Selector.Obj != null && tile.Selector.Obj is Monster monster)
+                {
+                    player.RangeAttack(monster);
+                    TurnManager.Instance.EndTurn();
+                }
+                else
+                {
+                    EposManager.Instance.StartCoroutine(TileManager.Instance.MakeInjectedSelectable());
+                }
+            }));
         }
     }
     public class GoldItem : Item

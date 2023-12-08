@@ -29,7 +29,7 @@ namespace Epos
             isActive = false;
             itemImage = GetComponent<Image>();
             button = GetComponent<Button>();
-            clickEvent.AddListener(slot => item?.Use());
+            clickEvent.AddListener(slot => item?.OnClick());
                 
             button.onClick.AddListener(() =>
             {

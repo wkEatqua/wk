@@ -4,6 +4,7 @@ using Shared.Data;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using System;
 
 namespace Epos
 {
@@ -13,6 +14,19 @@ namespace Epos
 
         protected EposObjectInfo objectInfo;
 
+        public void DoRange(int range,Action<Tile> action)
+        {
+            for(int i = tile.X - range; i <= tile.X + range; i++)
+            {
+                for(int j = tile.Y - range; j <= tile.Y + range; j++)
+                {
+                    if(TileManager.Instance.CheckIndex(i, j))
+                    {
+                        action(TileManager.Instance.TileMap[i][j]);
+                    }
+                }
+            }
+        }
         public void SetObjectInfo(EposObjectInfo Info)
         {
             objectInfo = Info;

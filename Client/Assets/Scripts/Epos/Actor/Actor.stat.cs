@@ -225,6 +225,29 @@ namespace Epos
                 return (int)Mathf.Round(value);
             }
         }
+
+        public virtual int Damage
+        {
+            get
+            {
+                float value = statStrategies[ActorStatType.Damage].GetFinalStat(ActorStatType.Damage);
+                if (value < 0) return 0;
+
+                return (int)Mathf.Round(value);
+            }
+        }
+
+        public virtual int GoldGain
+        {
+            get
+            {
+                float value = statStrategies[ActorStatType.GoldGain].GetFinalStat(ActorStatType.GoldGain);
+                if (value < 0) return 0;
+
+                return (int)MathF.Round(value);
+            }
+        }
+
         public void AddStat(ActorStatType statType, int amount, StatType type)
         {
             switch (type)

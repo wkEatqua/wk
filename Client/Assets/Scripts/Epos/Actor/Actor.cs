@@ -41,6 +41,10 @@ namespace Epos
             {
                 dmg =(int)(dmg * CritProb / 100f);
             }
+
+            dmg *= 100 + Damage;
+            dmg /= 100;
+
             dmg = target.OnHit(dmg);
             return dmg;
         }        

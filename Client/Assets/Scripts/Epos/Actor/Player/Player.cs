@@ -17,7 +17,7 @@ namespace Epos
         public override int OnHit(int dmg)
         {
             int value = Def;
-            armours.ForEach(x => value += x.durability);
+            armours.ForEach(x => value += x.Durability);
 
             dmg -= value;
 
@@ -25,21 +25,21 @@ namespace Epos
 
             foreach (Armour armour in armours)
             {
-                int dur = armour.durability;
-                armour.count--;
+                int dur = armour.Durability;
+                armour.Count--;
                 if (dur >= dmg)
                 {
-                    armour.durability -= dmg;
+                    armour.Durability -= dmg;
                     break;
                 }
                 else
                 {
-                    armour.durability = 0;
+                    armour.Durability = 0;
                     dmg -= dur;
                 }
             }
 
-            armours = armours.Where(x => x.durability > 0 && x.count > 0).ToList();
+            armours = armours.Where(x => x.Durability > 0 && x.Count > 0).ToList();
 
             if (dmg < 0) dmg = 0;
 
@@ -53,29 +53,32 @@ namespace Epos
 
             int dmg = Atk;
             float rand = Random.Range(0, 100);
-            meleeWeapons.ForEach(x => dmg += x.durability);
+            meleeWeapons.ForEach(x => dmg += x.Durability);
 
             if (rand <= CritProb)
             {
                 dmg = (int)(dmg * CritProb / 100f);
             }
+            dmg *= 100 + Damage;
+            dmg /= 100;
             dmg = target.OnHit(dmg);
+
             int durabilityMinus = Mathf.Min(dmg, hp);
             foreach (MeleeWeapon wp in meleeWeapons)
             {
-                int dur = wp.durability;
+                int dur = wp.Durability;
                 if (dur >= durabilityMinus)
                 {
-                    wp.durability -= durabilityMinus;
+                    wp.Durability -= durabilityMinus;
                     break;
                 }
                 else
                 {
-                    wp.durability = 0;
+                    wp.Durability = 0;
                     durabilityMinus -= dur;
                 }
             }
-            meleeWeapons = meleeWeapons.Where(wp => wp.durability > 0).ToList();
+            meleeWeapons = meleeWeapons.Where(wp => wp.Durability > 0).ToList();
 
             return dmg;
         }

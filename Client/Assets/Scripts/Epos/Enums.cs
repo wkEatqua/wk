@@ -5,7 +5,7 @@ namespace Epos
 {
     public enum ActorStatType
     {
-        MaxHp, Atk, AtkRange, Def, DmgTake, CritProb, CritDmg, MoveSpeed
+        MaxHp, Atk, AtkRange, Def, DmgTake, CritProb, CritDmg, MoveSpeed, Sight,Damage,GoldGain
     }
     public enum StatType
     {
@@ -15,5 +15,14 @@ namespace Epos
     public enum Direction
     {
        Left,Right, Up, Down
+    }
+
+    public enum BuffEventType
+    {
+        OnRangeAttack,
+        OnMeleeAttack,
+        OnHit,
+        OnItemObtain,
+        None
     }
 }

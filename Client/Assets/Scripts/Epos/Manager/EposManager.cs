@@ -9,14 +9,28 @@ namespace Epos
 {
     public class EposManager : Singleton<EposManager>
     {
-         public int gold;
+         int gold;
          public int moveCount;
          public int eventCount;
          public int level;
          public int itemCount;
 
         int exp;
+        public int Gold
+        {
+            get
+            {
+                return gold;
+            }
+            set
+            {
+                int gain = value - gold;
+                gain *= 100 + player.GoldGain;
+                gain /= 100;
 
+                gold += gain;
+            }
+        }
         public int Exp
         {
             get

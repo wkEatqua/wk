@@ -8,7 +8,7 @@ using System;
 
 namespace Epos
 {
-    public abstract class TileObject : MonoBehaviour
+    public abstract class TileObject : BuffEvent
     {       
         [HideInInspector] public Tile tile;
 

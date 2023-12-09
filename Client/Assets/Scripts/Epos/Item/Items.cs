@@ -1,5 +1,6 @@
 using Apis;
 using Epos.UI;
+using NPOI.SS.Formula.Functions;
 using Org.BouncyCastle.Bcpg;
 using Shared.Data;
 using Shared.Model;
@@ -13,6 +14,12 @@ namespace Epos
     {
         protected readonly EposItemInfo data;
         public readonly ItemObject tileObj;
+
+        public int Durability;
+        public int Count;
+        public int Atk;
+        public int Range;
+
         public Item(EposItemInfo data,ItemObject tileObj)
         {
             this.data = data;
@@ -25,6 +32,10 @@ namespace Epos
         public string Name => data.Name;
         public readonly string Desc;
         public abstract void OnCollect();
+        public virtual void AddStat(ActorStatType statType,StatType addType,int amount)
+        {
+
+        }
     }
     public abstract class InvenItem : Item
     {
@@ -54,9 +65,7 @@ namespace Epos
 
     }
     public class RangeWeapon : InvenItem
-    {
-        public readonly int Atk;
-        public readonly int Range;
+    {      
         public static AddressablePooling pool;
         public RangeWeapon(EposItemInfo data,ItemObject itemObj) : base(data, itemObj)
         {
@@ -93,6 +102,38 @@ namespace Epos
                 }
             }));
         }
+        public override void AddStat(ActorStatType statType, StatType addType,int amount)
+        {
+            base.AddStat(statType, addType,amount);
+
+            switch(statType)
+            {
+                case ActorStatType.Atk:
+                    switch (addType)
+                    {
+                        case StatType.Value:
+                            Atk += amount;
+                            break;
+                        case StatType.Ratio:
+                            Atk *= 100 + amount;
+                            Atk /= 100;
+                            break;
+                    }
+                    break;
+                case ActorStatType.AtkRange:
+                    switch (addType)
+                    {
+                        case StatType.Value:
+                            Range += amount;
+                            break;
+                        case StatType.Ratio:
+                            Range *= 100 + amount;
+                            Range /= 100;
+                            break;
+                    }
+                    break;
+            }
+        }
     }
     public class GoldItem : Item
     {
@@ -102,7 +143,7 @@ namespace Epos
 
         public override void OnCollect()
         {
-            EposManager.Instance.gold += data.BaseStat;
+            EposManager.Instance.Gold += data.BaseStat;
         }
     }
 
@@ -120,33 +161,59 @@ namespace Epos
 
     public class MeleeWeapon : Item
     {
-        public int durability;
-
         public MeleeWeapon(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
         {
-            durability = data.BaseStat;
+            Durability = data.BaseStat;
         }
 
         public override void OnCollect()
         {
             EposManager.Instance.Player.Equip(this);
+        }
+        public override void AddStat(ActorStatType statType, StatType addType, int amount)
+        {
+            base.AddStat(statType, addType, amount);
+            switch (addType)
+            {
+                case StatType.Value:
+                    Durability += amount;
+                    break;
+                case StatType.Ratio:
+                    Durability *= 100 + amount;
+                    Durability /= 100;
+                    break;
+            }
         }
     }
 
     public class Armour : Item
     {
-        public int durability;
-        public int count;
-
+        
         public Armour(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
         {
-            durability = data.BaseStat;
-            count = data.UseCount;
+            Durability = data.BaseStat;
+            Count = data.UseCount;
         }
 
         public override void OnCollect()
         {
             EposManager.Instance.Player.Equip(this);
+        }
+
+        public override void AddStat(ActorStatType statType, StatType addType, int amount)
+        {
+            base.AddStat(statType, addType, amount);
+
+            switch (addType)
+            {
+                case StatType.Value:
+                    Durability += amount;
+                    break;
+                case StatType.Ratio:
+                    Durability *= 100 + amount;
+                    Durability /= 100;
+                    break;
+            }
         }
     }
 }

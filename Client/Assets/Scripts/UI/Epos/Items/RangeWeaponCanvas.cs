@@ -66,8 +66,7 @@ namespace Epos.UI
         }
         public void Return()
         {
-            RangeWeapon.pool.Return(gameObject);
-
+            UIPool.Return(gameObject);
         }
       
     }

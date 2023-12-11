@@ -3,9 +3,10 @@ using System.Collections.Generic;
 
 namespace Epos
 {
+
     public enum ActorStatType
     {
-        MaxHp, Atk, AtkRange, Def, DmgTake, CritProb, CritDmg, MoveSpeed, Sight,Damage,GoldGain
+        MaxHp, Atk, AtkRange, Def, DmgTake, CritProb, CritDmg, MoveSpeed, Sight, Damage, GoldGain
     }
     public enum StatType
     {
@@ -14,7 +15,7 @@ namespace Epos
 
     public enum Direction
     {
-       Left,Right, Up, Down
+        Left, Right, Up, Down
     }
 
     public enum BuffEventType
@@ -25,4 +26,9 @@ namespace Epos
         OnItemObtain,
         None
     }
+    public enum CardPattern
+    {
+        Clover, Heart, Diamond, Spade
+    }
+
 }

@@ -1,5 +1,6 @@
 using Shared.Data;
 using Shared.Model;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace Epos
 {
     public class EposManager : Singleton<EposManager>
     {
+        public UnityEvent OnGameReset = new UnityEvent();
          int gold;
          public int moveCount;
          public int eventCount;
@@ -62,6 +64,7 @@ namespace Epos
             }
         }
 
+        public IDictionary<CardPattern,int> CardPatternCounts = new Dictionary<CardPattern,int>();
         protected override void Awake()
         {
             base.Awake();
@@ -77,11 +80,20 @@ namespace Epos
                 }
                 Exp += value;
             });
+            OnGameReset.AddListener(() =>
+            {
+                CardPatternCounts.Clear();
+
+                foreach (CardPattern pattern in Enum.GetValues(typeof(CardPattern)))
+                {
+                    CardPatternCounts.Add(pattern, 0);
+                }
+            });
         }
 
         private void Start()
         {
-           
+            OnGameReset.Invoke();
         }
     }
 }

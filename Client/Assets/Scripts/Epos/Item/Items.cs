@@ -65,18 +65,16 @@ namespace Epos
 
     }
     public class RangeWeapon : InvenItem
-    {      
-        public static AddressablePooling pool;
+    {             
         public RangeWeapon(EposItemInfo data,ItemObject itemObj) : base(data, itemObj)
-        {
-            pool ??= new("RangeWeaponUI");
+        {          
             Atk = data.BaseStat;
             Range = data.Range;
         }
 
         public override void OnCollect()
         {
-            GameObject obj = pool.Get("RangeWeaponCanvas");
+            GameObject obj = UIPool.Get("RangeWeaponCanvas");
             RangeWeaponCanvas canvas = obj.GetComponent<RangeWeaponCanvas>();
             canvas.Init(tileObj);
         }

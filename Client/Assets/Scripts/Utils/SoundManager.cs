@@ -9,4 +9,6 @@ public class SoundManager : Singleton<SoundManager>
     float sfxVolume = 1.0f;
 
     float bgmVolume = 1.0f;
+
+    
 }

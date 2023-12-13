@@ -11,10 +11,10 @@ namespace Epos
         {
             public Item obtainedItem;
         }
-        readonly IDictionary<BuffEventType, UnityEvent<EventInfo>> events = new Dictionary<BuffEventType,UnityEvent<EventInfo>>();
+        readonly IDictionary<Define.BuffEventType, UnityEvent<EventInfo>> events = new Dictionary<Define.BuffEventType,UnityEvent<EventInfo>>();
 
         
-        public void AddEvent(BuffEventType type,UnityAction<EventInfo> action)
+        public void AddEvent(Define.BuffEventType type,UnityAction<EventInfo> action)
         {
             if(!events.ContainsKey(type))
             {
@@ -23,7 +23,7 @@ namespace Epos
             events[type].AddListener(action);
         }
 
-        public void RemoveEvent(BuffEventType type, UnityAction<EventInfo> action)
+        public void RemoveEvent(Define.BuffEventType type, UnityAction<EventInfo> action)
         {
             if (events.ContainsKey(type))
             {
@@ -31,7 +31,7 @@ namespace Epos
             }
         }
 
-        public void ExcuteEvent(BuffEventType type,EventInfo info) 
+        public void ExcuteEvent(Define.BuffEventType type,EventInfo info) 
         {
             if (events.ContainsKey(type))
             {

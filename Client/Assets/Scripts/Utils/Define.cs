@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Epos
-{
 
+public class Define
+{
     public enum ActorStatType
     {
         MaxHp, Atk, AtkRange, Def, DmgTake, CritProb, CritDmg, MoveSpeed, Sight, Damage, GoldGain
@@ -30,5 +30,14 @@ namespace Epos
     {
         Clover, Heart, Diamond, Spade
     }
-
+    public enum UIEvent
+    {
+        Click,
+        Drag,
+        Drop,
+        PointUp,
+        PointEnter,
+        PointExit,
+        PointStay
+    }
 }

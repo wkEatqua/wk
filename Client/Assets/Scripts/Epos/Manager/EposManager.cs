@@ -64,7 +64,7 @@ namespace Epos
             }
         }
 
-        public IDictionary<CardPattern,int> CardPatternCounts = new Dictionary<CardPattern,int>();
+        public IDictionary<Define.CardPattern,int> CardPatternCounts = new Dictionary<Define.CardPattern,int>();
         protected override void Awake()
         {
             base.Awake();
@@ -84,7 +84,7 @@ namespace Epos
             {
                 CardPatternCounts.Clear();
 
-                foreach (CardPattern pattern in Enum.GetValues(typeof(CardPattern)))
+                foreach (Define.CardPattern pattern in Enum.GetValues(typeof(Define.CardPattern)))
                 {
                     CardPatternCounts.Add(pattern, 0);
                 }

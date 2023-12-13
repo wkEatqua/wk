@@ -166,7 +166,7 @@ namespace Epos
         {
             TileManager.Instance.RemoveTile(x, y);
 
-            List<Direction> directions = new() { Direction.Left, Direction.Right, Direction.Up, Direction.Down };
+            List<Define.Direction> directions = new() { Define.Direction.Left, Define.Direction.Right, Define.Direction.Up, Define.Direction.Down };
             directions = directions.Where(dir => !TileManager.Instance.Check(dir, x, y,
                 tile =>
                 {

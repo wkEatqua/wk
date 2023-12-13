@@ -32,7 +32,7 @@ namespace Epos
         public string Name => data.Name;
         public readonly string Desc;
         public abstract void OnCollect();
-        public virtual void AddStat(ActorStatType statType,StatType addType,int amount)
+        public virtual void AddStat(Define.ActorStatType statType,Define.StatType addType,int amount)
         {
 
         }
@@ -100,31 +100,31 @@ namespace Epos
                 }
             }));
         }
-        public override void AddStat(ActorStatType statType, StatType addType,int amount)
+        public override void AddStat(Define.ActorStatType statType, Define.StatType addType,int amount)
         {
             base.AddStat(statType, addType,amount);
 
             switch(statType)
             {
-                case ActorStatType.Atk:
+                case Define.ActorStatType.Atk:
                     switch (addType)
                     {
-                        case StatType.Value:
+                        case Define.StatType.Value:
                             Atk += amount;
                             break;
-                        case StatType.Ratio:
+                        case Define.StatType.Ratio:
                             Atk *= 100 + amount;
                             Atk /= 100;
                             break;
                     }
                     break;
-                case ActorStatType.AtkRange:
+                case Define.ActorStatType.AtkRange:
                     switch (addType)
                     {
-                        case StatType.Value:
+                        case Define.StatType.Value:
                             Range += amount;
                             break;
-                        case StatType.Ratio:
+                        case Define.StatType.Ratio:
                             Range *= 100 + amount;
                             Range /= 100;
                             break;
@@ -168,15 +168,15 @@ namespace Epos
         {
             EposManager.Instance.Player.Equip(this);
         }
-        public override void AddStat(ActorStatType statType, StatType addType, int amount)
+        public override void AddStat(Define.ActorStatType statType, Define.StatType addType, int amount)
         {
             base.AddStat(statType, addType, amount);
             switch (addType)
             {
-                case StatType.Value:
+                case Define.StatType.Value:
                     Durability += amount;
                     break;
-                case StatType.Ratio:
+                case Define.StatType.Ratio:
                     Durability *= 100 + amount;
                     Durability /= 100;
                     break;
@@ -198,16 +198,16 @@ namespace Epos
             EposManager.Instance.Player.Equip(this);
         }
 
-        public override void AddStat(ActorStatType statType, StatType addType, int amount)
+        public override void AddStat(Define.ActorStatType statType, Define.StatType addType, int amount)
         {
             base.AddStat(statType, addType, amount);
 
             switch (addType)
             {
-                case StatType.Value:
+                case Define.StatType.Value:
                     Durability += amount;
                     break;
-                case StatType.Ratio:
+                case Define.StatType.Ratio:
                     Durability *= 100 + amount;
                     Durability /= 100;
                     break;

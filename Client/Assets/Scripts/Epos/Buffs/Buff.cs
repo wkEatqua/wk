@@ -8,10 +8,10 @@ namespace Epos.Buff
     public abstract partial class Buff
     {
         
-        public BuffEventType UseType;
+        public Define.BuffEventType UseCondition;
         public int Amount;
-        public ActorStatType StatType;
-        public StatType AddType;
+        public Define.ActorStatType StatType;
+        public Define.StatType AddType;
 
         protected Actor actor;
 
@@ -28,13 +28,13 @@ namespace Epos.Buff
         {
             isEquiped = true;
             this.actor = actor;
-            if (UseType == BuffEventType.None)
+            if (UseCondition == Define.BuffEventType.None)
             {
                 UseStrategy.UseBuff();
             }
             else
             {
-                actor.AddEvent(UseType, Invoke);
+                actor.AddEvent(UseCondition, Invoke);
             }
         }
 
@@ -43,13 +43,13 @@ namespace Epos.Buff
             if (!isEquiped) return;
             isEquiped = false;
 
-            if (UseType == BuffEventType.None)
+            if (UseCondition == Define.BuffEventType.None)
             {
                 CancelStrategy.CancelBuff();
             }
             else
             {
-                actor.RemoveEvent(UseType, Invoke);
+                actor.RemoveEvent(UseCondition, Invoke);
             }
         }      
 

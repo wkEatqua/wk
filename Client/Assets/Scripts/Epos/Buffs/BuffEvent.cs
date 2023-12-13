@@ -10,6 +10,7 @@ namespace Epos
         public class EventInfo
         {
             public Item obtainedItem;
+            public BonusStat<Define.ActorStatType> stat;
         }
         readonly IDictionary<Define.BuffEventType, UnityEvent<EventInfo>> events = new Dictionary<Define.BuffEventType,UnityEvent<EventInfo>>();
 

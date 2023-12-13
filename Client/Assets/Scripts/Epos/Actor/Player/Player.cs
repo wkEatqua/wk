@@ -50,7 +50,10 @@ namespace Epos
         public override int Attack(Actor target)
         {
             int hp = target.CurHp;
+            EventInfo info = new EventInfo();
+            ExcuteEvent(Define.BuffEventType.OnMeleeAttack, info);
 
+            bonusStat += info.stat;
             int dmg = Atk;
             float rand = Random.Range(0, 100);
             meleeWeapons.ForEach(x => dmg += x.Durability);
@@ -79,7 +82,7 @@ namespace Epos
                 }
             }
             meleeWeapons = meleeWeapons.Where(wp => wp.Durability > 0).ToList();
-
+            bonusStat -= info.stat;
             return dmg;
         }
 

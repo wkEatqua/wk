@@ -324,6 +324,30 @@ namespace Shared.Model
         public long Rate4 { get; set; }
     }
 
+    public class EposCardEvent : JsonModel
+    {
+        public long Index { get; set; }
+        public long BgText { get; set; }
+        public Define.CardPattern Pattern { get; set; }
+        public long EventName { get; set; }
+        public long EventText { get; set; }
+    }
+    
+    public class EposBuff : JsonModel
+    {
+        public long Index { get; set; }      
+        public string BuffType { get; set; }
+        public Define.BuffEventType UseCondition { get; set; }
+        public float Amount { get; set; }
+        public Define.ActorStatType StatType { get; set; }
+        public Define.ValueType ValueType { get; set; }
+    }
+    public class EposBuffGroup : JsonModel
+    {
+        public long GroupIndex { get; set; }
+        public long BuffIndex { get; set; }
+        public int Chance { get; set; }
+    }
     #region 아이템 관련
 
     public class EposItem : JsonModel

@@ -23,7 +23,7 @@ namespace Epos.Buff
         {
             Item item = info.obtainedItem;
 
-            item?.AddStat(StatType, AddType, Amount);
+            item?.AddStat(StatType, ValueType, Amount);
         }
     }
 }

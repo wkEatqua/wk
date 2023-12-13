@@ -96,15 +96,16 @@ namespace Epos
         [SerializeField] BaseStat baseStat = new();
         public BaseStat BaseStat => baseStat;
 
-        private readonly BonusStat<Define.ActorStatType> bonusStat = new();
+        protected BonusStat<Define.ActorStatType> bonusStat = new();
 
         readonly List<BonusStat<Define.ActorStatType>> bonusStats = new();
+
         protected virtual BonusStat<Define.ActorStatType> BonusStat
         {
             get
             {               
                 BonusStat<Define.ActorStatType> stat = new();
-
+                stat += bonusStat;
                 bonusStats.ForEach(x => stat += x);
 
                 return stat;
@@ -248,14 +249,14 @@ namespace Epos
             }
         }
 
-        public void AddStat(Define.ActorStatType statType, int amount, Define.StatType type)
+        public void AddStat(Define.ActorStatType statType, int amount, Define.ValueType type)
         {
             switch (type)
             {
-                case Define.StatType.Value:
+                case Define.ValueType.Value:
                     bonusStat.AddValue(statType, amount);
                     break;
-                case Define.StatType.Ratio:
+                case Define.ValueType.Ratio:
                     bonusStat.AddRatio(statType, amount);
                     break;
             }

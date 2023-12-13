@@ -37,7 +37,7 @@ namespace Epos.Buff
             {
                 if (buff.actor != null)
                 {
-                    buff.actor.AddStat(buff.StatType, buff.Amount, buff.AddType);
+                    buff.actor.AddStat(buff.StatType, buff.Amount, buff.ValueType);
                 }
             }
         }
@@ -52,7 +52,7 @@ namespace Epos.Buff
             {
                 if (buff.actor != null)
                 {
-                    buff.actor.AddStat(buff.StatType, -buff.Amount, buff.AddType);
+                    buff.actor.AddStat(buff.StatType, -buff.Amount, buff.ValueType);
                 }
             }
         }

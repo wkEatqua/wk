@@ -11,7 +11,7 @@ namespace Epos.Buff
         public Define.BuffEventType UseCondition;
         public int Amount;
         public Define.ActorStatType StatType;
-        public Define.StatType AddType;
+        public Define.ValueType ValueType;
 
         protected Actor actor;
 

@@ -8,7 +8,7 @@ public class Define
     {
         MaxHp, Atk, AtkRange, Def, DmgTake, CritProb, CritDmg, MoveSpeed, Sight, Damage, GoldGain
     }
-    public enum StatType
+    public enum ValueType
     {
         Value, Ratio
     }

@@ -19,7 +19,15 @@ namespace Epos.Buff
         }
         protected override void Invoke(BuffEvent.EventInfo info)
         {
-            UseStrategy.UseBuff();
+            switch(ValueType)
+            {
+                case Define.ValueType.Value:
+                    info.stat.AddValue(StatType, Amount);
+                    break;
+                case Define.ValueType.Ratio:
+                    info.stat.AddRatio(StatType, Amount);
+                    break;
+            }
         }
     }
 }

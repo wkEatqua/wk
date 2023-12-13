@@ -10,7 +10,7 @@ namespace Epos
 {
     public class EposManager : Singleton<EposManager>
     {
-        public UnityEvent OnGameReset = new UnityEvent();
+        public UnityEvent OnGameReset = new();
          int gold;
          public int moveCount;
          public int eventCount;
@@ -63,8 +63,6 @@ namespace Epos
                 player = value;
             }
         }
-
-        public IDictionary<Define.CardPattern,int> CardPatternCounts = new Dictionary<Define.CardPattern,int>();
         protected override void Awake()
         {
             base.Awake();
@@ -82,11 +80,11 @@ namespace Epos
             });
             OnGameReset.AddListener(() =>
             {
-                CardPatternCounts.Clear();
+                CardManager.CardPatternCounts.Clear();
 
                 foreach (Define.CardPattern pattern in Enum.GetValues(typeof(Define.CardPattern)))
                 {
-                    CardPatternCounts.Add(pattern, 0);
+                    CardManager.CardPatternCounts.Add(pattern, 0);
                 }
             });
         }

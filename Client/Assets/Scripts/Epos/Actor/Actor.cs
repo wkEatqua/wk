@@ -11,8 +11,7 @@ namespace Epos
         protected virtual void Awake()
         {
             InitStatStrategy();
-            baseStat.Init();
-            bonusStats.Add(bonusStat);
+            baseStat.Init();            
         }
 
         public virtual void Start()
@@ -34,6 +33,10 @@ namespace Epos
         
         public virtual int Attack(Actor target)
         {
+            EventInfo info = new EventInfo();
+            ExcuteEvent(Define.BuffEventType.OnMeleeAttack, info);
+
+            bonusStat += info.stat;
             int dmg = Atk;
             float rand = Random.Range(0, 100);
 
@@ -46,6 +49,7 @@ namespace Epos
             dmg /= 100;
 
             dmg = target.OnHit(dmg);
+            bonusStat -= info.stat;
             return dmg;
         }        
     }

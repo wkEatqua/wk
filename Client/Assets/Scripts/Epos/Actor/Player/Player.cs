@@ -88,7 +88,24 @@ namespace Epos
 
         public int RangeAttack(Actor target)
         {
-            return base.Attack(target);
+            EventInfo info = new();
+            ExcuteEvent(Define.BuffEventType.OnRangeAttack, info);
+
+            bonusStat += info.stat;
+            int dmg = Atk;
+            float rand = Random.Range(0, 100);
+
+            if (rand <= CritProb)
+            {
+                dmg = (int)(dmg * CritProb / 100f);
+            }
+
+            dmg *= 100 + Damage;
+            dmg /= 100;
+
+            dmg = target.OnHit(dmg);
+            bonusStat -= info.stat;
+            return dmg;
         }
         public void Equip(MeleeWeapon wp)
         {

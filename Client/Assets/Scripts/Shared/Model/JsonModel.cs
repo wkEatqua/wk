@@ -337,10 +337,13 @@ namespace Shared.Model
     {
         public long Index { get; set; }      
         public string BuffType { get; set; }
-        public Define.BuffEventType UseCondition { get; set; }
+        public Define.BuffEventType ActiveType { get; set; }
         public float Amount { get; set; }
         public Define.ActorStatType StatType { get; set; }
         public Define.ValueType ValueType { get; set; }
+        public int BuffCondition1 { get; set; }
+        public int BuffCondition2 { get; set; }
+        public int ConditionParam { get; set; }
     }
     public class EposBuffGroup : JsonModel
     {

@@ -19,8 +19,8 @@ namespace Epos
         public int Count;
         public int Atk;
         public int Range;
-
-        public Item(EposItemInfo data,ItemObject tileObj)
+        public int Type;
+        public Item(EposItemInfo data, ItemObject tileObj)
         {
             this.data = data;
             ScriptData.TryGetGameText(data.DescText, out EposGameTextInfo info);
@@ -32,7 +32,7 @@ namespace Epos
         public string Name => data.Name;
         public readonly string Desc;
         public abstract void OnCollect();
-        public virtual void AddStat(Define.ActorStatType statType,Define.ValueType addType,int amount)
+        public virtual void AddStat(Define.ActorStatType statType, Define.ValueType addType, int amount)
         {
 
         }
@@ -44,7 +44,7 @@ namespace Epos
         public int UseCount => useCount;
         public virtual void OnClick()
         {
-            
+
         }
 
         public virtual void Use()
@@ -65,9 +65,9 @@ namespace Epos
 
     }
     public class RangeWeapon : InvenItem
-    {             
-        public RangeWeapon(EposItemInfo data,ItemObject itemObj) : base(data, itemObj)
-        {          
+    {
+        public RangeWeapon(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
+        {
             Atk = data.BaseStat;
             Range = data.Range;
         }
@@ -89,7 +89,7 @@ namespace Epos
             player.DoRange(Range, tile => tile.Selector.OnClicked.AddListener(() =>
             {
                 tile.Selector.selectable = false;
-                if(tile.Selector.Obj != null && tile.Selector.Obj is Monster monster)
+                if (tile.Selector.Obj != null && tile.Selector.Obj is Monster monster)
                 {
                     player.RangeAttack(monster);
                     TurnManager.Instance.EndTurn();
@@ -100,11 +100,11 @@ namespace Epos
                 }
             }));
         }
-        public override void AddStat(Define.ActorStatType statType, Define.ValueType addType,int amount)
+        public override void AddStat(Define.ActorStatType statType, Define.ValueType addType, int amount)
         {
-            base.AddStat(statType, addType,amount);
+            base.AddStat(statType, addType, amount);
 
-            switch(statType)
+            switch (statType)
             {
                 case Define.ActorStatType.Atk:
                     switch (addType)
@@ -135,7 +135,7 @@ namespace Epos
     }
     public class GoldItem : Item
     {
-        public GoldItem(EposItemInfo data,ItemObject itemObj) : base(data, itemObj)
+        public GoldItem(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
         {
         }
 
@@ -171,14 +171,19 @@ namespace Epos
         public override void AddStat(Define.ActorStatType statType, Define.ValueType addType, int amount)
         {
             base.AddStat(statType, addType, amount);
-            switch (addType)
+            switch (statType)
             {
-                case Define.ValueType.Value:
-                    Durability += amount;
-                    break;
-                case Define.ValueType.Ratio:
-                    Durability *= 100 + amount;
-                    Durability /= 100;
+                case Define.ActorStatType.Atk:
+                    switch (addType)
+                    {
+                        case Define.ValueType.Value:
+                            Durability += amount;
+                            break;
+                        case Define.ValueType.Ratio:
+                            Durability *= 100 + amount;
+                            Durability /= 100;
+                            break;
+                    }
                     break;
             }
         }
@@ -186,7 +191,7 @@ namespace Epos
 
     public class Armour : Item
     {
-        
+
         public Armour(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
         {
             Durability = data.BaseStat;
@@ -201,15 +206,19 @@ namespace Epos
         public override void AddStat(Define.ActorStatType statType, Define.ValueType addType, int amount)
         {
             base.AddStat(statType, addType, amount);
-
-            switch (addType)
+            switch (statType)
             {
-                case Define.ValueType.Value:
-                    Durability += amount;
-                    break;
-                case Define.ValueType.Ratio:
-                    Durability *= 100 + amount;
-                    Durability /= 100;
+                case Define.ActorStatType.Def:
+                    switch (addType)
+                    {
+                        case Define.ValueType.Value:
+                            Durability += amount;
+                            break;
+                        case Define.ValueType.Ratio:
+                            Durability *= 100 + amount;
+                            Durability /= 100;
+                            break;
+                    }
                     break;
             }
         }

@@ -21,11 +21,13 @@ namespace Shared.Data
     {
         public long Index => data.Index;
         public string BuffType => data.BuffType;
-        public Define.BuffEventType UseCondition => data.UseCondition;
+        public Define.BuffEventType ActiveType => data.ActiveType;
         public float Amount => data.Amount;
         public Define.ActorStatType StatType => data.StatType;
         public Define.ValueType ValueType => data.ValueType;
-
+        public int BuffCondition1 => data.BuffCondition1;
+        public int BuffCondition2 => data.BuffCondition2;
+        public int ConditionParam => data.ConditionParam;
         readonly EposBuff data;
         public EposBuffInfo(EposBuff data) { this.data = data; }
     }

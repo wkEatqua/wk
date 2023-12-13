@@ -16,7 +16,7 @@ namespace Epos.Buff
         protected Actor actor;
 
         protected bool isEquiped = false;
-        
+        public int ConditionParam;
         public Buff()
         {
             isEquiped = false;

@@ -25,8 +25,7 @@ namespace Shared.Data
         public float Amount => data.Amount;
         public Define.ActorStatType StatType => data.StatType;
         public Define.ValueType ValueType => data.ValueType;
-        public int BuffCondition1 => data.BuffCondition1;
-        public int BuffCondition2 => data.BuffCondition2;
+        public int BuffCondition => data.BuffCondition;      
         public int ConditionParam => data.ConditionParam;
         readonly EposBuff data;
         public EposBuffInfo(EposBuff data) { this.data = data; }

@@ -7,6 +7,7 @@ namespace Shared.Data
 {
     public class EposItemInfo
     {
+        public long ID => data.ID;
         public ItemType Type => data.Type;
         public string Name => data.Name;
         public long DescText => data.DescText;

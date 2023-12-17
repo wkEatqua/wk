@@ -12,52 +12,34 @@ namespace Epos
         List<Armour> armours = new();
 
         public List<MeleeWeapon> MeleeWeapons => meleeWeapons;
-        public List<Armour> Armours => armours;
-        public override int Atk
-        {
-            get
-            {
-                int value = base.Atk;
-
-                meleeWeapons.ForEach(x => value += x.durability);
-
-                return value;
-            }
-        }
-
-        public override int Def
-        {
-            get
-            {
-                int value = base.Def;
-                armours.ForEach(x => value += x.durability);
-
-                return value;
-            }
-        }
+        public List<Armour> Armours => armours;              
+    
         public override int OnHit(int dmg)
-        {           
-            dmg -= Def;
+        {
+            int value = Def;
+            armours.ForEach(x => value += x.Durability);
+
+            dmg -= value;
 
             if (dmg < 0) dmg = 0;
 
             foreach (Armour armour in armours)
             {
-                int dur = armour.durability;
-                armour.count--;
+                int dur = armour.Durability;
+                armour.Count--;
                 if (dur >= dmg)
                 {
-                    armour.durability -= dmg;
+                    armour.Durability -= dmg;
                     break;
                 }
                 else
                 {
-                    armour.durability = 0;
+                    armour.Durability = 0;
                     dmg -= dur;
                 }
             }
 
-            armours = armours.Where(x => x.durability > 0 && x.count > 0).ToList();
+            armours = armours.Where(x => x.Durability > 0 && x.Count > 0).ToList();
 
             if (dmg < 0) dmg = 0;
 
@@ -68,33 +50,63 @@ namespace Epos
         public override int Attack(Actor target)
         {
             int hp = target.CurHp;
+            EventInfo info = new EventInfo();
+            ExcuteEvent(Define.BuffEventType.OnMeleeAttack, info);
 
-            int dmg = base.Attack(target);
+            bonusStat += info.stat;
+            int dmg = Atk;
+            float rand = Random.Range(0, 100);
+            meleeWeapons.ForEach(x => dmg += x.Durability);
+
+            if (rand <= CritProb)
+            {
+                dmg = (int)(dmg * CritProb / 100f);
+            }
+            dmg *= 100 + Damage;
+            dmg /= 100;
+            dmg = target.OnHit(dmg);
 
             int durabilityMinus = Mathf.Min(dmg, hp);
             foreach (MeleeWeapon wp in meleeWeapons)
             {
-                int dur = wp.durability;
+                int dur = wp.Durability;
                 if (dur >= durabilityMinus)
                 {
-                    wp.durability -= durabilityMinus;
+                    wp.Durability -= durabilityMinus;
                     break;
                 }
                 else
                 {
-                    wp.durability = 0;
+                    wp.Durability = 0;
                     durabilityMinus -= dur;
                 }
             }
-            meleeWeapons = meleeWeapons.Where(wp => wp.durability > 0).ToList();
-
-            if(target != null && target.gameObject.activeSelf && target.CurHp > 0)
-            {
-                OnHit(target.CurHp);
-            }
+            meleeWeapons = meleeWeapons.Where(wp => wp.Durability > 0).ToList();
+            bonusStat -= info.stat;
             return dmg;
         }
 
+        public int RangeAttack(Actor target)
+        {
+            EventInfo info = new();
+            ExcuteEvent(Define.BuffEventType.OnRangeAttack, info);
+
+            bonusStat += info.stat;
+            int dmg = Atk;
+            float rand = Random.Range(0, 100);
+
+            if (rand <= CritProb)
+            {
+                dmg = (int)(dmg * CritProb / 100f);
+            }
+
+            dmg *= 100 + Damage;
+            dmg /= 100;
+
+            dmg = target.OnHit(dmg);
+            bonusStat -= info.stat;
+            return dmg;
+        }
         public void Equip(MeleeWeapon wp)
         {
             meleeWeapons.Add(wp);
@@ -110,8 +122,6 @@ namespace Epos
         }
         private void Update()
         {
-            Debug.Log(Atk);
-            Debug.Log(Def);
         }
     }
 }

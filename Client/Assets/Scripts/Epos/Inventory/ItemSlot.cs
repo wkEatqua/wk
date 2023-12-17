@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Epos
@@ -13,16 +14,26 @@ namespace Epos
         Image itemImage;
 
         bool isActive;
+
         public bool IsActive => isActive;
 
+        readonly public UnityEvent<ItemSlot> clickEvent = new();
+
+        public void ChangeClickEvent(UnityAction<ItemSlot> action)
+        {
+            clickEvent.RemoveAllListeners();
+            clickEvent.AddListener(action);
+        }
         private void Awake()
         {
             isActive = false;
             itemImage = GetComponent<Image>();
             button = GetComponent<Button>();
+            clickEvent.AddListener(slot => item?.OnClick());
+                
             button.onClick.AddListener(() =>
             {
-                item?.Use();
+                clickEvent.Invoke(this);
             });
         }
         public void Add(InvenItem item)
@@ -31,12 +42,15 @@ namespace Epos
             if(item != null)
             {                
                 item.Slot = this;
+                itemImage.color = Color.green;
             }
         }
         public InvenItem Remove()
         {
+            item.Slot = null;
             InvenItem temp = item;
             item = null;
+            itemImage.color = Color.white;
             return temp;
         }
 

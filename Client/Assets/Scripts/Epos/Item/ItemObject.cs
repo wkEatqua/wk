@@ -12,11 +12,12 @@ namespace Epos
 
         public Item item;
 
-        private void Start()
+        private void OnEnable()
         {
             ItemData.TryGetItemInfo(ItemID, out EposItemInfo itemInfo);
-            item = Activator.CreateInstance(Type.GetType("Epos."+itemInfo.Type.ToString()), itemInfo) as Item;
+            item = Activator.CreateInstance(Type.GetType("Epos." + itemInfo.Type.ToString()), itemInfo, this) as Item;
         }
+       
         public virtual void Collect()
         {
             item.OnCollect();

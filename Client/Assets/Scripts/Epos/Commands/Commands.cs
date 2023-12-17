@@ -62,6 +62,7 @@ namespace Epos
         public IEnumerator Excute()
         {
             obj.OnInteract();
+            TurnManager.Instance.EndTurn();
             yield return null;
         }
     }

@@ -15,10 +15,15 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_Data:
     m_SerializedData: []
-  m_GUID: d9b0786f1c442ee4eb74b0b2307d9df9
+  m_GUID: bb4b38ee323a21d4d842cb535e5414ba
   m_SerializeEntries:
-  - m_GUID: 14f190ee840b2894d98ef2a3d57d76af
-    m_Address: Assets/Prefabs/Dice Window.prefab
+  - m_GUID: f4fa6563f85f35540bd56cfbb85b78f5
+    m_Address: Assets/Prefabs/Debug/DebugTile.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e96ab3473fe74f418864685091327ca
+    m_Address: ItemObject
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -27,8 +32,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68344bce1663cd74e83b23f4556a0e63
+    m_Address: DebugObj
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1ebff531946c34f4e93b6458162e0f35
     m_Address: Player
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec6e3f50a2bcf954ebc302b531703560
+    m_Address: DmgText
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -37,8 +52,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ec6e3f50a2bcf954ebc302b531703560
-    m_Address: DmgText
+  - m_GUID: f0f792632a8041747933e34458c02b12
+    m_Address: RangeWeaponCanvas
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -9,9 +9,9 @@ namespace Epos
     {
         public static ICommand CreateCommand(Tile tile, TileObject tileObject)
         {
-            Player player = Object.FindAnyObjectByType<Player>();
+            Player player = EposManager.Instance.Player;
 
-            if ((tileObject == null || tileObject is ItemObject) && tile.Type == Tile.TileType.Normal)
+            if ((tileObject == null || tileObject is ItemObject) && tile.Type != Tile.TileType.Grace)
             {
                 return new MoveCommand(player, tile);
             }

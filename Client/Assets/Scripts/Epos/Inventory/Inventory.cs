@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Epos
@@ -10,7 +11,7 @@ namespace Epos
     {
         List<ItemSlot> slots = new();
 
-        public int maxSlot;
+        public int maxSlot;       
 
         protected override void Awake()
         {
@@ -19,6 +20,20 @@ namespace Epos
             ResetSlots();
         }
 
+        public void ChangeClickEvents(UnityAction<ItemSlot> clickEvent)
+        {
+            foreach (ItemSlot slot in slots)
+            {
+                slot.ChangeClickEvent(clickEvent);
+            }
+        }
+        public void ClickEventsBackToNormal()
+        {
+            foreach (ItemSlot slot in slots)
+            {
+                slot.ChangeClickEvent(s => s.Item?.OnClick());
+            }
+        }
         void ResetSlots()
         {
             for (int i = 0; i < slots.Count; i++)

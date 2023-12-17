@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 namespace Epos
 {
-    public class TileSelector : MonoBehaviour
+    public class TileSelector : MonoBehaviour,IRaycast
     {
         [HideInInspector] public UnityEvent OnSelected = new();
         [HideInInspector] public UnityEvent OnConfirmed = new();
@@ -16,11 +17,21 @@ namespace Epos
         public bool selectable;
         ICommand command;
 
+        public UnityEvent OnClicked = new();
+
         private void Awake()
         {
             tile = GetComponent<Tile>();
             selectable = false;
             render = GetComponent<Renderer>();
+            OnClicked.AddListener(() =>
+            {
+                if (selectable)
+                {
+                    Debug.Log("Clicked");
+                    OnSelected.Invoke();
+                }
+            });
             OnSelected.AddListener(() =>
             {
                 command = CommandFactory.CreateCommand(tile, obj);
@@ -31,15 +42,7 @@ namespace Epos
                 }
             });
             OnConfirmed.AddListener(() => TileManager.Instance.Traverse(x => x.Selector.selectable = false));           
-        }
-
-        private void OnMouseDown()
-        {
-            if (selectable)
-            {
-                OnSelected.Invoke();
-            }
-        }
+        }       
 
         private void OnDisable()
         {
@@ -63,10 +66,14 @@ namespace Epos
 
         private void Update()
         {
+            
             switch (tile.Type)
-            {
-                case Tile.TileType.Normal:
-                case Tile.TileType.UnMovable:
+            { 
+                case Tile.TileType.Grace:
+                    render.material.color = Color.black;
+                    selectable = false;
+                    break;
+                default:
                     if (selectable)
                     {
                         render.material.color = Color.green;
@@ -76,11 +83,12 @@ namespace Epos
                         render.material.color = Color.white;
                     }
                     break;
-                case Tile.TileType.Grace:
-                    render.material.color = Color.black;
-                    selectable = false;
-                    break;
             }
+        }
+
+        public void OnRayCast()
+        {
+            OnClicked.Invoke();           
         }
     }
 }

@@ -16,12 +16,5 @@ public class TilingDebug : MonoBehaviour
 
     public void OnClickCheckInfoButton()
     {
-        EposObjectPercentInfo objectInfo;
-        EposData.TryGetEposObjectPercent(1, out objectInfo);
-        Debug.Log(objectInfo.ToString());
-
-        EposTileObjectPercentInfo tileObjectInfo;
-        EposData.TryGetEposTileObjectPercent(6, out tileObjectInfo);
-        Debug.Log(tileObjectInfo.ToString());
     }
 }

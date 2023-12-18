@@ -3,6 +3,7 @@ using Shared.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,11 +12,13 @@ namespace Epos
     public class EposManager : Singleton<EposManager>
     {
         public UnityEvent OnGameReset = new();
-         int gold;
-         public int moveCount;
-         public int eventCount;
-         public int level;
-         public int itemCount;
+        int gold;
+        public int moveCount;
+        public int eventCount;
+        public int level;
+        public int itemCount;
+
+        int maxLevel;
 
         int exp;
         public int Gold
@@ -41,11 +44,20 @@ namespace Epos
             }
             set
             {
+                if (level >= maxLevel) return;
+
                 exp = value;
-                while (EposData.TryGetEposMaxExp(level, out EposLevelExpInfo info) && exp >= info.Exp)
+                EposLevelExpInfo info;
+                while (EposData.TryGetEposMaxExp(level, out info) && exp >= info.Exp)
                 {
                     exp -= info.Exp;
                     level++;
+                }
+
+                if (info == null)
+                {
+                    level = maxLevel;
+                    exp = 0;
                 }
             }
         }
@@ -92,6 +104,7 @@ namespace Epos
         private void Start()
         {
             OnGameReset.Invoke();
+            maxLevel = (int)EposData.LevelDict.Keys.Max(x => x);
         }
     }
 }

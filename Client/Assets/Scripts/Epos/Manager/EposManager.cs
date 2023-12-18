@@ -82,7 +82,7 @@ namespace Epos
             {
                 CardManager.CardPatternCounts.Clear();
 
-                foreach (Define.CardPattern pattern in Enum.GetValues(typeof(Define.CardPattern)))
+                foreach (CardPattern pattern in Enum.GetValues(typeof(CardPattern)))
                 {
                     CardManager.CardPatternCounts.Add(pattern, 0);
                 }

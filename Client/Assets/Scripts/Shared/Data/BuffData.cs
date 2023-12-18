@@ -10,7 +10,7 @@ namespace Shared.Data
         public long Index => data.Index;
         public long BgTitle => data.BgTitle;
         public long BgText => data.BgText;
-        public Define.CardPattern Pattern => data.Pattern;
+        public CardPattern Pattern => data.Pattern;
         public long EventName => data.EventName;
         public long EventText => data.EventText;
 
@@ -22,10 +22,10 @@ namespace Shared.Data
     {
         public long Index => data.Index;
         public string BuffType => data.BuffType;
-        public Define.BuffEventType ActiveType => data.ActiveType;
+        public BuffEventType ActiveType => data.ActiveType;
         public float Amount => data.Amount;
-        public Define.ActorStatType StatType => data.StatType;
-        public Define.ValueType ValueType => data.ValueType;
+        public ActorStatType StatType => data.StatType;
+        public Shared.Model.ValueType ValueType => data.ValueType;
         public int BuffCondition => data.BuffCondition;      
         public int ConditionParam => data.ConditionParam;
         readonly EposBuff data;

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using Shared.Model;
 
 namespace Epos
 {
@@ -18,69 +19,69 @@ namespace Epos
         [SerializeField] int DmgTake = 100; // 받는 피해량
         [SerializeField] int MoveSpeed = 1; // 한 턴에 이동 거리
 
-        public Dictionary<Define.ActorStatType, int> stats = new();
+        public Dictionary<ActorStatType, int> stats = new();
 
         public int maxHp
         {
-            get { return stats[Define.ActorStatType.MaxHp]; }
+            get { return stats[ActorStatType.MaxHp]; }
             set
             {
-                stats[Define.ActorStatType.MaxHp] = value < 0 ? 0 : value;
+                stats[ActorStatType.MaxHp] = value < 0 ? 0 : value;
             }
         }
         public int atk
         {
-            get { return stats[Define.ActorStatType.Atk]; }
-            set { stats[Define.ActorStatType.Atk] = value < 0 ? 0 : value; }
+            get { return stats[ActorStatType.Atk]; }
+            set { stats[ActorStatType.Atk] = value < 0 ? 0 : value; }
         }       
         public int atkRange
         {
-            get { return stats[Define.ActorStatType.AtkRange]; }
-            set { stats[Define.ActorStatType.AtkRange] = value < 0 ? 0 : value; }
+            get { return stats[ActorStatType.AtkRange]; }
+            set { stats[ActorStatType.AtkRange] = value < 0 ? 0 : value; }
         }
         public int dmgTake
         {
-            get { return stats[Define.ActorStatType.DmgTake]; }
-            set { stats[Define.ActorStatType.DmgTake] = value; }
+            get { return stats[ActorStatType.DmgTake]; }
+            set { stats[ActorStatType.DmgTake] = value; }
         }
         public int def
         {
-            get { return stats[Define.ActorStatType.Def]; }
-            set { stats[Define.ActorStatType.Def] = value; }
+            get { return stats[ActorStatType.Def]; }
+            set { stats[ActorStatType.Def] = value; }
         }       
         public int critProb
         {
-            get { return stats[Define.ActorStatType.CritProb]; }
-            set { stats[Define.ActorStatType.CritProb] = value < 0 ? 0 : value; }
+            get { return stats[ActorStatType.CritProb]; }
+            set { stats[ActorStatType.CritProb] = value < 0 ? 0 : value; }
         }
         public int critDmg
         {
-            get { return stats[Define.ActorStatType.CritDmg]; }
-            set { stats[Define.ActorStatType.CritDmg] = value < 0 ? 0 : value; }
+            get { return stats[ActorStatType.CritDmg]; }
+            set { stats[ActorStatType.CritDmg] = value < 0 ? 0 : value; }
         }
         public int moveSpeed
         {
-            get { return stats[Define.ActorStatType.MoveSpeed]; }
-            set { stats[Define.ActorStatType.MoveSpeed] = value < 0 ? 0 : value; }
+            get { return stats[ActorStatType.MoveSpeed]; }
+            set { stats[ActorStatType.MoveSpeed] = value < 0 ? 0 : value; }
         }
 
         public void Init()
         {
             var fields = typeof(BaseStat).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
             stats.Clear();
-            foreach (Define.ActorStatType x in Enum.GetValues(typeof(Define.ActorStatType)))
+            foreach (ActorStatType x in Enum.GetValues(typeof(ActorStatType)))
             {
                 stats.TryAdd(x, 0);
             }
 
             foreach (var field in fields)
             {
-                if (!Enum.IsDefined(typeof(Define.ActorStatType), field.Name))
+                if (!Enum.IsDefined(typeof(ActorStatType), field.Name))
                 {
                     continue;
                 }
                 
-                Define.ActorStatType statType = (Define.ActorStatType)Enum.Parse(typeof(Define.ActorStatType), field.Name);
+                ActorStatType statType = (ActorStatType)Enum.Parse(typeof(ActorStatType), field.Name);
                 if (stats.ContainsKey(statType))
                 {                    
                     stats[statType] += (int)field.GetValue(this);
@@ -96,15 +97,15 @@ namespace Epos
         [SerializeField] BaseStat baseStat = new();
         public BaseStat BaseStat => baseStat;
 
-        protected BonusStat<Define.ActorStatType> bonusStat = new();
+        protected BonusStat<ActorStatType> bonusStat = new();
 
-        readonly List<BonusStat<Define.ActorStatType>> bonusStats = new();
+        readonly List<BonusStat<ActorStatType>> bonusStats = new();
 
-        protected virtual BonusStat<Define.ActorStatType> BonusStat
+        protected virtual BonusStat<ActorStatType> BonusStat
         {
             get
             {               
-                BonusStat<Define.ActorStatType> stat = new();
+                BonusStat<ActorStatType> stat = new();
                 stat += bonusStat;
                 bonusStats.ForEach(x => stat += x);
 
@@ -112,11 +113,11 @@ namespace Epos
             }
         }
 
-        protected IDictionary<Define.ActorStatType, IStatStrategy> statStrategies = new Dictionary<Define.ActorStatType, IStatStrategy>();
+        protected IDictionary<ActorStatType, IStatStrategy> statStrategies = new Dictionary<ActorStatType, IStatStrategy>();
 
         void InitStatStrategy()
         {
-            foreach (Define.ActorStatType x in Enum.GetValues(typeof(Define.ActorStatType)))
+            foreach (ActorStatType x in Enum.GetValues(typeof(ActorStatType)))
             {
                 statStrategies.Add(x, new BasicStatStrategy(this));
             }
@@ -150,7 +151,7 @@ namespace Epos
         {
             get
             {
-                int value = statStrategies[Define.ActorStatType.MaxHp].GetFinalStat(Define.ActorStatType.MaxHp);
+                int value = statStrategies[ActorStatType.MaxHp].GetFinalStat(ActorStatType.MaxHp);
                 if (value < 0) return 0;
                 return value;
             }
@@ -160,7 +161,7 @@ namespace Epos
         {
             get
             {
-                int value = statStrategies[Define.ActorStatType.Atk].GetFinalStat(Define.ActorStatType.Atk);
+                int value = statStrategies[ActorStatType.Atk].GetFinalStat(ActorStatType.Atk);
                 if (value < 0) return 0;
                 return value;
             }
@@ -169,7 +170,7 @@ namespace Epos
         {
             get
             {
-                int value = statStrategies[Define.ActorStatType.AtkRange].GetFinalStat(Define.ActorStatType.AtkRange);
+                int value = statStrategies[ActorStatType.AtkRange].GetFinalStat(ActorStatType.AtkRange);
                 if (value < 0) return 0;
                 return value;
             }
@@ -178,7 +179,7 @@ namespace Epos
         {
             get
             {
-                int value = statStrategies[Define.ActorStatType.DmgTake].GetFinalStat(Define.ActorStatType.DmgTake);
+                int value = statStrategies[ActorStatType.DmgTake].GetFinalStat(ActorStatType.DmgTake);
                 if (value < 0) return 0;
                 return value;
             }
@@ -187,7 +188,7 @@ namespace Epos
         {
             get
             {
-                int value = statStrategies[Define.ActorStatType.Def].GetFinalStat(Define.ActorStatType.Def);
+                int value = statStrategies[ActorStatType.Def].GetFinalStat(ActorStatType.Def);
 
                 return value;
             }
@@ -197,7 +198,7 @@ namespace Epos
         {
             get
             {
-                int value = statStrategies[Define.ActorStatType.CritProb].GetFinalStat(Define.ActorStatType.CritProb);
+                int value = statStrategies[ActorStatType.CritProb].GetFinalStat(ActorStatType.CritProb);
                 if (value < 0)
                     return 0;
                 else if (value > 100)
@@ -209,7 +210,7 @@ namespace Epos
         {
             get
             {
-                float value = statStrategies[Define.ActorStatType.CritDmg].GetFinalStat(Define.ActorStatType.CritDmg);
+                float value = statStrategies[ActorStatType.CritDmg].GetFinalStat(ActorStatType.CritDmg);
                 if (value < 0) return 0;
 
                 return (int)MathF.Round(value);
@@ -220,7 +221,7 @@ namespace Epos
         {
             get
             {
-                float value = statStrategies[Define.ActorStatType.MoveSpeed].GetFinalStat(Define.ActorStatType.MoveSpeed);
+                float value = statStrategies[ActorStatType.MoveSpeed].GetFinalStat(ActorStatType.MoveSpeed);
                 if (value < 0) return 0;
 
                 return (int)Mathf.Round(value);
@@ -231,7 +232,7 @@ namespace Epos
         {
             get
             {
-                float value = statStrategies[Define.ActorStatType.Damage].GetFinalStat(Define.ActorStatType.Damage);
+                float value = statStrategies[ActorStatType.Damage].GetFinalStat(ActorStatType.Damage);
                 if (value < 0) return 0;
 
                 return (int)Mathf.Round(value);
@@ -242,27 +243,27 @@ namespace Epos
         {
             get
             {
-                float value = statStrategies[Define.ActorStatType.GoldGain].GetFinalStat(Define.ActorStatType.GoldGain);
+                float value = statStrategies[ActorStatType.GoldGain].GetFinalStat(ActorStatType.GoldGain);
                 if (value < 0) return 0;
 
                 return (int)MathF.Round(value);
             }
         }
 
-        public void AddStat(Define.ActorStatType statType, int amount, Define.ValueType type)
+        public void AddStat(ActorStatType statType, int amount, Shared.Model.ValueType type)
         {
             switch (type)
             {
-                case Define.ValueType.Value:
+                case Shared.Model.ValueType.Value:
                     bonusStat.AddValue(statType, amount);
                     break;
-                case Define.ValueType.Ratio:
+                case Shared.Model.ValueType.Ratio:
                     bonusStat.AddRatio(statType, amount);
                     break;
             }
         }
 
-        public void ChangeStatStrategy(Define.ActorStatType statType, IStatStrategy strategy)
+        public void ChangeStatStrategy(ActorStatType statType, IStatStrategy strategy)
         {
             statStrategies[statType] = strategy;
         }

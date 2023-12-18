@@ -2,16 +2,17 @@ using Epos;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Shared.Model;
 
 namespace Epos.Buff
 {
     public abstract partial class Buff
     {
         
-        public Define.BuffEventType UseCondition;
+        public BuffEventType UseCondition;
         public int Amount;
-        public Define.ActorStatType StatType;
-        public Define.ValueType ValueType;
+        public ActorStatType StatType;
+        public ValueType ValueType;
 
         protected Actor actor;
 
@@ -28,7 +29,7 @@ namespace Epos.Buff
         {
             isEquiped = true;
             this.actor = actor;
-            if (UseCondition == Define.BuffEventType.None)
+            if (UseCondition == BuffEventType.None)
             {
                 UseStrategy.UseBuff();
             }
@@ -43,7 +44,7 @@ namespace Epos.Buff
             if (!isEquiped) return;
             isEquiped = false;
 
-            if (UseCondition == Define.BuffEventType.None)
+            if (UseCondition == BuffEventType.None)
             {
                 CancelStrategy.CancelBuff();
             }

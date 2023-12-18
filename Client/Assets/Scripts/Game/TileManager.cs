@@ -234,7 +234,7 @@ public class TileManager : Singleton<TileManager>
 
         return true;
     }
-    public IEnumerator PullTiles(int x, int y, Define.Direction direction)
+    public IEnumerator PullTiles(int x, int y, Direction direction)
     {
         if (x < 0 || y < 0 || x >= TileMap.Count || TileMap[x].Count <= y)
         {
@@ -247,7 +247,7 @@ public class TileManager : Singleton<TileManager>
 
         switch (direction)
         {
-            case Define.Direction.Left:
+            case Direction.Left:
 
                 for (int i = y; i > 0; i--)
                 {
@@ -272,7 +272,7 @@ public class TileManager : Singleton<TileManager>
                     StartCoroutine(CreateTile(x, 0));
                 }
                 break;
-            case Define.Direction.Right:
+            case Direction.Right:
 
                 for (int i = y; i < TileMap[x].Count - 1; i++)
                 {
@@ -299,7 +299,7 @@ public class TileManager : Singleton<TileManager>
                     StartCoroutine(CreateTile(x, TileMap[x].Count - 1));
                 }
                 break;
-            case Define.Direction.Up:
+            case Direction.Up:
                 for (int i = x; i < TileMap.Count - 1; i++)
                 {
                     if (TileMap[i + 1][y] != null)
@@ -325,7 +325,7 @@ public class TileManager : Singleton<TileManager>
                     StartCoroutine(CreateTile(TileMap.Count - 1, y));
                 }
                 break;
-            case Define.Direction.Down:
+            case Direction.Down:
                 for (int i = x; i > 0; i--)
                 {
                     if (TileMap[i - 1][y] != null)
@@ -379,13 +379,13 @@ public class TileManager : Singleton<TileManager>
         TileMap[mid][mid].SetObject(player);
     }
     public delegate bool CheckHanlder(Tile tile);
-    public bool Check(Define.Direction dir, int x, int y, CheckHanlder handler)
+    public bool Check(Direction dir, int x, int y, CheckHanlder handler)
     {
         if (!CheckIndex(x, y)) return false;
 
         switch (dir)
         {
-            case Define.Direction.Left:
+            case Direction.Left:
 
                 if (y - 1 < 0) return true;
                 for (int i = y - 1; i >= 0; i--)
@@ -394,7 +394,7 @@ public class TileManager : Singleton<TileManager>
                 }
 
                 break;
-            case Define.Direction.Right:
+            case Direction.Right:
 
                 if (y + 1 >= TileMap[x].Count) return true;
                 for (int i = y + 1; i < TileMap[x].Count; i++)
@@ -402,7 +402,7 @@ public class TileManager : Singleton<TileManager>
                     if (handler(TileMap[x][i])) return true;
                 }
                 break;
-            case Define.Direction.Up:
+            case Direction.Up:
                 if (x + 1 >= TileMap.Count) return true;
                 for (int i = x + 1; i < TileMap.Count; i++)
                 {
@@ -410,7 +410,7 @@ public class TileManager : Singleton<TileManager>
                 }
 
                 break;
-            case Define.Direction.Down:
+            case Direction.Down:
                 if (x - 1 < 0) return true;
                 for (int i = x - 1; i >= 0; i--)
                 {
@@ -483,9 +483,9 @@ public class TileManager : Singleton<TileManager>
             int x = grace.X;
             int y = grace.Y;
 
-            List<Define.Direction> directions = new()
+            List<Direction> directions = new()
                 {
-                    Define.Direction.Left,Define.Direction.Right,Define.Direction.Up,Define.Direction.Down
+                    Direction.Left,Direction.Right,Direction.Up,Direction.Down
                 };
 
             directions = directions.Where(dir => !Check(dir, x, y, (tile) =>

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Shared.Model;
 
 namespace Epos
 {
@@ -51,7 +52,7 @@ namespace Epos
         {
             int hp = target.CurHp;
             EventInfo info = new EventInfo();
-            ExcuteEvent(Define.BuffEventType.OnMeleeAttack, info);
+            ExcuteEvent(BuffEventType.OnMeleeAttack, info);
 
             bonusStat += info.stat;
             int dmg = Atk;
@@ -89,7 +90,7 @@ namespace Epos
         public int RangeAttack(Actor target)
         {
             EventInfo info = new();
-            ExcuteEvent(Define.BuffEventType.OnRangeAttack, info);
+            ExcuteEvent(BuffEventType.OnRangeAttack, info);
 
             bonusStat += info.stat;
             int dmg = Atk;

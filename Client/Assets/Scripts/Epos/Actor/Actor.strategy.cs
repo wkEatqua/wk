@@ -21,7 +21,7 @@ namespace Epos
 
             public int GetFinalStat(ActorStatType type)
             {
-                return (int)((actor.BaseStat.stats[type] + actor.BonusStat.Value[type]) * (1 + actor.BonusStat.Ratio[type] / 100f));
+                return (int)((actor.BaseStat.stats[type] + actor.BonusStats.Value[type]) * (1 + actor.BonusStats.Ratio[type] / 100f));
             }
         }
 

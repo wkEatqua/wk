@@ -22,10 +22,10 @@ namespace Epos.Buff
         {
             switch(ValueType)
             {
-                case ValueType.Value:
+                case AddType.Value:
                     info.stat.AddValue(StatType, Amount);
                     break;
-                case ValueType.Ratio:
+                case AddType.Ratio:
                     info.stat.AddRatio(StatType, Amount);
                     break;
             }

@@ -41,7 +41,7 @@ namespace Shared.Model
     {
         MaxHp, Atk, AtkRange, Def, DmgTake, CritProb, CritDmg, MoveSpeed, Sight, Damage, GoldGain
     }
-    public enum ValueType
+    public enum AddType
     {
         Value, Ratio
     }
@@ -376,7 +376,7 @@ namespace Shared.Model
         public BuffEventType ActiveType { get; set; }
         public float Amount { get; set; }
         public ActorStatType StatType { get; set; }
-        public ValueType ValueType { get; set; }
+        public AddType ValueType { get; set; }
         public int BuffCondition { get; set; }
         public int ConditionParam { get; set; }
     }

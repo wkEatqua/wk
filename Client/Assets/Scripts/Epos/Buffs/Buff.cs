@@ -12,7 +12,7 @@ namespace Epos.Buff
         public BuffEventType UseCondition;
         public int Amount;
         public ActorStatType StatType;
-        public ValueType ValueType;
+        public AddType ValueType;
 
         protected Actor actor;
 

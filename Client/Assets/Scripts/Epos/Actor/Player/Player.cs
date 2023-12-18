@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Shared.Model;
+using UnityEditor.Tilemaps;
 
 namespace Epos
 {
@@ -13,8 +14,8 @@ namespace Epos
         List<Armour> armours = new();
 
         public List<MeleeWeapon> MeleeWeapons => meleeWeapons;
-        public List<Armour> Armours => armours;              
-    
+        public List<Armour> Armours => armours;
+
         public override int OnHit(int dmg)
         {
             int value = Def;
@@ -111,15 +112,34 @@ namespace Epos
         public void Equip(MeleeWeapon wp)
         {
             meleeWeapons.Add(wp);
+            OnStatChange.Invoke();
         }
         public void Equip(Armour armour)
         {
             armours.Add(armour);
+            OnStatChange.Invoke();
+        }
+        protected override void Awake()
+        {
+            base.Awake();
+            BonusStatEvent += () =>
+            {
+                BonusStat<ActorStatType> b = new();
+                MeleeWeapons.ForEach(wp => b.AddValue(ActorStatType.Atk, wp.Durability));
+                return b;
+            };
+            BonusStatEvent += () =>
+            {
+                BonusStat<ActorStatType> b = new();
+                Armours.ForEach(wp => b.AddValue(ActorStatType.Def, wp.Durability));
+                return b;
+            };
         }
         public override void Start()
         {
             base.Start();
             EposManager.Instance.Player = this;
+            
         }
         private void Update()
         {

@@ -25,7 +25,7 @@ namespace Shared.Data
         public BuffEventType ActiveType => data.ActiveType;
         public float Amount => data.Amount;
         public ActorStatType StatType => data.StatType;
-        public Shared.Model.ValueType ValueType => data.ValueType;
+        public Shared.Model.AddType ValueType => data.ValueType;
         public int BuffCondition => data.BuffCondition;      
         public int ConditionParam => data.ConditionParam;
         readonly EposBuff data;

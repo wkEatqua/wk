@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using Shared.Model;
+using System.Linq;
+using UnityEngine.Events;
 
 namespace Epos
 {
@@ -19,51 +21,7 @@ namespace Epos
         [SerializeField] int DmgTake = 100; // 받는 피해량
         [SerializeField] int MoveSpeed = 1; // 한 턴에 이동 거리
 
-        public Dictionary<ActorStatType, int> stats = new();
-
-        public int maxHp
-        {
-            get { return stats[ActorStatType.MaxHp]; }
-            set
-            {
-                stats[ActorStatType.MaxHp] = value < 0 ? 0 : value;
-            }
-        }
-        public int atk
-        {
-            get { return stats[ActorStatType.Atk]; }
-            set { stats[ActorStatType.Atk] = value < 0 ? 0 : value; }
-        }       
-        public int atkRange
-        {
-            get { return stats[ActorStatType.AtkRange]; }
-            set { stats[ActorStatType.AtkRange] = value < 0 ? 0 : value; }
-        }
-        public int dmgTake
-        {
-            get { return stats[ActorStatType.DmgTake]; }
-            set { stats[ActorStatType.DmgTake] = value; }
-        }
-        public int def
-        {
-            get { return stats[ActorStatType.Def]; }
-            set { stats[ActorStatType.Def] = value; }
-        }       
-        public int critProb
-        {
-            get { return stats[ActorStatType.CritProb]; }
-            set { stats[ActorStatType.CritProb] = value < 0 ? 0 : value; }
-        }
-        public int critDmg
-        {
-            get { return stats[ActorStatType.CritDmg]; }
-            set { stats[ActorStatType.CritDmg] = value < 0 ? 0 : value; }
-        }
-        public int moveSpeed
-        {
-            get { return stats[ActorStatType.MoveSpeed]; }
-            set { stats[ActorStatType.MoveSpeed] = value < 0 ? 0 : value; }
-        }
+        public Dictionary<ActorStatType, int> stats = new();      
 
         public void Init()
         {
@@ -89,6 +47,8 @@ namespace Epos
             }
         }
     }
+    public delegate BonusStat<ActorStatType> StatEvent();
+
     public partial class Actor
     {
         [Tooltip("0이 아닌 값으로 설정하면 해당 체력으로 생성(디버그용)")]
@@ -99,22 +59,46 @@ namespace Epos
 
         protected BonusStat<ActorStatType> bonusStat = new();
 
-        readonly List<BonusStat<ActorStatType>> bonusStats = new();
-
-        protected virtual BonusStat<ActorStatType> BonusStat
+        event StatEvent bonusStatEvent;
+        public event StatEvent BonusStatEvent
         {
-            get
-            {               
-                BonusStat<ActorStatType> stat = new();
-                stat += bonusStat;
-                bonusStats.ForEach(x => stat += x);
-
-                return stat;
+            add
+            {
+                bonusStatEvent -= value;
+                bonusStatEvent += value;
+            }
+            remove
+            {
+                bonusStatEvent -= value;
             }
         }
+        protected virtual BonusStat<ActorStatType> BonusStats
+        {
+            get
+            {
+                bonusStat ??= new();
 
+                if (bonusStatEvent != null)
+                {
+                    Debug.Log(bonusStatEvent.GetInvocationList().Count());
+                    foreach (StatEvent ev in bonusStatEvent.GetInvocationList().Cast<StatEvent>())
+                    {
+                        bonusStat += ev();
+                    }
+                }
+                return bonusStat;
+            }
+        }
+        public int BonusStat(ActorStatType type)
+        {
+            int value = statStrategies[type].GetFinalStat(type);
+
+
+            return value - BaseStat.stats[type];
+        }
         protected IDictionary<ActorStatType, IStatStrategy> statStrategies = new Dictionary<ActorStatType, IStatStrategy>();
 
+        [HideInInspector]public UnityEvent OnStatChange = new();
         void InitStatStrategy()
         {
             foreach (ActorStatType x in Enum.GetValues(typeof(ActorStatType)))
@@ -175,6 +159,7 @@ namespace Epos
                 return value;
             }
         }
+
         virtual public int DmgTake
         {
             get
@@ -193,7 +178,6 @@ namespace Epos
                 return value;
             }
         }
-
         virtual public int CritProb
         {
             get
@@ -250,22 +234,24 @@ namespace Epos
             }
         }
 
-        public void AddStat(ActorStatType statType, int amount, Shared.Model.ValueType type)
+        public void AddStat(ActorStatType statType, int amount, AddType type)
         {
             switch (type)
             {
-                case Shared.Model.ValueType.Value:
+                case AddType.Value:
                     bonusStat.AddValue(statType, amount);
                     break;
-                case Shared.Model.ValueType.Ratio:
+                case AddType.Ratio:
                     bonusStat.AddRatio(statType, amount);
                     break;
             }
+            OnStatChange.Invoke();
         }
 
         public void ChangeStatStrategy(ActorStatType statType, IStatStrategy strategy)
         {
             statStrategies[statType] = strategy;
+            OnStatChange.Invoke();
         }
     }
 }

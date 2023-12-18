@@ -20,5 +20,7 @@ public class TestEPO : MonoBehaviour
         EposItemInfo info = new(data);
         Armour melee = new(info, null);
         EposManager.Instance.Player.Equip(melee);
+        EposManager.Instance.Player.AddStat(ActorStatType.Def, 50, AddType.Ratio);
+        Debug.Log(EposManager.Instance.Player.BonusStat(ActorStatType.Def));
     }
 }

@@ -77,16 +77,16 @@ namespace Epos
             get
             {
                 bonusStat ??= new();
-
+                BonusStat<ActorStatType> bs = new BonusStat<ActorStatType>();
+                bs += bonusStat;
                 if (bonusStatEvent != null)
                 {
-                    Debug.Log(bonusStatEvent.GetInvocationList().Count());
                     foreach (StatEvent ev in bonusStatEvent.GetInvocationList().Cast<StatEvent>())
                     {
-                        bonusStat += ev();
+                        bs += ev();
                     }
                 }
-                return bonusStat;
+                return bs;
             }
         }
         public int BonusStat(ActorStatType type)

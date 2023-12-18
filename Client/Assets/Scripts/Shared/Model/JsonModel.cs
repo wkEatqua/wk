@@ -327,6 +327,7 @@ namespace Shared.Model
     public class EposCardEvent : JsonModel
     {
         public long Index { get; set; }
+        public long BgTitle { get; set; }
         public long BgText { get; set; }
         public Define.CardPattern Pattern { get; set; }
         public long EventName { get; set; }

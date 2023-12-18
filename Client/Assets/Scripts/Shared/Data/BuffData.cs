@@ -8,6 +8,7 @@ namespace Shared.Data
     public class EposCardEventInfo
     {
         public long Index => data.Index;
+        public long BgTitle => data.BgTitle;
         public long BgText => data.BgText;
         public Define.CardPattern Pattern => data.Pattern;
         public long EventName => data.EventName;

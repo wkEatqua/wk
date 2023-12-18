@@ -61,7 +61,14 @@ namespace Epos
                 }
             }
         }
-
+        public int MaxExp
+        {
+            get
+            {
+                EposData.TryGetEposMaxExp(level, out EposLevelExpInfo info);
+                return info?.Exp ?? 0;
+            }
+        }
         [HideInInspector] public UnityEvent<Tile> OnMove = new();
         Player player;
         public Player Player
@@ -104,7 +111,7 @@ namespace Epos
         private void Start()
         {
             OnGameReset.Invoke();
-            maxLevel = (int)EposData.LevelDict.Keys.Max(x => x);
+            maxLevel = (int)EposData.LevelDict.Keys.Max(x => x) + 1;
         }
     }
 }

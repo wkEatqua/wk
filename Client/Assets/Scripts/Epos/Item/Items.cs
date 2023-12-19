@@ -30,6 +30,13 @@ namespace Epos
             this.tileObj = tileObj;
         }
 
+        public Item(EposItemInfo data)
+        {
+            this.data = data;
+            ScriptData.TryGetGameText(data.DescText, out EposGameTextInfo info);
+
+            Desc = info?.Kor;
+        }
         public string Name => data.Name;
         public readonly string Desc;
         public abstract void OnCollect();
@@ -59,11 +66,14 @@ namespace Epos
                 }
             }
         }
-        protected InvenItem(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
+        public InvenItem(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
         {
             useCount = data.UseCount;
         }
-
+        public InvenItem(EposItemInfo data) : base(data)
+        {
+            useCount = data.UseCount;
+        }
     }
     public class RangeWeapon : InvenItem
     {
@@ -72,7 +82,11 @@ namespace Epos
             Atk = data.BaseStat;
             Range = data.Range;
         }
-
+        public RangeWeapon(EposItemInfo data) : base(data)
+        {
+            Atk = data.BaseStat;
+            Range = data.Range;
+        }
         public override void OnCollect()
         {
             GameObject obj = UIPool.Get("RangeWeaponCanvas");
@@ -139,6 +153,9 @@ namespace Epos
         public GoldItem(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
         {
         }
+        public GoldItem(EposItemInfo data) : base(data)
+        {
+        }
 
         public override void OnCollect()
         {
@@ -149,6 +166,9 @@ namespace Epos
     public class HpPotion : Item
     {
         public HpPotion(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
+        {
+        }
+        public HpPotion(EposItemInfo data) : base(data)
         {
         }
 
@@ -164,7 +184,10 @@ namespace Epos
         {
             Durability = data.BaseStat;
         }
-
+        public MeleeWeapon(EposItemInfo data) : base(data)
+        {
+            Durability = data.BaseStat;
+        }
         public override void OnCollect()
         {
             EposManager.Instance.Player.Equip(this);
@@ -198,7 +221,11 @@ namespace Epos
             Durability = data.BaseStat;
             Count = data.UseCount;
         }
-
+        public Armour(EposItemInfo data) : base(data)
+        {
+            Durability = data.BaseStat;
+            Count = data.UseCount;
+        }
         public override void OnCollect()
         {
             EposManager.Instance.Player.Equip(this);

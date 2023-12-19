@@ -13,10 +13,10 @@ namespace Epos
             public Item obtainedItem;
             public BonusStat<ActorStatType> stat;
         }
-        readonly IDictionary<BuffEventType, UnityEvent<EventInfo>> events = new Dictionary<BuffEventType,UnityEvent<EventInfo>>();
+        readonly IDictionary<EventTypes, UnityEvent<EventInfo>> events = new Dictionary<EventTypes, UnityEvent<EventInfo>>();
 
         
-        public void AddEvent(BuffEventType type,UnityAction<EventInfo> action)
+        public void AddEvent(EventTypes type,UnityAction<EventInfo> action)
         {
             if(!events.ContainsKey(type))
             {
@@ -25,7 +25,7 @@ namespace Epos
             events[type].AddListener(action);
         }
 
-        public void RemoveEvent(BuffEventType type, UnityAction<EventInfo> action)
+        public void RemoveEvent(EventTypes type, UnityAction<EventInfo> action)
         {
             if (events.ContainsKey(type))
             {
@@ -33,7 +33,7 @@ namespace Epos
             }
         }
 
-        public void ExcuteEvent(BuffEventType type,EventInfo info) 
+        public void ExcuteEvent(EventTypes type,EventInfo info) 
         {
             if (events.ContainsKey(type))
             {

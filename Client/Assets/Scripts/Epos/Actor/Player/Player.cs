@@ -53,7 +53,7 @@ namespace Epos
         {
             int hp = target.CurHp;
             EventInfo info = new EventInfo();
-            ExcuteEvent(BuffEventType.OnMeleeAttack, info);
+            ExcuteEvent(Shared.Model.EventTypes.OnMeleeAttack, info);
 
             bonusStat += info.stat;
             int dmg = Atk;
@@ -91,7 +91,7 @@ namespace Epos
         public int RangeAttack(Actor target)
         {
             EventInfo info = new();
-            ExcuteEvent(BuffEventType.OnRangeAttack, info);
+            ExcuteEvent(Shared.Model.EventTypes.OnRangeAttack, info);
 
             bonusStat += info.stat;
             int dmg = Atk;

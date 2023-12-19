@@ -1,3 +1,4 @@
+
 namespace Shared.Model
 {
     /// <summary>
@@ -51,7 +52,7 @@ namespace Shared.Model
         Left, Right, Up, Down
     }
 
-    public enum BuffEventType
+    public enum EventTypes
     {
         OnRangeAttack,
         OnMeleeAttack,
@@ -373,7 +374,7 @@ namespace Shared.Model
     {
         public long Index { get; set; }      
         public string BuffType { get; set; }
-        public BuffEventType ActiveType { get; set; }
+        public EventTypes ActiveType { get; set; }
         public float Amount { get; set; }
         public ActorStatType StatType { get; set; }
         public AddType ValueType { get; set; }
@@ -419,6 +420,64 @@ namespace Shared.Model
         public int ItemRate5 { get; set; }
     }
     #endregion
+    #region 임무 관련
+   
+    public class Mission : JsonModel
+    {
+        public long ID { get; set; }
+        public int Lv { get; set; }
+        public int CountValueMin { get; set; }
+        public int CountValueMax { get; set; }
+        public long MissionSubjectID { get; set; }
+        public long MissionRewardID { get; set; }
+        public long MissionPenaltyID { get; set; }
 
+    }
+    public class MissionSubject : JsonModel
+    {
+        public long GroupID { get; set; }
+        public int Lv { get; set; }
+        public int Rate { get; set; }
+        public EventTypes Type { get; set; }
+        public int Condition { get; set; }
+        public int SubjectCountMin { get; set; }
+        public int SubjectCountMax { get; set; }
+        public int SubjectReqMin { get; set; }
+        public int SubjectReqMax { get; set; }
+        
+    }
+    public enum RewardType
+    {
+        Item,Stat
+    }
+    public class MissionReward : JsonModel
+    {
+        public long GroupID { get; set; }
+        public int Lv { get; set; }
+        public int Rate { get; set; }
+        public RewardType Type { get; set; }
+        public int RewardType { get; set; }
+        public long RewardID { get; set; }
+        public int RewardValueMin { get; set; }
+        public int RewardValueMax { get; set; }
+        public AddType AddType { get; set; }
+    }
+    public enum PenaltyType
+    {
+        Stat,HP
+    }
+    public class MissionPenalty : JsonModel
+    {
+        public long GroupID { get; set; }
+        public int Lv { get; set; }
+        public int Rate { get; set; }
+        public PenaltyType Type { get; set; }
+        public int PenaltyType { get; set; }
+        public int PenaltyValueMin { get; set; }
+        public int PenaltyValueMax { get; set; }
+
+        public AddType AddType { get; set; }
+    }
+    #endregion
 }
 #endregion

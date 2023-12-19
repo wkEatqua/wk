@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Shared.Model;
 
 namespace Epos
 {
@@ -166,7 +167,7 @@ namespace Epos
         {
             TileManager.Instance.RemoveTile(x, y);
 
-            List<Define.Direction> directions = new() { Define.Direction.Left, Define.Direction.Right, Define.Direction.Up, Define.Direction.Down };
+            List<Direction> directions = new() { Direction.Left, Direction.Right, Direction.Up, Direction.Down };
             directions = directions.Where(dir => !TileManager.Instance.Check(dir, x, y,
                 tile =>
                 {

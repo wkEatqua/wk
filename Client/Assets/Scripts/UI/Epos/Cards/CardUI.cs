@@ -1,3 +1,4 @@
+using Shared.Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Tilemaps;
@@ -12,22 +13,34 @@ namespace Epos.UI
             Selection,Card,CardTail
         }
 
-        CardSelections selection;
-        CardFront card;
-        CardTail cardTail;
+        [HideInInspector]public CardSelections selection;
+        [HideInInspector]public CardFront cardFront;
+        [HideInInspector]public CardTail cardTail;
+        
+        [HideInInspector]public EposCardEventInfo cardEventInfo;
 
         private void OnEnable()
         {
+            
+        }
+
+        public void Init(EposCardEventInfo info)
+        {
+            cardEventInfo = info;
             selection.gameObject.SetActive(true);
-            card.gameObject.SetActive(false);
+            cardFront.gameObject.SetActive(false);
             cardTail.gameObject.SetActive(false);
+
+            selection.Init(this);
+            cardFront.Init(this);
+            cardTail.Init(this);
         }
 
         private void Awake()
         {
             Bind<GameObject>(typeof(GameObjects));
             selection = Get<GameObject>((int)GameObjects.Selection).GetComponent<CardSelections>();
-            card = Get<GameObject>((int)GameObjects.Card).GetComponent<CardFront>();
+            cardFront = Get<GameObject>((int)GameObjects.Card).GetComponent<CardFront>();
             cardTail = Get<GameObject>((int)GameObjects.CardTail).GetComponent<CardTail>();
         }
     }

@@ -6,6 +6,10 @@ namespace Epos.UI
 {
     public class CardTail : UI_Base
     {
-
+        CardUI cardUI;
+        public void Init(CardUI cardUI)
+        {
+            this.cardUI = cardUI;
+        }
     }
 }

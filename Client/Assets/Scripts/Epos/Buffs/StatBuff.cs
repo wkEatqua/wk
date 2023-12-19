@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Shared.Model;
 
 namespace Epos.Buff
 {
@@ -21,10 +22,10 @@ namespace Epos.Buff
         {
             switch(ValueType)
             {
-                case Define.ValueType.Value:
+                case AddType.Value:
                     info.stat.AddValue(StatType, Amount);
                     break;
-                case Define.ValueType.Ratio:
+                case AddType.Ratio:
                     info.stat.AddRatio(StatType, Amount);
                     break;
             }

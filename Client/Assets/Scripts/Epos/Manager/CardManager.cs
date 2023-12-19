@@ -2,23 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Shared.Model;
 
 namespace Epos
 {
     public class CardManager
     {
-        static public readonly IDictionary<Define.CardPattern,List<long>> BuffList = new Dictionary<Define.CardPattern,List<long>>();
-        public readonly static IDictionary<Define.CardPattern, int> CardPatternCounts = new Dictionary<Define.CardPattern, int>();
+        static public readonly IDictionary<CardPattern,List<long>> BuffList = new Dictionary<CardPattern,List<long>>();
+        public readonly static IDictionary<CardPattern, int> CardPatternCounts = new Dictionary<CardPattern, int>();
         static CardManager() 
         {
             BuffList.Clear();   
-            foreach(Define.CardPattern pattern in Enum.GetValues(typeof(Define.CardPattern)))
+            foreach(CardPattern pattern in Enum.GetValues(typeof(CardPattern)))
             {
                 BuffList.Add(pattern, new List<long>());
             }
             CardPatternCounts.Clear();
 
-            foreach (Define.CardPattern pattern in Enum.GetValues(typeof(Define.CardPattern)))
+            foreach (CardPattern pattern in Enum.GetValues(typeof(CardPattern)))
             {
                 CardPatternCounts.Add(pattern, 0);
             }

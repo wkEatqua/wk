@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Shared.Model;
 
 namespace Epos
 {
@@ -34,7 +35,7 @@ namespace Epos
         public virtual int Attack(Actor target)
         {
             EventInfo info = new EventInfo();
-            ExcuteEvent(Define.BuffEventType.OnMeleeAttack, info);
+            ExcuteEvent(BuffEventType.OnMeleeAttack, info);
 
             bonusStat += info.stat;
             int dmg = Atk;

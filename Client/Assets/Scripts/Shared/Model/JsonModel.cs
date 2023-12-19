@@ -37,7 +37,42 @@ namespace Shared.Model
     {
         MeleeWeapon,RangeWeapon,HpPotion,Armour,Gold,
     }
+    public enum ActorStatType
+    {
+        MaxHp, Atk, AtkRange, Def, DmgTake, CritProb, CritDmg, MoveSpeed, Sight, Damage, GoldGain
+    }
+    public enum AddType
+    {
+        Value, Ratio
+    }
 
+    public enum Direction
+    {
+        Left, Right, Up, Down
+    }
+
+    public enum BuffEventType
+    {
+        OnRangeAttack,
+        OnMeleeAttack,
+        OnHit,
+        OnItemObtain,
+        None
+    }
+    public enum CardPattern
+    {
+        Clover, Heart, Diamond, Spade
+    }
+    public enum UIEvent
+    {
+        Click,
+        Drag,
+        Drop,
+        PointUp,
+        PointEnter,
+        PointExit,
+        PointStay
+    }
     public class EposGameText : JsonModel
     {
         public long ID { get; set; }
@@ -327,8 +362,9 @@ namespace Shared.Model
     public class EposCardEvent : JsonModel
     {
         public long Index { get; set; }
+        public long BgTitle { get; set; }
         public long BgText { get; set; }
-        public Define.CardPattern Pattern { get; set; }
+        public CardPattern Pattern { get; set; }
         public long EventName { get; set; }
         public long EventText { get; set; }
     }
@@ -337,10 +373,10 @@ namespace Shared.Model
     {
         public long Index { get; set; }      
         public string BuffType { get; set; }
-        public Define.BuffEventType ActiveType { get; set; }
+        public BuffEventType ActiveType { get; set; }
         public float Amount { get; set; }
-        public Define.ActorStatType StatType { get; set; }
-        public Define.ValueType ValueType { get; set; }
+        public ActorStatType StatType { get; set; }
+        public AddType ValueType { get; set; }
         public int BuffCondition { get; set; }
         public int ConditionParam { get; set; }
     }

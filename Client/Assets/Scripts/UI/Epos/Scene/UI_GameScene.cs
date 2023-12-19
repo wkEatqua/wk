@@ -21,7 +21,11 @@ public class UI_GameScene : UI_Scene
         DefenceText,
         AdditionalDefenceText,
         SightText,
-        AdditionalSightText
+        AdditionalSightText,
+        TotalTurnText,
+        MovedTileText,
+        TotalItemText,
+        LevelText,
     }
 
     Player player;
@@ -32,8 +36,11 @@ public class UI_GameScene : UI_Scene
         player = FindAnyObjectByType<Player>();
         if (player)
         {
-            player.OnStatChange.AddListener(ChangeStatTexts);
+            player.OnStatChange.AddListener(UpdateStatTexts);
         }
+
+        TurnManager.Instance.OnEnemyTurnEnd += UpdateGameInfoTexts;
+        UpdateStatTexts();
     }
 
     protected override void BindUI()
@@ -41,9 +48,40 @@ public class UI_GameScene : UI_Scene
         Bind<TextMeshProUGUI>(typeof(Texts));
     }
 
-    protected void ChangeStatTexts()
+    public override void Refresh()
+    {
+        UpdateStatTexts();
+        UpdateExpTexts();
+    }
+
+    protected IEnumerator UpdateGameInfoTexts()
+    {
+        GetText((int)Texts.MovedTileText).text = EposManager.Instance.moveCount.ToString();
+        GetText((int)Texts.TotalTurnText).text = TurnManager.Instance.TurnCount.ToString();
+        yield return null;
+    }
+
+    protected void UpdateExpTexts()
+    {
+        GetText((int)Texts.LevelText).text = EposManager.Instance.level.ToString();
+    }
+
+    protected void UpdateStatTexts()
     {
         // Base Stat
+        if (player == null)
+        {
+            Debug.Log("Player is null");
+            var playerInScene = FindAnyObjectByType<Player>();
+            if (playerInScene == null)
+            {
+                Debug.Log("Player In Scene is null");
+                return;
+            }
+            
+            player = playerInScene;
+        }
+
         var baseStat = player.BaseStat;
 
         baseStat.stats.TryGetValue(Shared.Model.ActorStatType.MaxHp, out int maxHP);
@@ -61,6 +99,7 @@ public class UI_GameScene : UI_Scene
         // Bonus Stat
         StringBuilder sb = new StringBuilder();
         var bonusHPText = GetText((int)Texts.AdditionalHPText);
+        bonusHPText.gameObject.SetActive(true);
         int bonusHP = player.BonusStat(Shared.Model.ActorStatType.MaxHp);
         if (bonusHP > 0)
             sb.Append("+");
@@ -75,6 +114,7 @@ public class UI_GameScene : UI_Scene
 
         sb = new StringBuilder();
         var bonusAttackText = GetText((int)Texts.AdditionalAttackText);
+        bonusAttackText.gameObject.SetActive(true);
         int bonusAttack = player.BonusStat(Shared.Model.ActorStatType.Atk);
         if (bonusAttack > 0)
             sb.Append("+");
@@ -88,6 +128,7 @@ public class UI_GameScene : UI_Scene
 
         sb = new StringBuilder();
         var bonusDefenceText = GetText((int)Texts.AdditionalDefenceText);
+        bonusDefenceText.gameObject.SetActive(true);
         int bonusDefence = player.BonusStat(Shared.Model.ActorStatType.Def);
         if (bonusDefence > 0)
             sb.Append("+");
@@ -101,6 +142,7 @@ public class UI_GameScene : UI_Scene
 
         sb = new StringBuilder();
         var bonusSightText = GetText((int)Texts.AdditionalSightText);
+        bonusSightText.gameObject.SetActive(true);
         int bonusSight = player.BonusStat(Shared.Model.ActorStatType.Sight);
         if (bonusSight > 0)
             sb.Append("+");

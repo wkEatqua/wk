@@ -11,11 +11,24 @@ public class UIManager : Singleton<UIManager>
     UI_Scene _sceneUI = null;
 
 
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
     private void Start()
     {
         //Input.GetKeyDown(KeyCode.Escape)
         //Input.GetKeyDown(KeyCode.Escape);
+
+        _sceneUI = FindAnyObjectByType<UI_Scene>();
     }
+
+    public UI_Scene GetSceneUI()
+    {
+        return _sceneUI;
+    }
+
     public void SetCanvas(GameObject go, bool sort = true)
     {
         Canvas canvas = Utils.GetOrAddComponent<Canvas>(go);

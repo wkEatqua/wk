@@ -108,7 +108,6 @@ public class TileManager : Singleton<TileManager>
     {
         int SightRange = player.Sight / 10;
         int SubSightRange = player.Sight % 10;
-        Debug.Log($"Player Sight : {player.Sight}");
         bool CheckSemiOpen = false;
         if (SubSightRange >= 5)
         {
@@ -506,6 +505,7 @@ public class TileManager : Singleton<TileManager>
         CheckSight();
         // To do - Player 생성 따로 뺄 것
         TurnManager.Instance.StartTurn();
+        UIManager.Instance.GetSceneUI().Refresh();
     }
 
     void MakeSelectable(int x, int y)

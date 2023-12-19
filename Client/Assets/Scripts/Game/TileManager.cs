@@ -50,6 +50,8 @@ public class TileManager : Singleton<TileManager>
     public (int x, int y) playerLastPos = (-1, -1);
 
     private Player player;
+    public int playerX = 0;
+    public int playerY = 0;
 
     private void Init()
     {
@@ -104,6 +106,57 @@ public class TileManager : Singleton<TileManager>
 
     private IEnumerator CheckSight()
     {
+        int SightRange = player.Sight / 10;
+        int SubSightRange = player.Sight % 10;
+        Debug.Log($"Player Sight : {player.Sight}");
+        bool CheckSemiOpen = false;
+        if (SubSightRange >= 5)
+        {
+            CheckSemiOpen = true;
+            SightRange += 1;
+        }
+        else
+        {
+            CheckSemiOpen = false;
+        }
+
+        int maxX = playerX + SightRange;
+        int maxY = playerY + SightRange;
+        int minX = playerX - SightRange;
+        int minY = playerY - SightRange;
+
+        for (int x = 0; x < TileMap.Count; x++)
+        {
+            for (int y = 0; y < TileMap[x].Count; y++)
+            {
+                if (playerX == x && playerY == y)
+                {
+                    TileMap[x][y].SetState(TileState.Open);
+                }
+
+                if (x >= minX && x <= maxX && y >= minY && y <= maxY)
+                {
+                    if (CheckIndex(x, y) == false)
+                        continue;
+
+                    if (CheckSemiOpen == true && (x == minX || x == maxX || y == minY || y == maxY))
+                    {
+                        TileMap[x][y].SetState(TileState.SemiOpen);
+                    }
+                    else
+                    {
+                        TileMap[x][y].SetState(TileState.Open);
+                    }
+                        
+                }
+                else
+                {
+                    TileMap[x][y].SetState(TileState.Close);
+                }
+                    
+            }
+        }
+
         yield return null;
     }
 
@@ -176,8 +229,6 @@ public class TileManager : Singleton<TileManager>
             TileRateList.Add(new Tuple<long, long>(data.Key, data.Value));
             MaxTileRates += data.Value;
         }
-
-
     }
 
     private EposTileInfoInfo GetTileInfo()
@@ -211,6 +262,7 @@ public class TileManager : Singleton<TileManager>
         var TileInfo = GetTileInfo();
         TileComponent.SetTileInfo(TileInfo);
         TileComponent.SetScale(TileScale);
+        TileComponent.SetState(TileState.Close);
 
         // Create Object on Tile
         var TempObject = ObjectPool.Get("DebugObj");
@@ -391,7 +443,15 @@ public class TileManager : Singleton<TileManager>
 
         player = ResourceUtil.Instantiate("Player").GetComponent<Player>();
         TileMap[mid][mid].SetObject(player);
+        SetPlayerPos(mid, mid);
     }
+
+    public void SetPlayerPos(int x, int y)
+    {
+        playerX = x;
+        playerY = y;
+    }
+
     public delegate bool CheckHanlder(Tile tile);
     public bool Check(Direction dir, int x, int y, CheckHanlder handler)
     {
@@ -443,6 +503,8 @@ public class TileManager : Singleton<TileManager>
         LoadTilePercents();
         GetTileInfo();
         CreateAllTile();
+        CheckSight();
+        // To do - Player 생성 따로 뺄 것
         TurnManager.Instance.StartTurn();
     }
 

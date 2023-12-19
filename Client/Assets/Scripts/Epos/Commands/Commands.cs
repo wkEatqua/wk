@@ -22,7 +22,7 @@ namespace Epos
             int graceY = player.tile.Y;
             TileManager.Instance.playerLastPos = (graceX, graceY);
             yield return player.MoveTo(tile.X, tile.Y);
-
+            TileManager.Instance.SetPlayerPos(tile.X, tile.Y);
             EposManager.Instance.OnMove.Invoke(tile);
             TileManager.Instance.graceTiles.Enqueue((graceX, graceY));           
             TurnManager.Instance.EndTurn();

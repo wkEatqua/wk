@@ -45,7 +45,6 @@ namespace Epos
             }
             tileMap[x][y].SetObject(this);
             tileMap[removePosX][removePosY].SetObject(null);
-
             
             yield return new WaitForEndOfFrame();
 

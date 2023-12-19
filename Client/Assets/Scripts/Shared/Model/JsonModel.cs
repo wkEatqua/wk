@@ -33,6 +33,13 @@ namespace Shared.Model
         None, Easy, Normal, Danger, Hard, Nightmare, Disaster
     }
 
+    public enum TileState
+    {
+        Close,
+        SemiOpen,
+        Open,
+    }
+
     public enum ItemType
     {
         MeleeWeapon,RangeWeapon,HpPotion,Armour,Gold,

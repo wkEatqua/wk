@@ -20,6 +20,7 @@ namespace Epos
         [SerializeField] int CritDmg = 125; // 크리티컬 데미지       
         [SerializeField] int DmgTake = 100; // 받는 피해량
         [SerializeField] int MoveSpeed = 1; // 한 턴에 이동 거리
+        [SerializeField] int Sight; // 시야
 
         public Dictionary<ActorStatType, int> stats = new();      
 
@@ -234,6 +235,16 @@ namespace Epos
             }
         }
 
+        public virtual int Sight
+        {
+            get
+            {
+                float value = statStrategies[ActorStatType.Sight].GetFinalStat(ActorStatType.Sight);
+                if (value < 0) return 0;
+
+                return (int)MathF.Round(value);
+            }
+        }
         public void AddStat(ActorStatType statType, int amount, AddType type)
         {
             switch (type)

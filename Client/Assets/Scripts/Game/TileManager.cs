@@ -42,14 +42,14 @@ public class TileManager : Singleton<TileManager>
     // Create Tile, Object percentage
     private List<Tuple<long, long>> TileRateList = new List<Tuple<long, long>>();
 
-
     private float MaxTileRates = 0;
-
 
     Tweener tweener = null;
 
     public readonly Queue<(int x, int y)> graceTiles = new();
     public (int x, int y) playerLastPos = (-1, -1);
+
+    private Player player;
 
     private void Init()
     {
@@ -71,7 +71,9 @@ public class TileManager : Singleton<TileManager>
 
         TurnManager.Instance.OnPlayerTurnStart += MakeInjectedSelectable;
         TurnManager.Instance.OnPlayerTurnEnd += ResetTiles;
+        TurnManager.Instance.OnPlayerTurnEnd += CheckSight;
         TurnManager.Instance.OnEnemyTurnStart += RemoveAndCreateGrace;
+        TurnManager.Instance.OnEnemyTurnEnd += CheckSight;
     }
 
     public IEnumerator ResetTiles()
@@ -98,6 +100,11 @@ public class TileManager : Singleton<TileManager>
             }
         }
         TileMap = null;
+    }
+
+    private IEnumerator CheckSight()
+    {
+        yield return null;
     }
 
     private void LoadLevel()
@@ -355,7 +362,8 @@ public class TileManager : Singleton<TileManager>
                 break;
         }
 
-        if (tweener != null) yield return tweener.WaitForCompletion();
+        if (tweener != null) 
+            yield return tweener.WaitForCompletion();
     }
     private void CreateAllTile()
     {
@@ -375,7 +383,13 @@ public class TileManager : Singleton<TileManager>
         }
         int mid = (int)TileNumber / 2;
 
-        Player player = ResourceUtil.Instantiate("Player").GetComponent<Player>();
+        if (player != null)
+        {
+            ResourceUtil.Destroy(player.gameObject);
+            player = null;
+        }
+
+        player = ResourceUtil.Instantiate("Player").GetComponent<Player>();
         TileMap[mid][mid].SetObject(player);
     }
     public delegate bool CheckHanlder(Tile tile);

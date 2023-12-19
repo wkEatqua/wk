@@ -12,6 +12,16 @@ public class UI_Base : MonoBehaviour
 {
     readonly Dictionary<Type, UnityEngine.Object[]> _object = new Dictionary<Type, UnityEngine.Object[]>();
     
+    protected virtual void Init()
+    {
+
+    }
+
+    protected void Start()
+    {
+        Init();
+    }
+
     protected void Bind<T>(Type type) where T : UnityEngine.Object
     {
         string[] names = Enum.GetNames(type);
@@ -24,6 +34,7 @@ public class UI_Base : MonoBehaviour
                 objects[i] = Utils.FindChild(gameObject, names[i], true);
             else
                 objects[i] = Utils.FindChild<T>(gameObject, names[i], true);
+
             if (objects[i] == null)
                 Debug.Log($"Failed to bind({names[i]})");
         }

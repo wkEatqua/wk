@@ -16,7 +16,22 @@ public class UIManager : Singleton<UIManager>
         //Input.GetKeyDown(KeyCode.Escape)
         //Input.GetKeyDown(KeyCode.Escape);
     }
+    public void SetCanvas(GameObject go, bool sort = true)
+    {
+        Canvas canvas = Utils.GetOrAddComponent<Canvas>(go);
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.overrideSorting = true;
 
+        if (sort)
+        {
+            canvas.sortingOrder = _order;
+            _order++;
+        }
+        else
+        {
+            canvas.sortingOrder = 0;
+        }
+    }
 
     public void ShowPopup<T>() where T : UI_Popup
     {
@@ -25,6 +40,7 @@ public class UIManager : Singleton<UIManager>
         if (Popup == null)
             return;
 
+        Popup.gameObject.SetActive(true);
         Popup.transform.SetParent(_sceneUI.transform);
     }
    

@@ -35,6 +35,7 @@ namespace Epos.Mission
             subject = new(sl[rand]);
             MissionData.TryGetMissionRewardGroup(info.MissionRewardID, out List<MissionRewardInfo> rewardList);
             List<MissionRewardInfo> rl = new();
+
             rewardList.ForEach(x =>
             {
                 for (int i = 0; i < x.Rate; i++)

@@ -39,7 +39,7 @@ namespace Epos
             int removePosY = tile.Y;
             
             yield return transform.DOMove(tileMap[x][y].transform.position, 0.5f).WaitForCompletion();
-            tileMap[x][y].Selector.Obj.Collect();
+            
             tileMap[x][y].SetObject(this);
             tileMap[removePosX][removePosY].SetObject(null);
             

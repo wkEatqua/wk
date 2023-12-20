@@ -8,11 +8,12 @@ namespace Epos.Mission
 {
     public class MissionReward
     {
-        readonly MissionRewardInfo info;
-
+        public readonly MissionRewardInfo info;
+        public readonly int value;
         public MissionReward(MissionRewardInfo info)
         {
             this.info = info;
+            value = Random.Range(info.RewardValueMin, info.RewardValueMax + 1);
         }
 
         public void GetReward()
@@ -24,8 +25,7 @@ namespace Epos.Mission
                     item.OnCollect();
                     break;
                 case RewardType.Stat:
-                    int rand = Random.Range(info.RewardValueMin, info.RewardValueMax + 1);
-                    EposManager.Instance.Player.AddStat((ActorStatType)info.RewardDetail, rand, info.AddType);
+                    EposManager.Instance.Player.AddStat((ActorStatType)info.RewardDetail, value, info.AddType);
                     break;
             }
         }

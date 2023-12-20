@@ -2,7 +2,6 @@ using Shared.Model;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Shared.Data
 {
@@ -32,7 +31,8 @@ namespace Shared.Data
         public int SubjectCountMax => data.SubjectCountMax;
         public int SubjectReqMin => data.SubjectReqMin;
         public int SubjectReqMax => data.SubjectReqMax;
-
+        public string Name => data.Name;
+        public string Desc => data.Desc;
         readonly MissionSubject data;
         public MissionSubjectInfo(MissionSubject data)
         {
@@ -50,6 +50,8 @@ namespace Shared.Data
         public int RewardValueMin => data.RewardValueMin;
         public int RewardValueMax => data.RewardValueMax;
         public AddType AddType => data.AddType;
+        public string Desc => data.Desc;
+
         readonly MissionReward data;
         public MissionRewardInfo(MissionReward data)
         {
@@ -66,6 +68,8 @@ namespace Shared.Data
         public int PenaltyValueMin => data.PenaltyValueMin;
         public int PenaltyValueMax => data.PenaltyValueMax;
         public AddType AddType => data.AddType;
+        public string Desc => data.Desc;
+
         readonly MissionPenalty data;
         public MissionPenaltyInfo(MissionPenalty data)
         {

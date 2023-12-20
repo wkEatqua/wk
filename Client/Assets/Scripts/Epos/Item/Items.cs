@@ -160,6 +160,7 @@ namespace Epos
         public override void OnCollect()
         {
             EposManager.Instance.Gold += data.BaseStat;
+            TurnManager.Instance.EndTurn();
         }
     }
 
@@ -175,6 +176,8 @@ namespace Epos
         public override void OnCollect()
         {
             EposManager.Instance.Player.CurHp += data.BaseStat;
+            TurnManager.Instance.EndTurn();
+
         }
     }
 
@@ -191,6 +194,8 @@ namespace Epos
         public override void OnCollect()
         {
             EposManager.Instance.Player.Equip(this);
+            TurnManager.Instance.EndTurn();
+
         }
         public override void AddStat(ActorStatType statType, AddType addType, int amount)
         {
@@ -229,6 +234,8 @@ namespace Epos
         public override void OnCollect()
         {
             EposManager.Instance.Player.Equip(this);
+            TurnManager.Instance.EndTurn();
+
         }
 
         public override void AddStat(ActorStatType statType, AddType addType, int amount)

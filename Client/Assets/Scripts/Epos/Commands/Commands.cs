@@ -29,6 +29,52 @@ namespace Epos
         }
     }
 
+    public class CollectCommand : ICommand
+    {
+        readonly Player player;
+        readonly Tile tile;
+        public CollectCommand(Player player, Tile tile)
+        {
+            this.player = player;
+            this.tile = tile;
+        }
+        public IEnumerator Excute()
+        {
+            tile.Selector.OnConfirmed.Invoke();
+            int graceX = player.tile.X;
+            int graceY = player.tile.Y;
+            TileManager.Instance.playerLastPos = (graceX, graceY);
+            TileObject obj = tile.Selector.Obj;
+            yield return player.MoveTo(tile.X, tile.Y);
+            TileManager.Instance.SetPlayerPos(tile.X, tile.Y);
+            EposManager.Instance.OnMove.Invoke(tile);
+            TileManager.Instance.graceTiles.Enqueue((graceX, graceY));
+            if(obj != null)
+            {
+                obj.Collect();
+            }
+        }
+    }
+    public class InteractCommand : ICommand
+    {
+        readonly Player player;
+        readonly Tile tile;
+
+        public InteractCommand(Player player, Tile tile)
+        {
+            this.player = player;
+            this.tile = tile;
+        }
+
+        public IEnumerator Excute()
+        {
+            if(tile.Selector.Obj != null)
+            {
+                tile.Selector.Obj.Collect();
+            }
+            yield return null;
+        }
+    }
     public class AttackCommand : ICommand
     {
         readonly Player player;
@@ -50,20 +96,5 @@ namespace Epos
                 TurnManager.Instance.EndTurn();
             }
         }
-    }
-
-    public class InteractCommand : ICommand
-    {
-        InteractableObject obj;
-        public InteractCommand(InteractableObject obj)
-        {
-            this.obj = obj;
-        }
-        public IEnumerator Excute()
-        {
-            obj.OnInteract();
-            TurnManager.Instance.EndTurn();
-            yield return null;
-        }
-    }
+    }  
 }

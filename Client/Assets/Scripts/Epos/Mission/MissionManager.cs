@@ -2,7 +2,6 @@ using Shared.Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using Shared.Model;
 using System.Linq;
 
@@ -10,11 +9,13 @@ namespace Epos.Mission
 {
     public class MissionManager : Singleton<MissionManager>
     {
-        MissionSubject subject;
         MissionInfo info;
-        MissionReward reward;
 
-        public int RemainCount;
+        public MissionSubject subject; // 목표
+        public MissionReward reward; // 보상
+        public MissionPenalty penalty; // 패널티
+
+        public int RemainCount; // 임무 시작까지 남은턴
         bool isMission = false;
         void ResetMission()
         {
@@ -44,9 +45,22 @@ namespace Epos.Mission
                 }
             });
 
-            rand = Random.Range(0, sl.Count);
+            rand = Random.Range(0, rl.Count);
             reward = new(rl[rand]);
 
+            MissionData.TryGetMissionPenaltyGroup(info.MissionPenaltyID, out List<MissionPenaltyInfo> pl);
+            List<MissionPenaltyInfo> penaltyList = new();
+
+            pl.ForEach(x =>
+            {
+                for (int i = 0; i < x.Rate; i++)
+                {
+                    penaltyList.Add(x);
+                }
+            });
+
+            rand = Random.Range(0, penaltyList.Count);
+            penalty = new(pl[rand]);
         }
         private void Start()
         {
@@ -81,6 +95,10 @@ namespace Epos.Mission
             isMission = false;
             reward?.GetReward();
             ResetMission();
+        }
+        public void Fail()
+        {
+            penalty?.GetPenalty();
         }
     }
 }

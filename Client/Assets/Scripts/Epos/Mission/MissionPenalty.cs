@@ -8,29 +8,29 @@ namespace Epos.Mission
 {
     public class MissionPenalty
     {
-        readonly MissionPenaltyInfo info;
-
+        public readonly MissionPenaltyInfo info;
+        public readonly int value;
         public MissionPenalty(MissionPenaltyInfo info)
         {
             this.info = info;
+            value = Random.Range(info.PenaltyValueMin, info.PenaltyValueMax + 1);
         }
 
         public void GetPenalty()
         {
-            int rand = Random.Range(info.PenaltyValueMin, info.PenaltyValueMax + 1);
             switch(info.Type)
             {
                 case PenaltyType.Stat:
-                    EposManager.Instance.Player.AddStat((ActorStatType)info.PenaltyType, -rand, info.AddType);
+                    EposManager.Instance.Player.AddStat((ActorStatType)info.PenaltyType, -value, info.AddType);
                     break;
                 case PenaltyType.HP:
                     switch(info.AddType)
                     {
                         case AddType.Value:
-                            EposManager.Instance.Player.CurHp -= rand;
+                            EposManager.Instance.Player.CurHp -= value;
                             break;
                         case AddType.Ratio:
-                            float ratio = (100 - rand) / 100;
+                            float ratio = (100 - value) / 100;
                             EposManager.Instance.Player.CurHp = (int)(EposManager.Instance.Player.CurHp * ratio);
                             break;
                     }

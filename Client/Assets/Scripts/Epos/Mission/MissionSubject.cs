@@ -8,18 +8,21 @@ namespace Epos.Mission
 {
     public class MissionSubject
     {
-        public MissionSubjectInfo data;
-        MissionManager manager => MissionManager.Instance;
-        int targetCount;
-        int maxTurn;
+        public readonly MissionSubjectInfo data;
 
-        int curCount;
+        public readonly int targetCount;
+        public readonly int maxTurn;
+
+        public int curCount;
+        public int curTurn;
+
         IMissionStrategy condition;
         public MissionSubject(MissionSubjectInfo data)
         {
             this.data = data;
             targetCount = Random.Range(data.SubjectCountMin, data.SubjectCountMax + 1);
             maxTurn = Random.Range(data.SubjectReqMin, data.SubjectReqMax + 1);
+            curTurn = maxTurn;
         }
 
         public void StartMission()
@@ -41,8 +44,8 @@ namespace Epos.Mission
 
         IEnumerator CountMinus()
         {
-            maxTurn--;
-            if (maxTurn <= 0) Fail();
+            curTurn--;
+            if (curTurn <= 0) Fail();
             yield return null;
         }
 
@@ -54,6 +57,7 @@ namespace Epos.Mission
         public void Fail()
         {
             TurnManager.Instance.OnEnemyTurnEnd -= CountMinus;
+            MissionManager.Instance.Fail();
         }
     }
 }

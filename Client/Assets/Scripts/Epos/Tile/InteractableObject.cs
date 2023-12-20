@@ -6,6 +6,5 @@ namespace Epos
 {
     public abstract class InteractableObject : TileObject
     {
-        public abstract void OnInteract();
     }
 }

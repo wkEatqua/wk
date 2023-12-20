@@ -438,7 +438,6 @@ namespace Shared.Model
         public long MissionSubjectID { get; set; }
         public long MissionRewardID { get; set; }
         public long MissionPenaltyID { get; set; }
-
     }
     public class MissionSubject : JsonModel
     {
@@ -451,6 +450,8 @@ namespace Shared.Model
         public int SubjectCountMax { get; set; }
         public int SubjectReqMin { get; set; }
         public int SubjectReqMax { get; set; }
+        public string Name { get; set; }
+        public string Desc { get; set; }
         
     }
     public enum RewardType
@@ -468,6 +469,7 @@ namespace Shared.Model
         public int RewardValueMin { get; set; }
         public int RewardValueMax { get; set; }
         public AddType AddType { get; set; }
+        public string Desc { get; set; }
     }
     public enum PenaltyType
     {
@@ -484,6 +486,7 @@ namespace Shared.Model
         public int PenaltyValueMax { get; set; }
 
         public AddType AddType { get; set; }
+        public string Desc { get; set; }
     }
     #endregion
 }

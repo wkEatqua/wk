@@ -17,12 +17,27 @@ namespace Epos
         Interaction,
         BlankTile
     }
+
+
     public class ObjectFactory : MonoBehaviour
     {
         private static bool initialized = false;
 
+        private static Dictionary<string, GameObject> ModelDict = new Dictionary<string, GameObject>();
+        private static void Init()
+        {
+            initialized = true;
+            var envObj = ResourceUtil.Load<GameObject>("DebugEnvObj");
+            ModelDict.Add("EnvironmentTile", envObj);
+
+            var interObj = ResourceUtil.Load<GameObject>("DebugInterObj");
+            ModelDict.Add("InteractionTile", interObj);
+        }
         public static TileObject CreateObject(EposTileInfoInfo tileInfo, GameObject gameObject)
         {
+            if (initialized == false)
+                Init();
+
             if (tileInfo == null || gameObject == null)
             {
                 Debug.Log("tileInfo or gameObject is null");
@@ -35,19 +50,44 @@ namespace Epos
             ItemType type = (ItemType)Enum.Parse(typeof(ItemType), ObjectInfo.ItemType);
             switch(type)
             {
+                case ItemType.Card:
+                case ItemType.Gold:
                 case ItemType.Item:
                     long itemID = GetItemID(ObjectInfo.ProduceInfo);
-                    if (itemID == 0) break;
+                    if (itemID == 0) 
+                        break;
+
                     gameObject.SetActive(false);
                     ItemObject item = gameObject.AddComponent<ItemObject>();
                     item.ItemID = itemID;
                     gameObject.SetActive(true);
                     break;
-                case ItemType.Card:
-                case ItemType.Gold:
                 case ItemType.Environment:
-                case ItemType.BlankTile:
+                    break;
                 case ItemType.Interaction:
+                case ItemType.BlankTile:
+                    break;
+            }
+
+            Tile.TileType tileType = (Tile.TileType)Enum.Parse(typeof(Tile.TileType), tileInfo.Tile);
+            Debug.Log("obj");
+            switch (tileType)
+            {
+                case Tile.TileType.EnvironmentTile:
+                    Debug.Log("EnvTile");
+                    EnvironmentObject environment = gameObject.AddComponent<EnvironmentObject>();
+                    string env = tileType.ToString();
+                    ModelDict.TryGetValue(env, out var envModel);
+                    environment.gameObject.GetComponent<MeshFilter>().sharedMesh = envModel.GetComponent<MeshFilter>().sharedMesh;
+                    environment.gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
+                    break;
+                case Tile.TileType.InteractionTile:
+                    Debug.Log("InterTile");
+                    InteractableObject interactable = gameObject.AddComponent<InteractableObject>();
+                    string inter = tileType.ToString();
+                    ModelDict.TryGetValue(inter, out var interModel);
+                    interactable.gameObject.GetComponent<MeshFilter>().sharedMesh = interModel.GetComponent<MeshFilter>().sharedMesh;
+                    interactable.gameObject.GetComponent<MeshRenderer>().material.color = Color.cyan;
                     break;
             }
 
@@ -56,7 +96,6 @@ namespace Epos
             {
                 objectComponent.SetObjectInfo(ObjectInfo);
             }
-                
             return objectComponent;
         }
 

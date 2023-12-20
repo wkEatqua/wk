@@ -69,7 +69,7 @@ namespace Epos
             switch (tile.Type)
             { 
                 case Tile.TileType.Grace:
-                    render.material.color = Color.black;
+                    render.material.color = Color.red;
                     selectable = false;
                     break;
                 default:

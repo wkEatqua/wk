@@ -56,6 +56,10 @@ MonoBehaviour:
     CritDmg: 0
     DmgTake: 100
     MoveSpeed: 1
+    Sight: 25
+  OnStatChange:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7594893173988545533
 GameObject:
   m_ObjectHideFlags: 0

@@ -26,6 +26,11 @@ public class UI_GameScene : UI_Scene
         MovedTileText,
         TotalItemText,
         LevelText,
+        ExpText,
+        TurnText,
+        ConditionText,
+        RewardText,
+        FailText,
     }
 
     Player player;
@@ -64,6 +69,16 @@ public class UI_GameScene : UI_Scene
     protected void UpdateExpTexts()
     {
         GetText((int)Texts.LevelText).text = EposManager.Instance.level.ToString();
+
+        int exp = EposManager.Instance.Exp;
+        int maxExp = EposManager.Instance.MaxExp;
+        float progress = 0;
+        if (maxExp != 0)
+        {
+            progress = (float)exp / maxExp;
+        }
+
+        GetText((int)Texts.ExpText).text = Mathf.Round(progress).ToString();
     }
 
     protected void UpdateStatTexts()

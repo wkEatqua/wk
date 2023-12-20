@@ -66,7 +66,6 @@ namespace Epos
 
         private void Update()
         {
-            
             switch (tile.Type)
             { 
                 case Tile.TileType.Grace:
@@ -80,7 +79,13 @@ namespace Epos
                     }
                     else
                     {
-                        render.material.color = Color.white;
+                        if (tile.State == Shared.Model.TileState.Open)
+                            render.material.color = Color.white;
+                        else if (tile.State == Shared.Model.TileState.SemiOpen)
+                            render.material.color = Color.gray;
+                        else
+                            render.material.color = Color.black;
+
                     }
                     break;
             }

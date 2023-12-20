@@ -51,6 +51,7 @@ public class Tile : MonoBehaviour
 
     public TileType Type;
     public TileDifficulty Difficulty = TileDifficulty.None;
+    public TileState State = TileState.Close;
 
     // Debug
     [SerializeField]
@@ -64,6 +65,11 @@ public class Tile : MonoBehaviour
     private void OnEnable()
     {
         Type = TileType.Tier;
+    }
+
+    public void SetState(TileState state)
+    {
+        this.State = state;
     }
   
     public void SetScale(float Scale)

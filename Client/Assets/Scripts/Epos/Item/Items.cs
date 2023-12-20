@@ -12,7 +12,7 @@ namespace Epos
 {
     public abstract class Item
     {
-        protected readonly EposItemInfo data;
+        public readonly EposItemInfo data;
         public readonly ItemObject tileObj;
 
         public int Durability;
@@ -20,6 +20,7 @@ namespace Epos
         public int Atk;
         public int Range;
         public int Type;
+
         public Item(EposItemInfo data, ItemObject tileObj)
         {
             this.data = data;
@@ -39,11 +40,29 @@ namespace Epos
         }
         public string Name => data.Name;
         public readonly string Desc;
-        public abstract void OnCollect();
+        public abstract string StatDesc { get; }
+
+        public abstract void OnMove();
         public virtual void AddStat(ActorStatType statType, AddType addType, int amount)
         {
 
         }
+    }
+    public abstract class InstantItem : Item
+    {
+        protected InstantItem(EposItemInfo data, ItemObject tileObj) : base(data, tileObj)
+        {
+        }
+        protected InstantItem(EposItemInfo data):base(data)
+        {
+
+        }
+        public override void OnMove()
+        {
+            ItemUI ui = UIPool.Get("ItemCanvas").GetComponent<ItemUI>();
+            ui.Init(this);
+        }
+        public abstract void Collect();
     }
     public abstract class InvenItem : Item
     {
@@ -77,6 +96,8 @@ namespace Epos
     }
     public class RangeWeapon : InvenItem
     {
+        public override string StatDesc => "";
+
         public RangeWeapon(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
         {
             Atk = data.BaseStat;
@@ -87,7 +108,7 @@ namespace Epos
             Atk = data.BaseStat;
             Range = data.Range;
         }
-        public override void OnCollect()
+        public override void OnMove()
         {
             GameObject obj = UIPool.Get("RangeWeaponCanvas");
             RangeWeaponCanvas canvas = obj.GetComponent<RangeWeaponCanvas>();
@@ -148,8 +169,10 @@ namespace Epos
             }
         }
     }
-    public class GoldItem : Item
+    public class GoldItem : InstantItem
     {
+        public override string StatDesc => "골드";
+
         public GoldItem(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
         {
         }
@@ -157,15 +180,16 @@ namespace Epos
         {
         }
 
-        public override void OnCollect()
+        public override void Collect()
         {
             EposManager.Instance.Gold += data.BaseStat;
-            TurnManager.Instance.EndTurn();
         }
     }
 
-    public class HpPotion : Item
+    public class HpPotion : InstantItem
     {
+        public override string StatDesc => "회복";
+
         public HpPotion(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
         {
         }
@@ -173,16 +197,16 @@ namespace Epos
         {
         }
 
-        public override void OnCollect()
+        public override void Collect()
         {
             EposManager.Instance.Player.CurHp += data.BaseStat;
-            TurnManager.Instance.EndTurn();
-
         }
     }
 
-    public class MeleeWeapon : Item
+    public class MeleeWeapon : InstantItem
     {
+        public override string StatDesc => "공격력";
+
         public MeleeWeapon(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
         {
             Durability = data.BaseStat;
@@ -191,12 +215,7 @@ namespace Epos
         {
             Durability = data.BaseStat;
         }
-        public override void OnCollect()
-        {
-            EposManager.Instance.Player.Equip(this);
-            TurnManager.Instance.EndTurn();
-
-        }
+        
         public override void AddStat(ActorStatType statType, AddType addType, int amount)
         {
             base.AddStat(statType, addType, amount);
@@ -216,10 +235,16 @@ namespace Epos
                     break;
             }
         }
+
+        public override void Collect()
+        {
+            EposManager.Instance.Player.Equip(this);
+        }
     }
 
-    public class Armour : Item
+    public class Armour : InstantItem
     {
+        public override string StatDesc => "방어력";
 
         public Armour(EposItemInfo data, ItemObject itemObj) : base(data, itemObj)
         {
@@ -231,13 +256,6 @@ namespace Epos
             Durability = data.BaseStat;
             Count = data.UseCount;
         }
-        public override void OnCollect()
-        {
-            EposManager.Instance.Player.Equip(this);
-            TurnManager.Instance.EndTurn();
-
-        }
-
         public override void AddStat(ActorStatType statType, AddType addType, int amount)
         {
             base.AddStat(statType, addType, amount);
@@ -256,6 +274,12 @@ namespace Epos
                     }
                     break;
             }
+        }
+
+        public override void Collect()
+        {
+            EposManager.Instance.Player.Equip(this);
+
         }
     }
 }

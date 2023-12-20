@@ -68,6 +68,7 @@ public class UI_GameScene : UI_Scene
 
     protected void UpdateStatTexts()
     {
+        Debug.Log("update");
         // Base Stat
         if (player == null)
         {

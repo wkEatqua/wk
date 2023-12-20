@@ -22,7 +22,7 @@ namespace Epos.Mission
             {
                 case RewardType.Item:
                     Item item = ItemFactory.Create(info.RewardID);
-                    item.OnCollect();
+                    item.OnMove();
                     break;
                 case RewardType.Stat:
                     EposManager.Instance.Player.AddStat((ActorStatType)info.RewardDetail, value, info.AddType);

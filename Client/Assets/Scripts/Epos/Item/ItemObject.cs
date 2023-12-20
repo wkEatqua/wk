@@ -21,7 +21,7 @@ namespace Epos
         public override void Collect()
         {
             base.Collect();
-            item.OnCollect();
+            item.OnMove();
             item = null;
             Die();
         }

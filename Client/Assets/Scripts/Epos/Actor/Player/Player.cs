@@ -129,7 +129,6 @@ namespace Epos
                 BonusStat<ActorStatType> b = new();
                 MeleeWeapons.ForEach(wp => 
                 {
-                    Debug.Log(wp.Name +" : " + wp.Durability);
                     b.AddValue(ActorStatType.Atk, wp.Durability);
                 });
                 return b;

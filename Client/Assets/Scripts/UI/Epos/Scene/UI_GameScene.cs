@@ -4,6 +4,9 @@ using UnityEngine;
 using TMPro;
 using Epos;
 using System.Text;
+using Epos.Mission;
+using Shared.Data;
+using Shared.Model;
 
 public class UI_GameScene : UI_Scene
 {
@@ -57,6 +60,57 @@ public class UI_GameScene : UI_Scene
     {
         UpdateStatTexts();
         UpdateExpTexts();
+    }
+
+    protected void UpdateMissionTexts()
+    {
+        // 잔여 턴
+        GetText((int)Texts.TurnText).text = MissionManager.Instance.subject.curTurn.ToString();
+
+        // 조건
+
+        // 보상
+        var rewardInfo = MissionManager.Instance.reward.info;
+        string rewardName = "";
+        switch(rewardInfo.RewardType)
+        {
+            case RewardType.Item:
+                ItemData.TryGetItemInfo(rewardInfo.RewardID, out var itemInfo);
+                rewardName = itemInfo.Name;
+                break;
+            case RewardType.Stat:
+                StringBuilder sb = new StringBuilder();
+                sb.Append(rewardInfo.Desc);
+                sb.Append(" ");
+                sb.Append(MissionManager.Instance.reward.value.ToString());
+                sb.Append(rewardInfo.AddType == AddType.Value ? "+" : "%");
+                rewardName = sb.ToString();
+                break;
+        }
+        GetText((int)Texts.RewardText).text = rewardName;
+
+        // 실패
+        var penaltyInfo = MissionManager.Instance.penalty.info;
+        string penaltyName = "";
+        StringBuilder sb = new StringBuilder();
+        switch (penaltyInfo.Type)
+        {
+            case PenaltyType.Stat:
+                {
+                    sb.Append(penaltyInfo.Desc);
+                }
+                break;
+            case PenaltyType.HP:
+                {
+                    sb.Append(PenaltyType.HP.ToString());
+                }
+                break;
+        }
+        sb.Append(" ");
+        sb.Append(MissionManager.Instance.penalty.value.ToString());
+        sb.Append(penaltyInfo.AddType == AddType.Value ? "-" : "%");
+        penaltyName = sb.ToString();
+        GetText((int)Texts.FailText).text = penaltyName;
     }
 
     protected IEnumerator UpdateGameInfoTexts()

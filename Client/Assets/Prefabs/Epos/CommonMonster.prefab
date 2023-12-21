@@ -131,14 +131,14 @@ MonoBehaviour:
   tile: {fileID: 0}
   curHp: 0
   baseStat:
-    MaxHp: 0
-    Atk: 0
+    MaxHp: 10
+    Atk: 5
     AtkRange: 0
     Def: 0
     CritProb: 0
     CritDmg: 125
     DmgTake: 100
-    MoveSpeed: 1
+    MoveSpeed: 0
     Sight: 0
   OnStatChange:
     m_PersistentCalls:

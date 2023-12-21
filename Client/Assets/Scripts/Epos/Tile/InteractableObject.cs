@@ -6,5 +6,6 @@ namespace Epos
 {
     public class InteractableObject : TileObject
     {
+        
     }
 }

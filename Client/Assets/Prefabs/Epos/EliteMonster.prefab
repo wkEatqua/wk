@@ -48,7 +48,7 @@ MonoBehaviour:
   tile: {fileID: 0}
   curHp: 0
   baseStat:
-    MaxHp: 10
+    MaxHp: 50
     Atk: 10
     AtkRange: 0
     Def: 0
@@ -56,6 +56,10 @@ MonoBehaviour:
     CritDmg: 125
     DmgTake: 100
     MoveSpeed: 1
+    Sight: 0
+  OnStatChange:
+    m_PersistentCalls:
+      m_Calls: []
   moveType: 0
 --- !u!1 &3994403954287449530
 GameObject:

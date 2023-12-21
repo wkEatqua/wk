@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Epos
 {
-    public abstract class InteractableObject : TileObject
+    public class InteractableObject : TileObject
     {
     }
 }

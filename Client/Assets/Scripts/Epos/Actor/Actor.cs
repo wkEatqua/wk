@@ -35,7 +35,7 @@ namespace Epos
         public virtual int Attack(Actor target)
         {
             EventInfo info = new EventInfo();
-            ExcuteEvent(BuffEventType.OnMeleeAttack, info);
+            ExcuteEvent(Shared.Model.EventTypes.OnMeleeAttack, info);
 
             bonusStat += info.stat;
             int dmg = Atk;

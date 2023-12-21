@@ -28,7 +28,6 @@ namespace Epos
             {
                 if (selectable)
                 {
-                    Debug.Log("Clicked");
                     OnSelected.Invoke();
                 }
             });

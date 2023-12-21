@@ -39,10 +39,7 @@ namespace Epos
             int removePosY = tile.Y;
             
             yield return transform.DOMove(tileMap[x][y].transform.position, 0.5f).WaitForCompletion();
-            if (tileMap[x][y].Selector.Obj is ItemObject item)
-            {
-                item.Collect();
-            }
+            
             tileMap[x][y].SetObject(this);
             tileMap[removePosX][removePosY].SetObject(null);
             
@@ -53,6 +50,11 @@ namespace Epos
         public void Die()
         {
             transform.DOMoveZ(transform.position.z + 2, 0.5f).OnComplete(() => { tile.SetObject(null); TileManager.Instance.Return(gameObject);  });
+        }
+
+        public virtual void Collect()
+        {
+
         }
     }
 }

@@ -17,9 +17,12 @@ namespace Epos
         {
             slots = GetComponentsInChildren<ItemSlot>().ToList();
             maxSlot = Mathf.Clamp(maxSlot, 0, slots.Count);
-            ResetSlots();
         }
 
+        private void Start()
+        {
+            ResetSlots();
+        }
         public void ChangeClickEvents(UnityAction<ItemSlot> clickEvent)
         {
             foreach (ItemSlot slot in slots)

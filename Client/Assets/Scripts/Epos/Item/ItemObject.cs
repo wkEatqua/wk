@@ -18,9 +18,10 @@ namespace Epos
             item = Activator.CreateInstance(Type.GetType("Epos." + itemInfo.Type.ToString()), itemInfo, this) as Item;
         }
        
-        public virtual void Collect()
+        public override void Collect()
         {
-            item.OnCollect();
+            base.Collect();
+            item.OnMove();
             item = null;
             Die();
         }

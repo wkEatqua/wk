@@ -67,7 +67,8 @@ namespace Epos.UI
         public void Return()
         {
             UIPool.Return(gameObject);
+            TurnManager.Instance.EndTurn();
         }
-      
+
     }
 }

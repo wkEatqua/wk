@@ -22,7 +22,7 @@ namespace Shared.Data
     {
         public long Index => data.Index;
         public string BuffType => data.BuffType;
-        public BuffEventType ActiveType => data.ActiveType;
+        public EventTypes ActiveType => data.ActiveType;
         public float Amount => data.Amount;
         public ActorStatType StatType => data.StatType;
         public Shared.Model.AddType ValueType => data.ValueType;

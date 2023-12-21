@@ -12,15 +12,15 @@ public struct StatKeyPair<T> where T : Enum
 [System.Serializable]
 public class BonusStat<T> where T : Enum
 {
-    // ¿µ±¸ Ãß°¡ ½ºÅÈ °ü·Ã Å¬·¡½º (¹«±â, ¾Ç¼¼¼­¸® µî)
+    // ì˜êµ¬ ì¶”ê°€ ìŠ¤íƒ¯ ê´€ë ¨ í´ë˜ìŠ¤ (ë¬´ê¸°, ì•…ì„¸ì„œë¦¬ ë“±)
 
-    public readonly IDictionary<T, int> Value = new Dictionary<T, int>(); // Ãß°¡°ª
-    public readonly IDictionary<T, int> Ratio = new Dictionary<T, int>(); // Ãß°¡ ¹èÀ²
+    public readonly IDictionary<T, int> Value = new Dictionary<T, int>(); // ì¶”ê°€ê°’
+    public readonly IDictionary<T, int> Ratio = new Dictionary<T, int>(); // ì¶”ê°€ ë°°ìœ¨
 
-    [Header("Ãß°¡ ½ºÅÈ °ª, ½ºÅÈ Å¸ÀÔ°ú Á¤¼ö ÀÔ·Â")]
+    [Header("ì¶”ê°€ ìŠ¤íƒ¯ ê°’, ìŠ¤íƒ¯ íƒ€ì…ê³¼ ì •ìˆ˜ ì…ë ¥")]
     [SerializeField] List<StatKeyPair<T>> values = new();
 
-    [Header("Ãß°¡ ½ºÅÈ ¹èÀ², ½ºÅÈ Å¸ÀÔ°ú ¹éºĞÀ² ÀÔ·Â")]
+    [Header("ì¶”ê°€ ìŠ¤íƒ¯ ë°°ìœ¨, ìŠ¤íƒ¯ íƒ€ì…ê³¼ ë°±ë¶„ìœ¨ ì…ë ¥")]
     [SerializeField] List<StatKeyPair<T>> ratios = new();
 
     public BonusStat()
@@ -32,7 +32,7 @@ public class BonusStat<T> where T : Enum
         }
     }
 
-    public void Init() // ÀÎ½ºÆåÅÍÃ¢¿¡¼­ °ª Á¶ÀıÇÒ ½Ã È£Ãâ ÇØ¾ßÇÏ´Â ÇÔ¼ö
+    public void Init() // ì¸ìŠ¤í™í„°ì°½ì—ì„œ ê°’ ì¡°ì ˆí•  ì‹œ í˜¸ì¶œ í•´ì•¼í•˜ëŠ” í•¨ìˆ˜
     {
         Reset();
         foreach (var x in values)
@@ -44,7 +44,7 @@ public class BonusStat<T> where T : Enum
             Ratio[x.Key] += x.Value;
         }
     }
-    public void Reset() // ÃÊ±âÈ­ ÇÔ¼ö
+    public void Reset() // ì´ˆê¸°í™” í•¨ìˆ˜
     {
         foreach (T x in Enum.GetValues(typeof(T)))
         {
@@ -57,13 +57,13 @@ public class BonusStat<T> where T : Enum
                 Ratio[x] = 0;
         }
     }
-    public void AddValue(T type, int value) // °ª Ãß°¡
+    public void AddValue(T type, int value) // ê°’ ì¶”ê°€
     {
-        Value[type] = value;
+        Value[type] += value;
     }
-    public void AddRatio(T type, int ratio) // ¹èÀ² Ãß°¡
+    public void AddRatio(T type, int ratio) // ë°°ìœ¨ ì¶”ê°€
     {
-        Ratio[type] = ratio;
+        Ratio[type] += ratio;
     }
     public static BonusStat<T> operator +(BonusStat<T> a, BonusStat<T> b)
     {

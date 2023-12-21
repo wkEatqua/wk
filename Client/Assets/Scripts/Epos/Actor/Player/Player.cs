@@ -46,6 +46,8 @@ namespace Epos
 
             CurHp -= dmg;
 
+            OnStatChange.Invoke();
+
             return dmg;
         }
         public override int Attack(Actor target)
@@ -84,6 +86,7 @@ namespace Epos
             }
             meleeWeapons = meleeWeapons.Where(wp => wp.Durability > 0).ToList();
             bonusStat -= info.stat;
+            OnStatChange.Invoke();
             return dmg;
         }
 
@@ -124,7 +127,11 @@ namespace Epos
             BonusStatEvent += () =>
             {
                 BonusStat<ActorStatType> b = new();
-                MeleeWeapons.ForEach(wp => b.AddValue(ActorStatType.Atk, wp.Durability));
+                MeleeWeapons.ForEach(wp => 
+                {
+                    Debug.Log(wp.Name +" : " + wp.Durability);
+                    b.AddValue(ActorStatType.Atk, wp.Durability);
+                });
                 return b;
             };
             BonusStatEvent += () =>

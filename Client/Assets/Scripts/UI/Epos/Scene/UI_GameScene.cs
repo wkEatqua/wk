@@ -96,6 +96,7 @@ public class UI_GameScene : UI_Scene
             }
             
             player = playerInScene;
+            player.OnStatChange.AddListener(UpdateStatTexts);
         }
 
         var baseStat = player.BaseStat;

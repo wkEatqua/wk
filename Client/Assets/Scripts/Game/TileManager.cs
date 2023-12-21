@@ -263,20 +263,21 @@ public class TileManager : Singleton<TileManager>
         TileComponent.SetScale(TileScale);
         TileComponent.SetState(TileState.Close);
 
-        // Create Object on Tile
-        var TempObject = ObjectPool.Get("DebugObj");
-        TileObject TileObject = ObjectFactory.CreateObject(TileInfo, TempObject);
-        if (TileObject == null)
-            ObjectPool.Return(TempObject);
-        else
-            TileComponent.SetObject(TileObject);
-
         // Set TilePosition
         int mid = (int)TileNumber / 2;
         float PosX = (x - mid) * TileInterval;
         float PosY = (y - mid) * TileInterval;
         TileComponent.SetPosition(PosX, PosY);
         TileComponent.SetIndex(x, y);
+
+        // Create Object on Tile
+        var TempObject = ObjectPool.Get("DebugObj");
+        TileObject TileObject = ObjectFactory.CreateObject(TileInfo, TempObject);
+        if (TileObject == null || (x == mid && y == mid))
+            ObjectPool.Return(TempObject);
+        else
+            TileComponent.SetObject(TileObject);
+
 
         // Keep TileComponent in memory
         TileMap[x][y] = TileComponent;

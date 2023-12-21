@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Shared.Model;
 using System.Linq;
+using UnityEngine.Events;
 
 namespace Epos.Mission
 {
@@ -16,6 +17,11 @@ namespace Epos.Mission
         public MissionPenalty penalty; // 패널티
 
         public int RemainCount; // 임무 시작까지 남은턴
+
+        public UnityEvent OnMissionStart = new(); // 미션 시작할 때
+        public UnityEvent OnMissionGiven = new(); // 미션 주어졌을 때 (시작까지 남은 턴 시작)
+        public UnityEvent OnMissionComplete = new(); // 미션 클리어 시
+        public UnityEvent OnMissionFail = new(); // 미션 실패시
         bool isMission = false;
         void ResetMission()
         {
@@ -61,6 +67,8 @@ namespace Epos.Mission
 
             rand = Random.Range(0, penaltyList.Count);
             penalty = new(pl[rand]);
+
+            OnMissionGiven.Invoke();
         }
         private void Start()
         {
@@ -89,16 +97,19 @@ namespace Epos.Mission
         {
             isMission = true;
             subject.StartMission();
+            OnMissionStart.Invoke();
         }
         public void Complete()
         {
             isMission = false;
             reward?.GetReward();
             ResetMission();
+            OnMissionComplete.Invoke();
         }
         public void Fail()
         {
             penalty?.GetPenalty();
+            OnMissionFail.Invoke();
         }
     }
 }

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Shared.Model;
-using UnityEditor.Tilemaps;
 
 namespace Epos
 {
@@ -52,8 +51,8 @@ namespace Epos
         public override int Attack(Actor target)
         {
             int hp = target.CurHp;
-            EventInfo info = new EventInfo();
-            ExcuteEvent(Shared.Model.EventTypes.OnMeleeAttack, info);
+            EventInfo info = new();
+            ExcuteEvent(EventTypes.OnMeleeAttack, info);
 
             bonusStat += info.stat;
             int dmg = Atk;
@@ -91,7 +90,7 @@ namespace Epos
         public int RangeAttack(Actor target)
         {
             EventInfo info = new();
-            ExcuteEvent(Shared.Model.EventTypes.OnRangeAttack, info);
+            ExcuteEvent(EventTypes.OnRangeAttack, info);
 
             bonusStat += info.stat;
             int dmg = Atk;

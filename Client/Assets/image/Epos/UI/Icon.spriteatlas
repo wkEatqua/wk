@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Icon
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_IgnorePlatformSupport: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 8becafb5ef471b34fa9b8803bbb20c6c, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - a5d63c13b6412e14d9eed2145e256836: 21300000
+    - d02ca40487c38714183ec3173f2d8aac: 21300000
+    - 904441e60cae31748ad86519d98adc3e: 21300000
+    - bbf7cb68964cb634b97da9bc11b9c436: 21300000
+    - ddd3ad49b825cc84085605b42c48e859: 21300000
+    - eb5d6babea0abc54a97f17309df6f81e: 21300000
+    - e0ec346d54ab02d4287cb81d0418a75a: 21300000
+    - 703f466e076260f4ba5fdc8fb51876e1: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: a5d63c13b6412e14d9eed2145e256836, type: 3}
+  - {fileID: 21300000, guid: d02ca40487c38714183ec3173f2d8aac, type: 3}
+  - {fileID: 21300000, guid: 904441e60cae31748ad86519d98adc3e, type: 3}
+  - {fileID: 21300000, guid: bbf7cb68964cb634b97da9bc11b9c436, type: 3}
+  - {fileID: 21300000, guid: ddd3ad49b825cc84085605b42c48e859, type: 3}
+  - {fileID: 21300000, guid: eb5d6babea0abc54a97f17309df6f81e, type: 3}
+  - {fileID: 21300000, guid: e0ec346d54ab02d4287cb81d0418a75a, type: 3}
+  - {fileID: 21300000, guid: 703f466e076260f4ba5fdc8fb51876e1, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - icon_004
+  - icon_bg_003
+  - icon_bg_001
+  - icon_002
+  - icon_bg_002
+  - icon_001
+  - icon_Reddot_001
+  - icon_003
+  m_RenderDataMap: {}
+  m_Tag: Icon
+  m_IsVariant: 0

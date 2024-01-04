@@ -69,6 +69,7 @@ public class UI_GameScene : UI_Scene
 
         // 조건
 
+
         // 보상
         var rewardInfo = MissionManager.Instance.reward.info;
         string rewardName = "";
@@ -79,12 +80,12 @@ public class UI_GameScene : UI_Scene
                 rewardName = itemInfo.Name;
                 break;
             case RewardType.Stat:
-                StringBuilder sb = new StringBuilder();
-                sb.Append(rewardInfo.Desc);
-                sb.Append(" ");
-                sb.Append(MissionManager.Instance.reward.value.ToString());
-                sb.Append(rewardInfo.AddType == AddType.Value ? "+" : "%");
-                rewardName = sb.ToString();
+                StringBuilder stb = new StringBuilder();
+                stb.Append(rewardInfo.Desc);
+                stb.Append(" ");
+                stb.Append(MissionManager.Instance.reward.value.ToString());
+                stb.Append(rewardInfo.AddType == AddType.Value ? "+" : "%");
+                rewardName = stb.ToString();
                 break;
         }
         GetText((int)Texts.RewardText).text = rewardName;

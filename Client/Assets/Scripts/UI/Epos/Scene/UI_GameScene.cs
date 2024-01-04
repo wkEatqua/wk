@@ -49,6 +49,10 @@ public class UI_GameScene : UI_Scene
 
         TurnManager.Instance.OnEnemyTurnEnd += UpdateGameInfoTexts;
         UpdateStatTexts();
+        MissionManager.Instance.OnMissionStart.AddListener(UpdateMissionTexts);
+        MissionManager.Instance.OnMissionGiven.AddListener(UpdateMissionTexts);
+        MissionManager.Instance.OnMissionComplete.AddListener(UpdateMissionTexts);
+        MissionManager.Instance.OnMissionFail.AddListener(UpdateMissionTexts);
     }
 
     protected override void BindUI()
@@ -60,6 +64,7 @@ public class UI_GameScene : UI_Scene
     {
         UpdateStatTexts();
         UpdateExpTexts();
+        UpdateMissionTexts();
     }
 
     protected void UpdateMissionTexts()
@@ -68,7 +73,7 @@ public class UI_GameScene : UI_Scene
         GetText((int)Texts.TurnText).text = MissionManager.Instance.subject.curTurn.ToString();
 
         // 조건
-
+        GetText((int)Texts.ConditionText).text = MissionManager.Instance.subject.data.Desc;
 
         // 보상
         var rewardInfo = MissionManager.Instance.reward.info;
